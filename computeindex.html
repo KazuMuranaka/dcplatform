@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>計算力指数（GX Compute Index）｜DC PLATFORM JAPAN</title>
+<meta name="description" content="GPUクラウドの計算力価格（B300・B200・H200・H100）を海外主要指標から日本語・円換算で定点表示。国内取引が参照できる中立の市場参考指標を目指します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#182420;--paper:#F6F4ED;--green:#1F4D36;--moss:#43604F;--gold:#A8894A;--line:#DAD5C6;--white:#FFFFFF;--up:#2F7D5A;--dn:#B8703A;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);line-height:1.8;font-size:15px;}
+.serif{font-family:'Noto Serif JP',serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(28px,5vw,64px);}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+header{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;}
+.brand .logo{font-family:'Noto Serif JP',serif;font-weight:700;font-size:21px;color:var(--green);}
+.brand .logo em{font-style:normal;color:var(--gold);}
+nav.menu{display:flex;gap:26px;font-size:13.5px;font-weight:500;}
+nav.menu a{padding:6px 0;border-bottom:2px solid transparent;}
+nav.menu a:hover,nav.menu a.on{border-color:var(--gold);}
+.cta-btn{background:var(--green);color:#fff;padding:9px 18px;font-size:13px;font-weight:700;border-radius:2px;}
+.cta-btn:hover{background:var(--moss);}
+
+.page-hero{padding:52px 0 36px;border-bottom:1px solid var(--line);
+ background:linear-gradient(rgba(246,244,237,.95),rgba(246,244,237,.97)),
+ repeating-linear-gradient(90deg,transparent 0 79px,rgba(31,77,54,.06) 79px 80px);}
+.crumb{font-size:12px;color:#8a8674;margin-bottom:14px;}
+.crumb a:hover{color:var(--green);text-decoration:underline;}
+h1{font-family:'Noto Serif JP',serif;font-size:clamp(26px,3vw,34px);color:var(--green);font-weight:600;margin-bottom:12px;}
+.page-hero p{max-width:46em;color:#4a5148;font-size:14.5px;}
+
+.asof{background:var(--ink);color:#CFC9B8;}
+.asof .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:11px 28px;font-size:12.5px;}
+.asof .live::before{content:"●";color:#8FBF9F;margin-right:6px;font-size:8px;vertical-align:1px;}
+.asof .fx{font-family:'IBM Plex Mono',monospace;color:#C9B074;}
+
+main{padding:40px 0 80px;}
+.section-title{display:flex;align-items:baseline;gap:12px;margin:8px 0 18px;}
+.section-title .no{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.12em;}
+.section-title h2{font-family:'Noto Serif JP',serif;font-size:22px;color:var(--green);font-weight:600;}
+
+/* board */
+.board{background:var(--ink);color:#E8E4D6;border-radius:6px;box-shadow:0 20px 44px -20px rgba(24,36,32,.5);overflow:hidden;margin-bottom:14px;}
+.board-head{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;border-bottom:1px solid #2c3a33;flex-wrap:wrap;gap:8px;}
+.board-head .t{font-size:13px;letter-spacing:.14em;color:var(--gold);font-weight:700;}
+.board-head .sub{font-size:11px;color:#8b968d;}
+.board table{width:100%;border-collapse:collapse;font-size:13.5px;}
+.board th{font-weight:400;font-size:10.5px;color:#8b968d;text-align:right;padding:10px 22px 6px;letter-spacing:.06em;}
+.board th:first-child{text-align:left;}
+.board td{padding:13px 22px;border-top:1px solid #232f29;text-align:right;}
+.board td:first-child{text-align:left;}
+.board td.gpu{font-family:'IBM Plex Mono',monospace;font-weight:600;color:#fff;font-size:14px;}
+.board td .cls{font-family:'Noto Sans JP',sans-serif;font-size:10.5px;color:#8b968d;display:block;font-weight:400;margin-top:2px;}
+.board td.val{font-family:'IBM Plex Mono',monospace;font-size:15px;color:#fff;}
+.board td.yen{font-family:'IBM Plex Mono',monospace;color:#CFC9B8;}
+.board td.rng{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#9aa79e;}
+.up{color:#8FBF9F;} .dn{color:#E0A56A;}
+.board-foot{padding:13px 22px;font-size:10.5px;color:#8b968d;border-top:1px solid #2c3a33;line-height:1.7;}
+.board-foot b{color:#CFC9B8;font-weight:500;}
+
+/* mini trend bars */
+.trend{display:flex;align-items:flex-end;gap:2px;height:26px;justify-content:flex-end;}
+.trend i{width:5px;background:#3a4a41;border-radius:1px;display:block;}
+.trend i.hl{background:var(--gold);}
+
+/* tier cards */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:8px 0 20px;}
+.tcard{background:var(--white);border:1px solid var(--line);border-radius:5px;padding:18px 20px;}
+.tcard .k{font-size:10.5px;letter-spacing:.14em;color:var(--gold);font-weight:700;margin-bottom:6px;}
+.tcard h3{font-family:'Noto Serif JP',serif;font-size:16px;color:var(--green);margin-bottom:8px;}
+.tcard p{font-size:12.5px;color:#5a6058;line-height:1.7;}
+.tcard .disc{margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--green);font-weight:600;}
+
+/* commentary */
+.commentary{background:var(--white);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:4px;padding:22px 26px;margin:8px 0 20px;}
+.commentary h3{font-family:'Noto Serif JP',serif;font-size:16px;color:var(--green);margin-bottom:10px;}
+.commentary p{font-size:13.8px;color:#3d453f;margin-bottom:10px;}
+.commentary p:last-child{margin-bottom:0;}
+.commentary b{color:var(--green);}
+
+/* revenue calculator */
+.calc{background:var(--white);border:1px solid var(--line);border-radius:6px;padding:26px 28px;margin:8px 0 20px;}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px 32px;}
+.calc-field label{display:block;font-size:12.5px;color:#4a5148;font-weight:700;margin-bottom:7px;}
+.calc-field .hint{font-weight:400;color:#8a8674;font-size:11px;}
+.calc-field input[type=range]{width:100%;accent-color:var(--green);}
+.calc-field select,.calc-field input[type=number]{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:3px;font-family:inherit;font-size:14px;background:var(--paper);color:var(--ink);}
+.calc-val{font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--green);font-weight:600;margin-top:5px;}
+.calc-out{margin-top:22px;padding-top:20px;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.calc-out .o{text-align:center;}
+.calc-out .o .lbl{font-size:11px;color:#8a8674;margin-bottom:4px;}
+.calc-out .o .num{font-family:'IBM Plex Mono',monospace;font-size:22px;color:var(--green);font-weight:600;}
+.calc-out .o .unit{font-size:11px;color:#8a8674;}
+.calc-note{margin-top:16px;font-size:11px;color:#8a8674;line-height:1.7;}
+
+.method{background:#FBFAF4;border:1px solid var(--line);border-radius:5px;padding:22px 26px;margin:8px 0 20px;}
+.method h3{font-family:'Noto Serif JP',serif;font-size:15px;color:var(--green);margin-bottom:12px;}
+.method ol{margin-left:18px;font-size:13.3px;color:#3d453f;}
+.method li{margin-bottom:8px;}
+.method .principle{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);font-size:12.5px;color:#5a6058;}
+.method .principle b{color:var(--green);}
+
+.sources{font-size:12px;color:#5a6058;margin:8px 0 24px;line-height:1.9;}
+.sources a{color:var(--moss);text-decoration:underline;text-decoration-color:var(--line);}
+.sources a:hover{text-decoration-color:var(--gold);}
+
+.consult-band{background:var(--green);color:#EDE9DC;border-radius:5px;padding:30px 34px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;}
+.consult-band h3{font-family:'Noto Serif JP',serif;font-size:19px;color:#fff;margin-bottom:6px;}
+.consult-band p{font-size:13px;color:#CDD6CE;max-width:36em;}
+.consult-band a{background:var(--gold);color:#1c1c14;font-weight:700;padding:12px 26px;font-size:13.5px;border-radius:2px;flex-shrink:0;}
+
+footer{background:var(--ink);color:#9aa79e;font-size:12.5px;padding:40px 0;margin-top:40px;}
+footer .wrap{display:block;}
+footer .frow{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+footer a:hover{color:#fff;}
+.disclaimer{border-top:1px solid #2c3a33;margin-top:20px;padding-top:16px;font-size:11px;line-height:1.8;color:#7a857c;}
+
+@media(max-width:900px){
+  nav.menu{display:none;}
+  .tiers{grid-template-columns:1fr;}
+  .calc-grid{grid-template-columns:1fr;}
+  .board td.rng,.board th.rng{display:none;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <a href="index.html" class="logo serif">DC PLATFORM <em>JAPAN</em></a>
+    </div>
+    <nav class="menu" aria-label="主要メニュー">
+      <a href="news.html">ニュースの視点</a>
+      <a href="projectmap.html">プロジェクトMAP</a>
+      <a href="#" class="on">計算力指数</a>
+      <a href="glossary.html">用語解説</a>
+      <a href="faq.html">開発FAQ</a>
+    </nav>
+    <a class="cta-btn" href="consult.html">開発の相談をする</a>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">ホーム</a> ／ 計算力指数（GX Compute Index）</div>
+    <h1 class="serif">計算力指数<span style="font-size:.6em;color:var(--gold);font-family:'IBM Plex Mono',monospace;margin-left:10px;">GX COMPUTE INDEX</span></h1>
+    <p>GPUクラウドの計算力価格を、海外の信頼できる価格指標から日本語・円換算で定点表示します。国内では唯一の日本語による計算力の価格リファレンスを目指し、将来は国内の実取引データに基づく指数へと育てていきます。事業計画の収入前提や、計算力取引の値決めの物差しとしてご活用ください。</p>
+  </div>
+</div>
+
+<div class="asof">
+  <div class="wrap">
+    <span class="live">データ基準：2026年6月（月次スナップショット）</span>
+    <span class="fx">参考為替 USD/JPY 156.40</span>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- BOARD -->
+  <div class="section-title" style="margin-top:34px;"><span class="no">SECTION 01</span><h2>主要GPU 計算力価格（オンデマンド中央値）</h2></div>
+  <div class="board">
+    <div class="board-head">
+      <span class="t">GX COMPUTE INDEX ｜ 参考指標</span>
+      <span class="sub">1GPU・1時間あたり／オンデマンド中央値</span>
+    </div>
+    <table>
+      <thead><tr>
+        <th>GPU（世代）</th><th>中央値(USD/h)</th><th>前月比</th><th>円換算/h</th><th class="rng">市場レンジ(USD)</th><th>直近推移</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="gpu">B300<span class="cls">Blackwell Ultra／最新世代</span></td>
+          <td class="val">$7.92</td>
+          <td class="up">▲ +4.2%</td>
+          <td class="yen">¥1,239</td>
+          <td class="rng">$4.30 – $18.00</td>
+          <td><div class="trend"><i style="height:40%"></i><i style="height:48%"></i><i style="height:55%"></i><i style="height:70%"></i><i style="height:85%"></i><i class="hl" style="height:100%"></i></div></td>
+        </tr>
+        <tr>
+          <td class="gpu">B200<span class="cls">Blackwell／最新世代</span></td>
+          <td class="val">$6.11</td>
+          <td class="up">▲ +1.8%</td>
+          <td class="yen">¥956</td>
+          <td class="rng">$2.12 – $11.06</td>
+          <td><div class="trend"><i style="height:45%"></i><i style="height:52%"></i><i style="height:60%"></i><i style="height:72%"></i><i style="height:88%"></i><i class="hl" style="height:100%"></i></div></td>
+        </tr>
+        <tr>
+          <td class="gpu">H200<span class="cls">Hopper／主力世代</span></td>
+          <td class="val">$3.72</td>
+          <td class="dn">▼ −2.4%</td>
+          <td class="yen">¥582</td>
+          <td class="rng">$2.45 – $10.60</td>
+          <td><div class="trend"><i style="height:88%"></i><i style="height:85%"></i><i style="height:80%"></i><i style="height:78%"></i><i style="height:74%"></i><i class="hl" style="height:70%"></i></div></td>
+        </tr>
+        <tr>
+          <td class="gpu">H100<span class="cls">Hopper／主力世代</span></td>
+          <td class="val">$3.37</td>
+          <td class="dn">▼ −3.1%</td>
+          <td class="yen">¥527</td>
+          <td class="rng">$1.03 – $11.06</td>
+          <td><div class="trend"><i style="height:92%"></i><i style="height:88%"></i><i style="height:82%"></i><i style="height:78%"></i><i style="height:72%"></i><i class="hl" style="height:66%"></i></div></td>
+        </tr>
+        <tr>
+          <td class="gpu">A100 80GB<span class="cls">Ampere／旧世代</span></td>
+          <td class="val">$1.79</td>
+          <td class="dn">▼ −1.5%</td>
+          <td class="yen">¥280</td>
+          <td class="rng">$1.09 – $5.07</td>
+          <td><div class="trend"><i style="height:70%"></i><i style="height:66%"></i><i style="height:62%"></i><i style="height:58%"></i><i style="height:54%"></i><i class="hl" style="height:50%"></i></div></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="board-foot">
+      中央値は海外主要指標の月次集計（<b>AIMultiple GPU Index</b> ほか、63プロバイダー・17機種）に基づく参考値です。「市場レンジ」は各社のスポット最安〜ハイパースケーラー掲示価格までの幅を示します。本表は過去実績の統計であり、特定価格の推奨・拘束を行うものではありません。国内実取引に基づく指数は取引板の稼働後に公表予定。
+    </div>
+  </div>
+
+  <!-- COMMENTARY -->
+  <div class="commentary">
+    <h3 class="serif">指数の読み方 ― いま市場で起きていること</h3>
+    <p>2026年半ばの計算力市場は、明確な<b>二極化</b>が進んでいます。最新世代（B300・B200）はハイパースケーラーの掲示価格が指標に加わることで中央値が上昇する一方、主力世代（H100・H200）は供給拡大により緩やかな下落が続いています。H100は登場初期のピーク（8ドル/時超）から大きく下げ、用途によっては最新世代の登場が旧世代の実効コストを押し下げる「世代交代による陳腐化」が鮮明です。</p>
+    <p>事業計画への含意は明快です。収入側は最安値ではなく<b>中央値ベースで、かつ保守的に</b>見積もること。そして最新世代のGPUを前提とする案件ほど、稼働開始時点では次世代の登場で単価が下がっている可能性を織り込むべきです。当プラットフォームは、単価下落を前提にしても成立する収支設計を推奨しています。</p>
+  </div>
+
+  <!-- RESERVED TIER -->
+  <div class="section-title"><span class="no">SECTION 02</span><h2>契約期間別の価格水準</h2></div>
+  <div class="tiers">
+    <div class="tcard">
+      <div class="k">SPOT ｜ スポット</div>
+      <h3>最安・中断あり</h3>
+      <p>中断を許容できるワークロード向け。ネオクラウドやP2P市場が最安値を提示。掲示中央値から大きく下振れします。</p>
+      <div class="disc">中央値比 −40〜−80%</div>
+    </div>
+    <div class="tcard">
+      <div class="k">ON-DEMAND ｜ 従量</div>
+      <h3>随時利用の基準値</h3>
+      <p>上表の中央値がこの水準。短期・スポット利用の標準で、事業計画の基準線として使いやすい価格帯です。</p>
+      <div class="disc">基準（中央値）</div>
+    </div>
+    <div class="tcard">
+      <div class="k">1-YEAR RESERVED ｜ 年間予約</div>
+      <h3>長期契約の割引</h3>
+      <p>1年の利用確約で掲示価格から割引。稼働の土台を長期契約で固める際の実勢水準で、B200等は割引幅が特に大きい傾向。</p>
+      <div class="disc">掲示比 −16〜−39%</div>
+    </div>
+  </div>
+
+  <!-- CALCULATOR -->
+  <div class="section-title"><span class="no">SECTION 03</span><h2>計算力売上シミュレーター</h2></div>
+  <div class="calc">
+    <div class="calc-grid">
+      <div class="calc-field">
+        <label>GPU機種 <span class="hint">（オンデマンド中央値を初期値に設定）</span></label>
+        <select id="gpu">
+          <option value="7.92">B300（$7.92/h）</option>
+          <option value="6.11">B200（$6.11/h）</option>
+          <option value="3.72" selected>H200（$3.72/h）</option>
+          <option value="3.37">H100（$3.37/h）</option>
+          <option value="1.79">A100 80GB（$1.79/h）</option>
+        </select>
+      </div>
+      <div class="calc-field">
+        <label>GPU搭載基数</label>
+        <input type="number" id="units" value="256" min="1" max="10000">
+        <div class="calc-val" id="unitsLabel">256 基（水冷コンテナ1台の目安）</div>
+      </div>
+      <div class="calc-field">
+        <label>想定稼働率</label>
+        <input type="range" id="util" min="10" max="100" value="70" step="5">
+        <div class="calc-val" id="utilLabel">70%</div>
+      </div>
+      <div class="calc-field">
+        <label>実売単価の対中央値比 <span class="hint">（長期契約・値引き分）</span></label>
+        <input type="range" id="disc" min="50" max="100" value="75" step="5">
+        <div class="calc-val" id="discLabel">中央値の75%で販売</div>
+      </div>
+    </div>
+    <div class="calc-out">
+      <div class="o"><div class="lbl">月間売上（粗）</div><div class="num" id="outMonth">–</div><div class="unit">円／月</div></div>
+      <div class="o"><div class="lbl">年間売上（粗）</div><div class="num" id="outYear">–</div><div class="unit">円／年</div></div>
+      <div class="o"><div class="lbl">GPU1基あたり月額</div><div class="num" id="outUnit">–</div><div class="unit">円／基・月</div></div>
+    </div>
+    <p class="calc-note">※ 売上＝単価(USD) × 対中央値比 × 720時間 × 稼働率 × 基数 × 為替156.40円 で算出した<b>粗売上</b>です。電力・冷却・回線・保守・減価償却などの費用は含みません。実際の収支は、ここから運営費（電気代がその大半を占めます）を差し引いて評価してください。あくまで概算であり、投資判断を保証するものではありません。</p>
+  </div>
+
+  <!-- METHOD -->
+  <div class="section-title"><span class="no">SECTION 04</span><h2>指数の算定方法と原則</h2></div>
+  <div class="method">
+    <h3 class="serif">二段階で「国内標準の物差し」を育てる</h3>
+    <ol>
+      <li><b>第一段階（現在）：</b>海外の信頼できる価格指標を、出典を明記のうえ日本語・円換算で定点表示します。国内で唯一の日本語価格リファレンスとして、まず相場観の共有基盤をつくります。</li>
+      <li><b>第二段階（取引板の稼働後）：</b>当プラットフォームの計算力取引板に集まる売り希望・成約データを匿名で集計し、国内の実取引に基づく指数を公表します。国内実勢に基づく計算力指数は他に存在せず、事業計画・与信審査・報道が参照する事実上の物差しを目指します。</li>
+    </ol>
+    <div class="principle">
+      <b>公正性の原則：</b>本指数は特定価格への準拠を求める「標準価格」ではなく、あくまで「市場参考指標」です。①過去実績の統計として示す、②個社が特定されない匿名・集計値のみを用いる、③準拠は任意である——この三原則を守り、独占禁止法上の疑義を生じさせない設計とします。
+    </div>
+  </div>
+
+  <!-- SOURCES -->
+  <div class="section-title"><span class="no">SECTION 05</span><h2>出典・参照指標</h2></div>
+  <p class="sources">
+    本ページの数値は、以下の海外価格トラッカーの公表値（2026年5〜6月時点）を要約・円換算したものです。原数値・最新値は各出典をご確認ください。<br>
+    ・AIMultiple「Cloud GPU Rental Price Index」（<a href="https://aimultiple.com/gpu-index" target="_blank" rel="noopener">aimultiple.com/gpu-index</a>）― 63プロバイダー・17機種の月次中央値<br>
+    ・GPUPerHour（<a href="https://gpuperhour.com/" target="_blank" rel="noopener">gpuperhour.com</a>）― 28プロバイダー・17,889構成のリアルタイム価格<br>
+    ・Nebius AI Cloud 価格表（<a href="https://nebius.com/prices" target="_blank" rel="noopener">nebius.com/prices</a>）― HGX B300/B200/H200/H100 の実掲示価格<br>
+    ・Thunder Compute / Spheron / CloudZero 各社の市場分析（H100・H200・B200 のレンジ）
+  </p>
+
+  <div class="consult-band">
+    <div>
+      <h3 class="serif">計算力の売り先・買い先をお探しですか。</h3>
+      <p>指数はあくまで物差しです。実際の売買は計算力取引板で。売りたいDC運営者も、使いたい企業も、まずは無料でご相談ください。</p>
+    </div>
+    <a href="consult.html">取引・相談について</a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="frow">
+      <span>© 2026 DC PLATFORM JAPAN（仮称）／一般社団法人グリーンXアライアンス</span>
+      <span><a href="index.html">ホーム</a>　·　<a href="news.html">ニュースの視点</a>　·　<a href="glossary.html">用語解説</a>　·　<a href="faq.html">開発FAQ</a></span>
+    </div>
+    <div class="disclaimer">
+      本ページの価格情報は、公表された海外価格指標を要約・円換算した参考値であり、過去実績の統計に基づく市場参考指標です。特定の価格への準拠を求めるものではなく、取引価格を保証するものでもありません。円換算は表示時点の参考為替によるものです。掲載数値は情報提供を目的としたものであり、投資・財務・法務・税務に関する助言ではありません。実際の価格・最新値は各出典元でご確認ください。
+    </div>
+  </div>
+</footer>
+
+<script>
+const gpu=document.getElementById('gpu'), units=document.getElementById('units'),
+      util=document.getElementById('util'), disc=document.getElementById('disc');
+const unitsLabel=document.getElementById('unitsLabel'), utilLabel=document.getElementById('utilLabel'),
+      discLabel=document.getElementById('discLabel');
+const outMonth=document.getElementById('outMonth'), outYear=document.getElementById('outYear'), outUnit=document.getElementById('outUnit');
+const FX=156.40;
+
+function yen(n){return '¥'+Math.round(n).toLocaleString('ja-JP');}
+function compact(n){
+  if(n>=1e8) return '約'+(n/1e8).toFixed(2)+'億';
+  if(n>=1e4) return '約'+Math.round(n/1e4).toLocaleString('ja-JP')+'万';
+  return Math.round(n).toLocaleString('ja-JP');
+}
+function calc(){
+  const price=parseFloat(gpu.value);
+  const n=Math.max(1,parseInt(units.value||'1'));
+  const u=parseInt(util.value)/100;
+  const d=parseInt(disc.value)/100;
+  const perUnitMonth = price*d*720*u*FX;   // yen per GPU per month
+  const month = perUnitMonth*n;
+  utilLabel.textContent=util.value+'%';
+  discLabel.textContent='中央値の'+disc.value+'%で販売';
+  const cap = n>=200? '（水冷コンテナ1台の目安）' : n>=60? '（空冷コンテナ1台の目安）' : '';
+  unitsLabel.textContent=n.toLocaleString('ja-JP')+' 基'+cap;
+  outMonth.textContent=compact(month);
+  outYear.textContent=compact(month*12);
+  outUnit.textContent=compact(perUnitMonth);
+}
+[gpu,units,util,disc].forEach(el=>el.addEventListener('input',calc));
+calc();
+</script>
+</body>
+</html>

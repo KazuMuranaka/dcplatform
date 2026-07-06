@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>プロジェクトMAP｜DC PLATFORM JAPAN</title>
+<meta name="description" content="全国で公表されたコンテナ型・分散型データセンターのプロジェクトを、日本地図と一覧で追う。報道・各社発表に基づく国内唯一の横断データベース。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#182420;--paper:#F6F4ED;--green:#1F4D36;--moss:#43604F;--gold:#A8894A;--line:#DAD5C6;--white:#FFFFFF;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);line-height:1.8;font-size:15px;}
+.serif{font-family:'Noto Serif JP',serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(28px,5vw,64px);}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+header{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;}
+.brand .logo{font-family:'Noto Serif JP',serif;font-weight:700;font-size:21px;color:var(--green);}
+.brand .logo em{font-style:normal;color:var(--gold);}
+nav.menu{display:flex;gap:26px;font-size:13.5px;font-weight:500;}
+nav.menu a{padding:6px 0;border-bottom:2px solid transparent;}
+nav.menu a:hover,nav.menu a.on{border-color:var(--gold);}
+.cta-btn{background:var(--green);color:#fff;padding:9px 18px;font-size:13px;font-weight:700;border-radius:2px;}
+.cta-btn:hover{background:var(--moss);}
+
+.page-hero{padding:52px 0 36px;border-bottom:1px solid var(--line);
+ background:linear-gradient(rgba(246,244,237,.95),rgba(246,244,237,.97)),
+ repeating-linear-gradient(90deg,transparent 0 79px,rgba(31,77,54,.06) 79px 80px);}
+.crumb{font-size:12px;color:#8a8674;margin-bottom:14px;}
+.crumb a:hover{color:var(--green);text-decoration:underline;}
+h1{font-family:'Noto Serif JP',serif;font-size:clamp(26px,3vw,34px);color:var(--green);font-weight:600;margin-bottom:12px;}
+.page-hero p{max-width:47em;color:#4a5148;font-size:14.5px;}
+
+.stats{background:var(--ink);color:#CFC9B8;}
+.stats .wrap{display:flex;gap:40px;flex-wrap:wrap;padding:14px 28px;font-size:12.5px;}
+.stats .s b{font-family:'IBM Plex Mono',monospace;color:#C9B074;font-size:16px;font-weight:600;margin-right:6px;}
+
+.layout{display:grid;grid-template-columns:440px 1fr;gap:40px;padding:40px 0 70px;align-items:start;}
+@media(max-width:960px){.layout{grid-template-columns:1fr;}nav.menu{display:none;}}
+
+/* map */
+.mapwrap{position:sticky;top:150px;}
+.mapcard{background:var(--white);border:1px solid var(--line);border-radius:6px;padding:18px;box-shadow:0 12px 30px -18px rgba(24,36,32,.3);}
+.mapcard h2{font-family:'Noto Serif JP',serif;font-size:15px;color:var(--green);margin-bottom:4px;}
+.mapcard .cap{font-size:11px;color:#8a8674;margin-bottom:12px;}
+svg.jpn{width:100%;height:auto;display:block;}
+.region{fill:#E7EDE7;stroke:#fff;stroke-width:1.2;transition:fill .2s;}
+.pin-dot{cursor:pointer;transition:r .15s,opacity .2s;}
+.pin-dot:hover{opacity:.85;}
+.pin-live{fill:#1F4D36;}
+.pin-plan{fill:#A8894A;}
+.pin-concept{fill:#fff;stroke:#A8894A;stroke-width:2;stroke-dasharray:2 2;}
+.pin-label{font-family:'Noto Sans JP',sans-serif;font-size:9px;fill:#3d453f;pointer-events:none;}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:11.5px;color:#4a5148;}
+.legend .lg{display:flex;align-items:center;gap:6px;}
+.legend .dot{width:11px;height:11px;border-radius:50%;display:inline-block;}
+.dot.live{background:#1F4D36;} .dot.plan{background:#A8894A;} .dot.concept{background:#fff;border:2px solid #A8894A;}
+
+/* filters */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.filters button{border:1px solid var(--line);background:var(--white);padding:7px 14px;font-size:12.5px;cursor:pointer;border-radius:2px;font-family:inherit;color:var(--ink);}
+.filters button:hover{border-color:var(--gold);}
+.filters button.on{background:var(--green);color:#fff;border-color:var(--green);}
+
+/* project cards */
+.proj{background:var(--white);border:1px solid var(--line);border-radius:5px;padding:20px 22px;margin-bottom:14px;transition:box-shadow .2s,border-color .2s;}
+.proj:target,.proj.flash{border-color:var(--gold);box-shadow:0 8px 22px -12px rgba(168,137,74,.5);}
+.proj.hide{display:none;}
+.proj .top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:8px;}
+.proj .status{font-size:10.5px;font-weight:700;padding:2px 10px;border-radius:2px;letter-spacing:.05em;}
+.status.live{background:var(--green);color:#fff;}
+.status.plan{background:var(--gold);color:#1c1c14;}
+.status.concept{background:#fff;color:var(--moss);border:1px solid var(--moss);}
+.proj .loc{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8a8674;}
+.proj h3{font-family:'Noto Serif JP',serif;font-size:17px;color:var(--green);font-weight:600;margin-bottom:8px;}
+.proj .spec{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.proj .chip{font-size:11px;background:var(--paper);border:1px solid var(--line);border-radius:2px;padding:2px 9px;color:#4a5148;}
+.proj p{font-size:13px;color:#3d453f;margin-bottom:8px;}
+.proj .src{font-size:11px;color:#8a8674;}
+.proj .src a{color:var(--moss);text-decoration:underline;text-decoration-color:var(--line);}
+.proj .src a:hover{text-decoration-color:var(--gold);}
+
+.note{background:#FBFAF4;border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:4px;padding:16px 20px;font-size:12.5px;color:#5a6058;line-height:1.8;margin-bottom:24px;}
+.note b{color:var(--green);}
+
+.submit-band{background:var(--green);color:#EDE9DC;border-radius:5px;padding:28px 32px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;margin-top:10px;}
+.submit-band h3{font-family:'Noto Serif JP',serif;font-size:18px;color:#fff;margin-bottom:6px;}
+.submit-band p{font-size:13px;color:#CDD6CE;max-width:34em;}
+.submit-band a{background:var(--gold);color:#1c1c14;font-weight:700;padding:11px 24px;font-size:13px;border-radius:2px;flex-shrink:0;}
+
+footer{background:var(--ink);color:#9aa79e;font-size:12.5px;padding:40px 0;margin-top:40px;}
+footer .wrap{display:block;}
+footer .frow{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+footer a:hover{color:#fff;}
+.disclaimer{border-top:1px solid #2c3a33;margin-top:20px;padding-top:16px;font-size:11px;line-height:1.8;color:#7a857c;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <a href="index.html" class="logo serif">DC PLATFORM <em>JAPAN</em></a>
+    </div>
+    <nav class="menu" aria-label="主要メニュー">
+      <a href="news.html">ニュースの視点</a>
+      <a href="#" class="on">プロジェクトMAP</a>
+      <a href="computeindex.html">計算力指数</a>
+      <a href="glossary.html">用語解説</a>
+      <a href="faq.html">開発FAQ</a>
+    </nav>
+    <a class="cta-btn" href="consult.html">開発の相談をする</a>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">ホーム</a> ／ プロジェクトMAP</div>
+    <h1 class="serif">プロジェクトMAP</h1>
+    <p>全国で<b>公表された</b>コンテナ型・分散型データセンターのプロジェクトを、日本地図と一覧で追います。報道および各社発表に基づき編集部が整理した、国内で唯一の横断データベースです。地方分散がどこで、どんな冷却方式・規模で進んでいるのか、その全体像をひと目で把握できます。</p>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="wrap">
+    <span class="s"><b>7</b>件 掲載プロジェクト</span>
+    <span class="s"><b>6</b>都道府県＋洋上</span>
+    <span class="s"><b>2026.07</b> 最終更新</span>
+  </div>
+</div>
+
+<main class="wrap layout">
+
+  <!-- MAP -->
+  <div class="mapwrap">
+    <div class="mapcard">
+      <h2 class="serif">分布図</h2>
+      <div class="cap">ピンをクリックすると一覧の該当プロジェクトへ移動します</div>
+      <svg class="jpn" viewBox="0 0 300 360" xmlns="http://www.w3.org/2000/svg" aria-label="国内プロジェクト分布図（簡略図）">
+        <!-- 簡略化した日本列島シルエット -->
+        <path class="region" d="M205 40 L230 55 L235 80 L215 95 L225 110 L210 120 L215 95 L200 70 Z"/><!-- 北海道 -->
+        <path class="region" d="M150 130 L190 120 L210 140 L205 175 L175 195 L150 185 L135 160 Z"/><!-- 東北 -->
+        <path class="region" d="M140 195 L175 195 L185 215 L170 235 L145 230 L130 210 Z"/><!-- 関東 -->
+        <path class="region" d="M110 210 L145 210 L150 235 L120 245 L100 230 Z"/><!-- 中部 -->
+        <path class="region" d="M80 235 L120 235 L120 255 L90 262 L70 250 Z"/><!-- 近畿 -->
+        <path class="region" d="M45 245 L90 250 L88 268 L50 268 L35 258 Z"/><!-- 中国 -->
+        <path class="region" d="M60 275 L95 272 L92 290 L62 292 Z"/><!-- 四国 -->
+        <path class="region" d="M20 285 L55 280 L58 315 L30 325 L12 305 Z"/><!-- 九州 -->
+
+        <!-- ピン：live=稼働/実証中, plan=計画確定, concept=構想 -->
+        <!-- 北海道: さくら石狩 / ゲットワークス×北電 -->
+        <circle class="pin-dot pin-live" data-id="p1" cx="215" cy="70" r="7"/>
+        <circle class="pin-dot pin-live" data-id="p2" cx="222" cy="85" r="7"/>
+        <!-- 千葉(関東): IIJ白井 / NTTデータ首都圏 / 三協フロンテア -->
+        <circle class="pin-dot pin-live" data-id="p4" cx="178" cy="212" r="7"/>
+        <circle class="pin-dot pin-live" data-id="p6" cx="168" cy="220" r="7"/>
+        <circle class="pin-dot pin-plan" data-id="p7" cx="158" cy="228" r="7"/>
+        <!-- 長野(中部): TOSYS -->
+        <circle class="pin-dot pin-live" data-id="p3" cx="128" cy="228" r="7"/>
+        <!-- 洋上(日本海側に配置): 商船三井×日立 -->
+        <circle class="pin-dot pin-plan" data-id="p5" cx="95" cy="200" r="7"/>
+        <text class="pin-label" x="95" y="192" text-anchor="middle">洋上</text>
+      </svg>
+      <div class="legend">
+        <span class="lg"><span class="dot live"></span>稼働・実証中</span>
+        <span class="lg"><span class="dot plan"></span>計画・予定</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIST -->
+  <div>
+    <div class="filters" role="group" aria-label="絞り込み">
+      <button data-f="all" class="on">すべて</button>
+      <button data-f="live">稼働・実証中</button>
+      <button data-f="plan">計画・予定</button>
+    </div>
+
+    <div class="note">
+      <b>本マップについて：</b>掲載情報はすべて報道・各社の公表資料に基づく公開情報です。事業者から提供された非公開の案件情報は含みません。内容は発表時点のものであり、計画は変更される場合があります。掲載の網羅性・正確性を保証するものではなく、詳細は必ず各出典元でご確認ください。
+    </div>
+
+    <!-- p1 -->
+    <article class="proj" id="p1" data-status="live">
+      <div class="top"><span class="status live">稼働・実証中</span><span class="loc">北海道・石狩市</span></div>
+      <h3>さくらインターネット 石狩データセンター 液冷コンテナ増設</h3>
+      <div class="spec"><span class="chip">液冷対応</span><span class="chip">約170億円</span><span class="chip">2期（2025・2026）</span><span class="chip">GPUクラウド</span></div>
+      <p>NVIDIA GPUのクラウド提供を手がける同社が、石狩の拠点に液冷対応のコンテナ型DCを新設。2期に分けて整備し、生成AI向け計算基盤を拡充する計画。寒冷地の外気を活かした立地の代表例。</p>
+      <p class="src">出典：日本経済新聞ほか報道（<a href="https://www.nikkei.com/article/DGXZQOUC0392N0T01C24A2000000/" target="_blank" rel="noopener">nikkei.com</a>）</p>
+    </article>
+
+    <!-- p2 -->
+    <article class="proj" id="p2" data-status="live">
+      <div class="top"><span class="status live">稼働・実証中</span><span class="loc">北海道（道内）</span></div>
+      <h3>ゲットワークス × 北海道電力 コンテナ型AIデータセンター</h3>
+      <div class="spec"><span class="chip">水冷GPU</span><span class="chip">電力会社連携</span><span class="chip">業務提携</span><span class="chip">湯沢GX稼働中</span></div>
+      <p>コンテナ型DC構築で国内最大級の実績を持つゲットワークスが、北海道電力と道内でのAIデータセンター新設・運用で業務提携。雪・水・外気・地域電力を冷却と運用に活かす。電力会社との直接連携の先行モデル。</p>
+      <p class="src">出典：株式会社ゲットワークス プレスリリース（<a href="https://www.getworks.co.jp/data-center/" target="_blank" rel="noopener">getworks.co.jp</a>）</p>
+    </article>
+
+    <!-- p3 -->
+    <article class="proj" id="p3" data-status="live">
+      <div class="top"><span class="status live">稼働・実証中</span><span class="loc">長野県・長野市</span></div>
+      <h3>TOSYS「Cube Park NAGANO」 水冷・液浸コンテナDC</h3>
+      <div class="spec"><span class="chip">空冷＋水冷＋液浸</span><span class="chip">2026年2月開始</span><span class="chip">運営拠点提供型</span><span class="chip">再エネ</span></div>
+      <p>従来の空冷に加え水冷・液浸を導入した次世代コンテナ型DCを商用化。用地を持たない顧客向けに自社運営拠点を用意し、遠隔監視で運用支援。地方発・冷却先進・再エネ活用の王道モデル。</p>
+      <p class="src">出典：株式会社TOSYS プレスリリース（<a href="https://www.atpress.ne.jp/news/572077" target="_blank" rel="noopener">atpress.ne.jp</a>）</p>
+    </article>
+
+    <!-- p4 -->
+    <article class="proj" id="p4" data-status="live">
+      <div class="top"><span class="status live">稼働・実証中</span><span class="loc">千葉県・白井市</span></div>
+      <h3>IIJ × PFN × JAIST 直接水冷コンテナDC 実証</h3>
+      <div class="spec"><span class="chip">直接水冷（DLC）</span><span class="chip">産学連携</span><span class="chip">実証</span></div>
+      <p>IIJがAI開発のプリファードネットワークス、北陸先端科学技術大学院大学と組み、直接水冷技術のコンテナ型DCを開発。白井のIIJ拠点に設置し実証を進める。エッジDC「DX edge」の系譜。</p>
+      <p class="src">出典：日本経済新聞ほか報道（<a href="https://ent.iij.ad.jp/articles/10006/" target="_blank" rel="noopener">ent.iij.ad.jp</a>）</p>
+    </article>
+
+    <!-- p6 -->
+    <article class="proj" id="p6" data-status="live">
+      <div class="top"><span class="status live">稼働・実証中</span><span class="loc">首都圏（自社DC内）</span></div>
+      <h3>NTTデータ コンテナ型GPUaaS</h3>
+      <div class="spec"><span class="chip">液冷GPU</span><span class="chip">GPUaaS</span><span class="chip">2025年度</span></div>
+      <p>首都圏の自社DC内にコンテナを設置し、液冷対応の最新GPUを搭載してGPU as a Serviceとして提供。ゲットワークスと冷却性能の実証でも協業。場所貸しから計算力売りへの流れを象徴。</p>
+      <p class="src">出典：各社発表・報道（<a href="https://www.getworks.co.jp/data-center/" target="_blank" rel="noopener">getworks.co.jp</a>）</p>
+    </article>
+
+    <!-- p7 -->
+    <article class="proj" id="p7" data-status="plan">
+      <div class="top"><span class="status plan">計画・予定</span><span class="loc">全国（国内10拠点供給）</span></div>
+      <h3>三協フロンテア モジュール型データセンター</h3>
+      <div class="spec"><span class="chip">モジュール型</span><span class="chip">天井高4m超</span><span class="chip">液冷対応</span><span class="chip">高圧・段階拡張</span></div>
+      <p>折りたたみ輸送の独自構造で天井高を確保し最新液冷に対応。国内10拠点の生産網で全国へ安定供給。2MW以下・高圧受電での段階拡張を提案し、地方分散の受け皿となる筐体供給側の代表格。</p>
+      <p class="src">出典：三協フロンテア株式会社 製品サイト（<a href="https://www.sankyofrontier.com/unithouse/offer/datacenter/" target="_blank" rel="noopener">sankyofrontier.com</a>）</p>
+    </article>
+
+    <!-- p5 -->
+    <article class="proj" id="p5" data-status="plan">
+      <div class="top"><span class="status plan">計画・予定</span><span class="loc">洋上（浮体式）</span></div>
+      <h3>商船三井 × 日立 浮体式データセンター</h3>
+      <div class="spec"><span class="chip">中古船改造</span><span class="chip">海水冷却</span><span class="chip">2027年以降稼働</span></div>
+      <p>中古船を改造した浮体式データセンターの開発で合意。用地・電力・冷却（海水利用）を海上で解決する新発想で、分散型DCの立地が陸から海へも広がりつつあることを示す象徴的プロジェクト。</p>
+      <p class="src">出典：IT Leaders（インプレス）ほか報道（<a href="https://it.impress.co.jp/articles/-/28798" target="_blank" rel="noopener">it.impress.co.jp</a>）</p>
+    </article>
+
+    <div class="submit-band">
+      <div>
+        <h3 class="serif">公表プロジェクトの情報提供・掲載依頼</h3>
+        <p>公表済みプロジェクトの掲載漏れ・訂正のご連絡、また新規プロジェクトの発表情報をお寄せください。掲載は無料です。</p>
+      </div>
+      <a href="consult.html">情報を寄せる</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="frow">
+      <span>© 2026 DC PLATFORM JAPAN（仮称）／一般社団法人グリーンXアライアンス</span>
+      <span><a href="index.html">ホーム</a>　·　<a href="news.html">ニュースの視点</a>　·　<a href="computeindex.html">計算力指数</a>　·　<a href="glossary.html">用語解説</a></span>
+    </div>
+    <div class="disclaimer">
+      本マップの掲載情報は、報道および各社の公表資料に基づく公開情報を編集部が整理したものです。事業者から提供された非公開情報は含みません。各プロジェクトの内容は発表時点のものであり、計画変更・中止の可能性があります。掲載の網羅性・正確性・最新性を保証するものではなく、投資その他の判断は各出典元および一次情報のご確認のうえ、利用者ご自身の責任で行ってください。
+    </div>
+  </div>
+</footer>
+
+<script>
+// ピン→カード ジャンプ＆ハイライト
+document.querySelectorAll('.pin-dot').forEach(p=>{
+  p.addEventListener('click',()=>{
+    const id=p.dataset.id;
+    const card=document.getElementById(id);
+    if(!card) return;
+    // 隠れていたら全表示に戻す
+    document.querySelectorAll('.proj').forEach(c=>c.classList.remove('hide'));
+    document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('on'));
+    document.querySelector('.filters button[data-f="all"]').classList.add('on');
+    card.scrollIntoView({behavior:'smooth',block:'center'});
+    card.classList.add('flash');
+    setTimeout(()=>card.classList.remove('flash'),1600);
+  });
+});
+// フィルタ
+document.querySelectorAll('.filters button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    const f=b.dataset.f;
+    document.querySelectorAll('.proj').forEach(c=>{
+      c.classList.toggle('hide', !(f==='all'||c.dataset.status===f));
+    });
+    // ピンの強調
+    document.querySelectorAll('.pin-dot').forEach(p=>{
+      const card=document.getElementById(p.dataset.id);
+      const show = f==='all' || (card && card.dataset.status===f);
+      p.style.opacity = show? '1':'0.2';
+    });
+  });
+});
+</script>
+</body>
+</html>
