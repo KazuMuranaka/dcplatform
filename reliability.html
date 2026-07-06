@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>信頼性・Tier等級の基礎｜DC PLATFORM JAPAN</title>
+<meta name="description" content="Tier I〜IVの違い、N+1と2Nの冗長構成、UPSと非常用発電機の役割——データセンターの「止まらなさ」を決める信頼性設計を、専門外の方にも分かる言葉で解説します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#182420;--paper:#F6F4ED;--green:#1F4D36;--moss:#43604F;--gold:#A8894A;--line:#DAD5C6;--white:#FFFFFF;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);line-height:1.8;font-size:15px;}
+.serif{font-family:'Noto Serif JP',serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(28px,5vw,64px);}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+header{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;}
+.brand .logo{font-family:'Noto Serif JP',serif;font-weight:700;font-size:21px;color:var(--green);}
+.brand .logo em{font-style:normal;color:var(--gold);}
+nav.menu{display:flex;gap:26px;font-size:13.5px;font-weight:500;}
+nav.menu a{padding:6px 0;border-bottom:2px solid transparent;}
+nav.menu a:hover,nav.menu a.on{border-color:var(--gold);}
+.cta-btn{background:var(--green);color:#fff;padding:9px 18px;font-size:13px;font-weight:700;border-radius:2px;}
+.cta-btn:hover{background:var(--moss);}
+
+.page-hero{padding:52px 0 40px;border-bottom:1px solid var(--line);
+ background:linear-gradient(rgba(246,244,237,.95),rgba(246,244,237,.97)),
+ repeating-linear-gradient(90deg,transparent 0 79px,rgba(31,77,54,.06) 79px 80px);}
+.crumb{font-size:12px;color:#8a8674;margin-bottom:14px;}
+.crumb a:hover{color:var(--green);text-decoration:underline;}
+h1{font-family:'Noto Serif JP',serif;font-size:clamp(26px,3vw,34px);color:var(--green);font-weight:600;margin-bottom:12px;}
+.page-hero p{max-width:44em;color:#4a5148;font-size:14.5px;}
+.page-hero a{color:var(--green);text-decoration:underline;}
+
+.section{padding:56px 0 8px;}
+.section-title{display:flex;align-items:baseline;gap:14px;margin-bottom:26px;}
+.section-title .no{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:.15em;}
+.section-title h2{font-family:'Noto Serif JP',serif;font-size:clamp(20px,2.4vw,26px);color:var(--green);font-weight:600;}
+.lede{max-width:46em;color:#4a5148;font-size:14.5px;margin-bottom:28px;}
+
+.basics{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:20px;}
+.bcard{background:var(--white);border:1px solid var(--line);border-top:3px solid var(--green);border-radius:3px;padding:22px 20px;}
+.bcard h3{font-family:'Noto Serif JP',serif;font-size:16.5px;color:var(--green);margin-bottom:8px;font-weight:600;}
+.bcard .en{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:.1em;display:block;margin-bottom:4px;}
+.bcard p{font-size:13.5px;color:#4a5148;line-height:1.75;}
+.bcard .num{font-family:'IBM Plex Mono',monospace;color:var(--gold);font-weight:600;}
+
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--white);margin-bottom:14px;-webkit-overflow-scrolling:touch;}
+table{border-collapse:collapse;width:100%;min-width:880px;font-size:13px;}
+th,td{padding:12px 14px;border-bottom:1px solid var(--line);border-right:1px solid #EAE6DA;vertical-align:top;text-align:left;}
+thead th{background:var(--green);color:#EDE9DC;font-weight:700;font-size:13px;white-space:nowrap;position:sticky;top:0;}
+thead th small{display:block;font-weight:400;font-size:10.5px;color:#B9C6BB;letter-spacing:.05em;}
+tbody th{background:#F1EEE3;font-weight:700;color:var(--green);white-space:nowrap;font-size:12.5px;position:sticky;left:0;min-width:130px;}
+td .mono{font-size:13px;}
+td .sub{display:block;font-size:11px;color:#8a8674;white-space:normal;min-width:10em;}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:none;}
+col.hl{background:rgba(168,137,74,.07);}
+thead th.hl{background:#2A5C42;}
+.badge{display:inline-block;background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:2px;margin-left:6px;vertical-align:middle;letter-spacing:.08em;}
+.tbl-note{font-size:12px;color:#8a8674;line-height:1.7;max-width:52em;margin-bottom:8px;}
+
+/* redundancy diagrams */
+.redun{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:16px;}
+.rd{background:var(--white);border:1px solid var(--line);border-radius:3px;padding:22px 20px;}
+.rd h3{font-family:'Noto Serif JP',serif;font-size:16px;color:var(--green);font-weight:600;margin-bottom:4px;}
+.rd .en{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:.1em;display:block;margin-bottom:10px;}
+.units{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.unit{width:38px;height:30px;border-radius:2px;background:var(--green);display:flex;align-items:center;justify-content:center;color:#EDE9DC;font-family:'IBM Plex Mono',monospace;font-size:10px;}
+.unit.spare{background:var(--gold);}
+.unit.b{background:var(--moss);}
+.rd p{font-size:13px;color:#4a5148;line-height:1.7;}
+.rd b{color:var(--green);}
+
+/* blackout timeline */
+.tline{background:var(--white);border:1px solid var(--line);border-radius:3px;padding:26px 24px;margin-bottom:20px;}
+.tline h3{font-family:'Noto Serif JP',serif;font-size:16px;color:var(--green);font-weight:600;margin-bottom:16px;}
+.trow{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;margin-bottom:10px;font-size:12.5px;}
+.trow .who{font-weight:700;color:var(--green);white-space:nowrap;}
+.tbar{position:relative;height:26px;background:#EDE9DC;border-radius:3px;overflow:hidden;}
+.tbar i{position:absolute;top:0;bottom:0;border-radius:3px;display:flex;align-items:center;padding:0 10px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#fff;white-space:nowrap;}
+.tline p{font-size:13px;color:#4a5148;line-height:1.75;margin-top:12px;max-width:52em;}
+.tline b{color:var(--green);}
+
+.reads{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:20px;}
+.rcard{background:var(--white);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:3px;padding:22px 22px;}
+.rcard h3{font-size:15px;color:var(--green);font-weight:700;margin-bottom:8px;}
+.rcard p{font-size:13.5px;color:#4a5148;line-height:1.75;}
+.rcard a{color:var(--green);text-decoration:underline;}
+
+.calc-note{font-size:12px;color:#8a8674;line-height:1.8;max-width:56em;background:#F1EEE3;border:1px solid var(--line);border-radius:3px;padding:16px 20px;margin:8px 0 24px;}
+.calc-note b{color:var(--green);}
+
+.cta-band{background:var(--green);color:#EDE9DC;margin-top:48px;padding:44px 0;}
+.cta-band .inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+.cta-band h2{font-family:'Noto Serif JP',serif;font-size:20px;font-weight:600;margin-bottom:6px;color:#fff;}
+.cta-band p{font-size:13.5px;color:#CDD6CE;max-width:38em;}
+.cta-band a{background:var(--gold);color:#fff;padding:12px 26px;font-size:14px;font-weight:700;border-radius:2px;white-space:nowrap;}
+.cta-band a:hover{opacity:.9;}
+
+footer{border-top:1px solid var(--line);padding:26px 0 34px;font-size:11.5px;color:#8a8674;}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+footer a:hover{color:var(--green);text-decoration:underline;}
+@media(max-width:860px){nav.menu{display:none;}.trow{grid-template-columns:100px 1fr;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <a href="index.html" class="logo serif">DC PLATFORM <em>JAPAN</em></a>
+    </div>
+    <nav class="menu" aria-label="主要メニュー">
+      <a href="news.html">ニュースの視点</a>
+      <a href="projectmap.html">プロジェクトMAP</a>
+      <a href="computeindex.html">計算力指数</a>
+      <a href="index.html#basics">基礎知識</a>
+      <a href="glossary.html">用語解説</a>
+      <a href="faq.html">開発FAQ</a>
+    </nav>
+    <a class="cta-btn" href="consult.html">開発の相談をする</a>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">ホーム</a> ／ 信頼性・Tier等級の基礎</div>
+    <h1 class="serif">信頼性・Tier等級の基礎</h1>
+    <p>データセンターの価値は「止まらないこと」——ただし、どこまで止まらない設計にするかは用途次第です。ここでは信頼性の世界標準であるTier等級と、それを支える電源冗長（N+1・2N）、UPSと非常用発電機の仕組みを整理します。<a href="power.html">電力・系統接続</a>・<a href="cooling.html">冷却技術</a>と併せてお読みください。</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 01</span><h2>まず押さえたい4つの基礎</h2></div>
+    <p class="lede">信頼性の話は「9の数」「Tier」「N」「UPS」の4語で骨格が掴めます。</p>
+    <div class="basics">
+      <div class="bcard">
+        <span class="en">AVAILABILITY</span>
+        <h3>可用性——「9の数」の意味</h3>
+        <p>可用性99.9%は立派に聞こえますが、年間に直すと<span class="num">約8.8時間</span>止まる計算です。99.99%で約53分、99.999%（ファイブナイン）で約5分。<b>小数点の下の9が1つ増えるごとに、設備投資は跳ね上がります。</b>この「9の数と費用」の関係が信頼性設計の出発点です。</p>
+      </div>
+      <div class="bcard">
+        <span class="en">TIER</span>
+        <h3>Tier等級とは</h3>
+        <p>米Uptime Institute が定めた、データセンター設備の信頼性を示す<span class="num">4段階</span>の世界標準。数字が大きいほど冗長性が高く、Tier IIIから「保守のために止めなくてよい」設計になります。顧客がデータセンターを選ぶときの共通言語です。</p>
+      </div>
+      <div class="bcard">
+        <span class="en">N / N+1 / 2N</span>
+        <h3>「N」の読み方</h3>
+        <p>Nは「必要な設備の台数」。<b>N+1</b>は予備を1台足した構成（1台壊れても大丈夫）、<b>2N</b>は同じ系統を丸ごと2つ持つ完全二重化（片系が全滅しても大丈夫）。電源・冷却・通信のそれぞれについて、この構成を選ぶのが信頼性設計です。</p>
+      </div>
+      <div class="bcard">
+        <span class="en">UPS + GENERATOR</span>
+        <h3>UPSと非常用発電機</h3>
+        <p>停電の瞬間を支えるのが二段構えの仕組み。<b>UPS（無停電電源装置）</b>が蓄電池で即座に数分〜数十分を持たせ、その間に<b>非常用発電機</b>が起動して長時間の供給を引き継ぎます。どちらか一方では成立しない、役割分担のペアです。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="table">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 02</span><h2>Tier等級 比較表</h2></div>
+    <p class="lede">Tier I〜IVの違いを横並びで確認してください。ポイントは「保守時に止まるか」と「障害時に止まるか」の2つです。表は横にスクロールできます。</p>
+    <div class="tbl-scroll">
+      <table>
+        <colgroup><col style="width:150px"><col><col><col class="hl"><col></colgroup>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>Tier I<small>BASIC</small></th>
+            <th>Tier II<small>REDUNDANT COMPONENTS</small></th>
+            <th class="hl">Tier III<small>CONCURRENTLY MAINTAINABLE</small><span class="badge">商用の主流</span></th>
+            <th>Tier IV<small>FAULT TOLERANT</small></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th>ひとことで言うと</th>
+            <td><span class="sub">冗長性なしの基本構成</span></td>
+            <td><span class="sub">主要機器に予備あり</span></td>
+            <td><span class="sub">保守のために止めなくてよい</span></td>
+            <td><span class="sub">障害が起きても止まらない</span></td></tr>
+          <tr><th>電源・冷却の構成</th>
+            <td><span class="mono">N</span><span class="sub">予備なし</span></td>
+            <td><span class="mono">N+1</span><span class="sub">機器レベルの予備</span></td>
+            <td><span class="mono">N+1以上</span><span class="sub">＋給電・配管の経路が複数</span></td>
+            <td><span class="mono">2N／2N+1</span><span class="sub">系統ごと完全二重化</span></td></tr>
+          <tr><th>保守時の停止</th>
+            <td><span class="sub">停止が必要</span></td>
+            <td><span class="sub">停止が必要（経路が単一のため）</span></td>
+            <td><span class="sub"><b>停止不要</b>（片方の経路を止めて保守できる）</span></td>
+            <td><span class="sub">停止不要</span></td></tr>
+          <tr><th>可用性の目安</th>
+            <td><span class="mono">99.671%</span></td>
+            <td><span class="mono">99.741%</span></td>
+            <td><span class="mono">99.982%</span></td>
+            <td><span class="mono">99.995%</span></td></tr>
+          <tr><th>年間停止時間の目安</th>
+            <td><span class="mono">約28.8時間</span></td>
+            <td><span class="mono">約22時間</span></td>
+            <td><span class="mono">約1.6時間</span></td>
+            <td><span class="mono">約26分</span></td></tr>
+          <tr><th>主な想定用途</th>
+            <td><span class="sub">小規模拠点、検証環境</span></td>
+            <td><span class="sub">中小規模施設、コスト重視のAI学習用途</span></td>
+            <td><span class="sub">商用コロケーション、企業システム、クラウド</span></td>
+            <td><span class="sub">金融基幹系、医療、社会インフラ</span></td></tr>
+          <tr><th>建設コストの傾向</th>
+            <td><span class="sub">最小</span></td>
+            <td><span class="sub">＋10〜20%程度</span></td>
+            <td><span class="sub">Tier IIの1.5倍前後になることも</span></td>
+            <td><span class="sub">最大（Tier IIIからさらに大幅増）</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-note">※ 可用性・停止時間はUptime Instituteの定義に基づく設計上の目安であり、実際の稼働実績を保証するものではありません。コスト傾向は一般的な傾向値です。正式なTier認証はUptime Instituteの審査によるもので、自称の「Tier III相当」とは区別されます（詳しくはSECTION 04）。</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 03</span><h2>冗長構成と「停電の10秒間」</h2></div>
+    <p class="lede">必要台数N＝4台の設備を例に、3つの構成を見比べてみましょう。金色が予備、濃淡は別系統を表します。</p>
+    <div class="redun">
+      <div class="rd">
+        <span class="en">N</span>
+        <h3>冗長なし</h3>
+        <div class="units"><span class="unit">1</span><span class="unit">2</span><span class="unit">3</span><span class="unit">4</span></div>
+        <p>必要な分だけ。<b>1台の故障＝即、能力不足</b>。設備費は最小ですが、保守のたびに止まります。Tier I の世界です。</p>
+      </div>
+      <div class="rd">
+        <span class="en">N+1</span>
+        <h3>予備1台</h3>
+        <div class="units"><span class="unit">1</span><span class="unit">2</span><span class="unit">3</span><span class="unit">4</span><span class="unit spare">＋1</span></div>
+        <p><b>どれか1台が壊れても、予備が肩代わり</b>。費用対効果が最も良いバランス型で、多くの施設の標準です。Tier II〜IIIの基本形。</p>
+      </div>
+      <div class="rd">
+        <span class="en">2N</span>
+        <h3>完全二重化</h3>
+        <div class="units"><span class="unit">A1</span><span class="unit">A2</span><span class="unit">A3</span><span class="unit">A4</span></div>
+        <div class="units"><span class="unit b">B1</span><span class="unit b">B2</span><span class="unit b">B3</span><span class="unit b">B4</span></div>
+        <p>同じ系統をまるごと2つ（A系・B系）。<b>片系が全滅しても運転継続</b>。設備は2倍、Tier IVの世界です。</p>
+      </div>
+    </div>
+
+    <div class="tline">
+      <h3>停電発生からの時間経過——UPSと発電機のリレー</h3>
+      <div class="trow"><span class="who">系統電力</span><span class="tbar"><i style="left:0;width:18%;background:var(--moss);">供給中</i><i style="left:18%;right:0;background:#C56A4A;">停電</i></span></div>
+      <div class="trow"><span class="who">UPS（蓄電池）</span><span class="tbar"><i style="left:18%;width:34%;background:var(--gold);">0秒で引継ぎ｜数分〜数十分</i></span></div>
+      <div class="trow"><span class="who">非常用発電機</span><span class="tbar"><i style="left:26%;right:0;background:var(--green);">起動10〜60秒 → 長時間供給</i></span></div>
+      <p>停電の瞬間、まずUPSが<b>無瞬断（0秒）</b>でサーバーへの給電を引き継ぎます。UPSの蓄電池は数分〜数十分しか持ちませんが、その間に非常用発電機が起動・安定し、供給をリレーします。発電機は燃料の備蓄分（一般に<b>数時間〜72時間</b>）だけ運転を継続できます。この一連のリレーが確実に動くかどうかが信頼性の核心で、だからこそ定期的な<b>実負荷試験</b>（本当に切り替わるかの訓練）が運用の必須項目になります。</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 04</span><h2>開発の視点で信頼性をどう考えるか</h2></div>
+    <div class="reads">
+      <div class="rcard">
+        <h3>Tierは「高いほど良い」ではない</h3>
+        <p>AI学習は「中断しても再開できる」ワークロードで、Tier IV級の完全二重化は過剰投資になり得ます。冗長設備を軽くして、浮いた電力と資金を<a href="gpu.html">GPU</a>に回す設計（Tier II相当）が合理的な場合もある——一方、金融・企業システム向けならTier IIIが商売の前提。<b>「誰に何を売る施設か」がTierを決めます。</b>逆ではありません。</p>
+      </div>
+      <div class="rcard">
+        <h3>信頼性は「最弱リンク」で決まる</h3>
+        <p>電源を2Nにしても、<a href="cooling.html">冷却</a>が単一系統なら冷却故障で全停止します。<a href="network.html">通信</a>のルートが1本なら切断で孤立します。Tier等級が電源・冷却・経路をまとめて評価するのはこのためで、<b>投資は弱い所から順に</b>——一点豪華主義は信頼性に寄与しません。</p>
+      </div>
+      <div class="rcard">
+        <h3>「Tier認証」と「Tier相当」は別物</h3>
+        <p>正式なTier認証はUptime Instituteの設計審査・施設審査を経たもので、国内で取得済みの施設は限られます。営業資料でよく見る「Tier III<b>相当</b>」は自己評価であり、保証ではありません。テナント誘致や資金調達で信頼性を訴求するなら、<b>何をもって「相当」と言うのか</b>を構成図で説明できることが最低条件です。</p>
+      </div>
+      <div class="rcard">
+        <h3>コンテナ型には「台数の冗長性」がある</h3>
+        <p>1棟の建屋を二重化する代わりに、<b>コンテナを複数台に分散し、1台が止まっても全体は続く</b>という考え方もあります。段階投資と相性が良く、増設のたびに冗長度が上がるのも利点。建屋型の「設備の冗長化」とコンテナ型の「箱の冗長化」——どちらが用途に合うかも設計判断の一つです。</p>
+      </div>
+    </div>
+    <p class="calc-note">※ 本ページのTier等級の説明はUptime Instituteの公開情報に基づく一般的な解説（2026年時点）であり、同機関の認証基準の全文ではありません。可用性・コストの数値は<b>参考値</b>です。本ページは一般的な情報提供であり、個別助言ではありません。</p>
+  </div>
+</div>
+
+<div class="cta-band">
+  <div class="wrap inner">
+    <div>
+      <h2 class="serif">信頼性設計の落としどころから相談できます</h2>
+      <p>用途に対して過剰でも過小でもない冗長構成の設計、Tier訴求の整理、コンテナ分散型の冗長設計まで支援します。</p>
+    </div>
+    <a href="consult.html">開発の相談をする</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 DC PLATFORM JAPAN（仮称）／一般社団法人グリーンXアライアンス</span>
+    <span><a href="index.html">ホームへ戻る</a>　·　<a href="gpu.html">GPU比較</a>　·　<a href="cooling.html">冷却技術</a>　·　<a href="power.html">電力・系統接続</a>　·　<a href="network.html">通信・回線</a>　·　本ページの解説は一般的な情報提供であり、法務・税務・技術の個別助言ではありません。</span>
+  </div>
+</footer>
+
+</body>
+</html>

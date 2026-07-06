@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>電力・系統接続の基礎｜DC PLATFORM JAPAN</title>
+<meta name="description" content="高圧と特別高圧の違い、系統接続の流れと期間、「空き容量」問題、工事費負担金——日本のデータセンター開発最大の関門である電力を、専門外の方にも分かる言葉で解説します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#182420;--paper:#F6F4ED;--green:#1F4D36;--moss:#43604F;--gold:#A8894A;--line:#DAD5C6;--white:#FFFFFF;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);line-height:1.8;font-size:15px;}
+.serif{font-family:'Noto Serif JP',serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(28px,5vw,64px);}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+header{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;}
+.brand .logo{font-family:'Noto Serif JP',serif;font-weight:700;font-size:21px;color:var(--green);}
+.brand .logo em{font-style:normal;color:var(--gold);}
+nav.menu{display:flex;gap:26px;font-size:13.5px;font-weight:500;}
+nav.menu a{padding:6px 0;border-bottom:2px solid transparent;}
+nav.menu a:hover,nav.menu a.on{border-color:var(--gold);}
+.cta-btn{background:var(--green);color:#fff;padding:9px 18px;font-size:13px;font-weight:700;border-radius:2px;}
+.cta-btn:hover{background:var(--moss);}
+
+.page-hero{padding:52px 0 40px;border-bottom:1px solid var(--line);
+ background:linear-gradient(rgba(246,244,237,.95),rgba(246,244,237,.97)),
+ repeating-linear-gradient(90deg,transparent 0 79px,rgba(31,77,54,.06) 79px 80px);}
+.crumb{font-size:12px;color:#8a8674;margin-bottom:14px;}
+.crumb a:hover{color:var(--green);text-decoration:underline;}
+h1{font-family:'Noto Serif JP',serif;font-size:clamp(26px,3vw,34px);color:var(--green);font-weight:600;margin-bottom:12px;}
+.page-hero p{max-width:44em;color:#4a5148;font-size:14.5px;}
+.page-hero a{color:var(--green);text-decoration:underline;}
+
+.section{padding:56px 0 8px;}
+.section-title{display:flex;align-items:baseline;gap:14px;margin-bottom:26px;}
+.section-title .no{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:.15em;}
+.section-title h2{font-family:'Noto Serif JP',serif;font-size:clamp(20px,2.4vw,26px);color:var(--green);font-weight:600;}
+.lede{max-width:46em;color:#4a5148;font-size:14.5px;margin-bottom:28px;}
+
+.basics{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:20px;}
+.bcard{background:var(--white);border:1px solid var(--line);border-top:3px solid var(--green);border-radius:3px;padding:22px 20px;}
+.bcard h3{font-family:'Noto Serif JP',serif;font-size:16.5px;color:var(--green);margin-bottom:8px;font-weight:600;}
+.bcard .en{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:.1em;display:block;margin-bottom:4px;}
+.bcard p{font-size:13.5px;color:#4a5148;line-height:1.75;}
+.bcard .num{font-family:'IBM Plex Mono',monospace;color:var(--gold);font-weight:600;}
+
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--white);margin-bottom:14px;-webkit-overflow-scrolling:touch;}
+table{border-collapse:collapse;width:100%;min-width:880px;font-size:13px;}
+th,td{padding:12px 14px;border-bottom:1px solid var(--line);border-right:1px solid #EAE6DA;vertical-align:top;text-align:left;}
+thead th{background:var(--green);color:#EDE9DC;font-weight:700;font-size:13px;white-space:nowrap;position:sticky;top:0;}
+thead th small{display:block;font-weight:400;font-size:10.5px;color:#B9C6BB;letter-spacing:.05em;}
+tbody th{background:#F1EEE3;font-weight:700;color:var(--green);white-space:nowrap;font-size:12.5px;position:sticky;left:0;min-width:130px;}
+td .mono{font-size:13px;}
+td .sub{display:block;font-size:11px;color:#8a8674;white-space:normal;min-width:11em;}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:none;}
+col.hl{background:rgba(168,137,74,.07);}
+thead th.hl{background:#2A5C42;}
+.badge{display:inline-block;background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:2px;margin-left:6px;vertical-align:middle;letter-spacing:.08em;}
+.tbl-note{font-size:12px;color:#8a8674;line-height:1.7;max-width:52em;margin-bottom:8px;}
+
+/* process steps */
+.steps{position:relative;margin:8px 0 20px;padding-left:34px;}
+.steps::before{content:"";position:absolute;left:11px;top:8px;bottom:8px;width:2px;background:var(--line);}
+.step{position:relative;background:var(--white);border:1px solid var(--line);border-radius:3px;padding:20px 22px;margin-bottom:14px;}
+.step::before{content:"";position:absolute;left:-29px;top:24px;width:12px;height:12px;border-radius:50%;background:var(--green);border:3px solid var(--paper);box-shadow:0 0 0 1px var(--line);}
+.step .shead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px;}
+.step .sno{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.12em;}
+.step h3{font-family:'Noto Serif JP',serif;font-size:16.5px;color:var(--green);font-weight:600;}
+.step .dur{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#8a8674;background:#F1EEE3;border:1px solid var(--line);border-radius:2px;padding:2px 10px;white-space:nowrap;}
+.step p{font-size:13.5px;color:#4a5148;line-height:1.75;}
+.step b{color:var(--green);}
+
+.reads{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:20px;}
+.rcard{background:var(--white);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:3px;padding:22px 22px;}
+.rcard h3{font-size:15px;color:var(--green);font-weight:700;margin-bottom:8px;}
+.rcard p{font-size:13.5px;color:#4a5148;line-height:1.75;}
+.rcard a{color:var(--green);text-decoration:underline;}
+
+.calc-note{font-size:12px;color:#8a8674;line-height:1.8;max-width:56em;background:#F1EEE3;border:1px solid var(--line);border-radius:3px;padding:16px 20px;margin:8px 0 24px;}
+.calc-note b{color:var(--green);}
+
+.cta-band{background:var(--green);color:#EDE9DC;margin-top:48px;padding:44px 0;}
+.cta-band .inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+.cta-band h2{font-family:'Noto Serif JP',serif;font-size:20px;font-weight:600;margin-bottom:6px;color:#fff;}
+.cta-band p{font-size:13.5px;color:#CDD6CE;max-width:38em;}
+.cta-band a{background:var(--gold);color:#fff;padding:12px 26px;font-size:14px;font-weight:700;border-radius:2px;white-space:nowrap;}
+.cta-band a:hover{opacity:.9;}
+
+footer{border-top:1px solid var(--line);padding:26px 0 34px;font-size:11.5px;color:#8a8674;}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+footer a:hover{color:var(--green);text-decoration:underline;}
+@media(max-width:860px){nav.menu{display:none;}.step .dur{margin-left:0;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <a href="index.html" class="logo serif">DC PLATFORM <em>JAPAN</em></a>
+    </div>
+    <nav class="menu" aria-label="主要メニュー">
+      <a href="news.html">ニュースの視点</a>
+      <a href="projectmap.html">プロジェクトMAP</a>
+      <a href="computeindex.html">計算力指数</a>
+      <a href="index.html#basics">基礎知識</a>
+      <a href="glossary.html">用語解説</a>
+      <a href="faq.html">開発FAQ</a>
+    </nav>
+    <a class="cta-btn" href="consult.html">開発の相談をする</a>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">ホーム</a> ／ 電力・系統接続の基礎</div>
+    <h1 class="serif">電力・系統接続の基礎</h1>
+    <p>日本のデータセンター開発で、最も時間がかかり、最も計画を左右するのが「電力」です。土地があっても、電気が引けなければ何も始まりません。ここでは受電方式の違いから系統接続の流れ、「空き容量」問題までを整理します。<a href="gpu.html">GPU比較</a>・<a href="cooling.html">冷却技術</a>と併せてお読みください。</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 01</span><h2>まず押さえたい4つの基礎</h2></div>
+    <p class="lede">電力の話は専門用語が多く見えますが、骨格はシンプルです。この4つを押さえれば、電力会社との会話が読めるようになります。</p>
+    <div class="basics">
+      <div class="bcard">
+        <span class="en">kW / kWh</span>
+        <h3>kWとkWh の違い</h3>
+        <p>kW（キロワット）は「同時に使う電気の太さ」、kWh（キロワット時）は「使った電気の量」。データセンターは24時間フル稼働するため、<span class="num">契約kW×24時間×365日</span>にほぼ等しいkWhを消費する、極めて珍しい負荷です。まず問われるのは「何kW必要か」です。</p>
+      </div>
+      <div class="bcard">
+        <span class="en">HV / EHV</span>
+        <h3>高圧と特別高圧</h3>
+        <p>受電規模<span class="num">2,000kW（2MW）</span>が分かれ目。それ未満は「高圧」（6.6kV）で、街中の配電線から受電できます。それ以上は「特別高圧」（22kV〜）となり、変電所からの専用受電が必要に。<b>手続き・費用・期間が桁違いに変わる</b>ため、開発の最初の分岐点です。</p>
+      </div>
+      <div class="bcard">
+        <span class="en">GRID CONNECTION</span>
+        <h3>系統接続とは</h3>
+        <p>電力会社の送配電網（系統）に自分の施設をつなぐこと。データセンターは「大量に電気を受け取る側」として、送配電事業者との協議（系統協議）を経て接続契約を結びます。この協議のプロセスと期間が、開発スケジュールの背骨になります。</p>
+      </div>
+      <div class="bcard">
+        <span class="en">AVAILABLE CAPACITY</span>
+        <h3>「空き容量」問題</h3>
+        <p>送電線・変電所には流せる電気の上限があり、その残り枠が「空き容量」。空きがなければ設備増強の完了まで待つことになり、<b>数年〜10年待ち</b>の地点も存在します。受電（買電）側の目安としては、各送配電事業者が「早く電力供給を始められる場所」を示す<b>ウェルカムゾーンマップ</b>の公開を進めています。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="table">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 02</span><h2>受電方式 比較表</h2></div>
+    <p class="lede">受電方式は施設規模で自動的に決まります。3方式の違いを横並びで確認してください。表は横にスクロールできます。</p>
+    <div class="tbl-scroll">
+      <table>
+        <colgroup><col style="width:150px"><col><col class="hl"><col></colgroup>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>低圧受電<small>LOW VOLTAGE</small></th>
+            <th class="hl">高圧受電<small>HIGH VOLTAGE</small><span class="badge">コンテナ級</span></th>
+            <th>特別高圧受電<small>EXTRA-HIGH VOLTAGE</small></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th>受電電圧</th>
+            <td><span class="mono">100V／200V</span></td>
+            <td><span class="mono">6.6kV（6,600V）</span></td>
+            <td><span class="mono">22kV／33kV／66kV〜</span><span class="sub">規模により電圧階級が上がる</span></td></tr>
+          <tr><th>契約規模</th>
+            <td><span class="mono">50kW未満</span></td>
+            <td><span class="mono">50kW〜2,000kW未満</span></td>
+            <td><span class="mono">2,000kW以上</span></td></tr>
+          <tr><th>想定されるDC規模</th>
+            <td><span class="sub">ラック数本のサーバールーム級。DCとしては実質対象外</span></td>
+            <td><span class="sub">コンテナ型1〜数台、エッジデータセンター（GPU数十〜百数十基級）</span></td>
+            <td><span class="sub">建屋型・コンテナ群の本格施設（数MW〜数百MW）</span></td></tr>
+          <tr><th>受電のしかた</th>
+            <td><span class="sub">電柱の変圧器から引込むだけ</span></td>
+            <td><span class="sub">最寄りの高圧配電線から引込み、敷地内のキュービクル（受変電設備）で降圧</span></td>
+            <td><span class="sub">変電所から専用線で受電し、敷地内の特高受変電設備で降圧</span></td></tr>
+          <tr><th>必要な設備・体制</th>
+            <td><span class="sub">特別な設備は不要</span></td>
+            <td><span class="sub">キュービクル設置＋電気主任技術者の選任（外部委託可）</span></td>
+            <td><span class="sub">特高変電設備（それ自体が数億円級）＋常駐級の保安体制</span></td></tr>
+          <tr><th>接続までの期間（目安）</th>
+            <td><span class="sub">数週間〜</span></td>
+            <td><span class="sub">数カ月〜1年程度（配電網の状況による）</span></td>
+            <td><span class="sub">2〜5年以上。系統増強が必要な場合はさらに長期化</span></td></tr>
+          <tr><th>電気料金の傾向</th>
+            <td><span class="sub">単価は最も高い</span></td>
+            <td><span class="sub">低圧より安い</span></td>
+            <td><span class="sub">単価は最も安いが、受電設備・保安の固定費が重い</span></td></tr>
+          <tr><th>手続きの重さ</th>
+            <td><span class="sub">申込みのみ</span></td>
+            <td><span class="sub">電力会社との事前相談＋引込工事</span></td>
+            <td><span class="sub">系統協議（接続検討→契約申込）＋工事費負担金＋長期の増強工事</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-note">※ 期間・費用は一般的な目安です。地域の系統状況・引込距離・増強要否により大きく変動します。2,000kW付近の計画では、高圧に収める設計（コンテナ分割・複数受電点など）が検討されることもありますが、制度上の制約があるため個別確認が必要です。</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 03</span><h2>系統接続の流れ（特別高圧の場合）</h2></div>
+    <p class="lede">特別高圧で「電気を買う側（需要側）」の接続は、決まった手順を踏むプロセスです。窓口は二層あります——引込・接続は<b>一般送配電事業者</b>、電気の購入契約（需給契約）は<b>小売電気事業者</b>。全体像と各段階の期間感を押さえておきましょう。</p>
+    <div class="steps">
+      <div class="step">
+        <div class="shead"><span class="sno">STEP 01</span><h3 class="serif">事前相談・供給余力の確認</h3><span class="dur">随時（無料）</span></div>
+        <p>一般送配電事業者の窓口に計画概要（場所・最大需要kW・希望時期）を伝えて相談します。各社が公開を進める<b>ウェルカムゾーンマップ</b>（早期に電力供給を開始できる地点を示した地図）で、候補地周辺の供給余力の概況も掴めます。無料かつ拘束力がない段階なので、候補地が複数あれば並行して相談するのが定石です。</p>
+      </div>
+      <div class="step">
+        <div class="shead"><span class="sno">STEP 02</span><h3 class="serif">接続検討（需要側）の申込み</h3><span class="dur">回答まで約3カ月</span></div>
+        <p>受電側の正式な検討依頼です。一般送配電事業者が「どの変電所・送電線から供給するか」「増強工事が必要か」「概算費用はいくらか」を技術的に検討し、回答します（検討料が必要）。<b>この回答で初めて、受電の実現性・時期・費用の輪郭が見えます。</b></p>
+      </div>
+      <div class="step">
+        <div class="shead"><span class="sno">STEP 03</span><h3 class="serif">契約申込み → 供給承諾 → 工事費負担金の入金</h3><span class="dur">承諾後3カ月以内に入金</span></div>
+        <p>検討回答をもとに需要設備の契約申込みを行い、供給承諾を得て、<b>工事費負担金</b>（引込線・系統増強のうち需要家側負担分。規模と距離により数億〜数十億円になることも）を支払うことで供給の枠が確保されます。なお2025年からデータセンターを念頭に規律が強化され、<b>供給承諾から3カ月以内に負担金を入金しなければ申込み解除</b>、また<b>申込時に計画した最終需要規模まで一定期間内に契約電力を引き上げること</b>が接続の要件とされる方針です。「とりあえず枠だけ確保」は通用しなくなりました。</p>
+      </div>
+      <div class="step">
+        <div class="shead"><span class="sno">STEP 04</span><h3 class="serif">接続工事・受電設備の建設</h3><span class="dur">1〜3年以上</span></div>
+        <p>送配電側の引込線・変電所工事と、敷地側の特高受変電設備の建設を並行して進めます。系統の増強工事が必要なケースでは、この期間がさらに延び、<b>全体で5年超</b>となることもあります。データセンター本体より電気の方が長くかかる——これが「電力が開発の背骨」と言われる理由です。</p>
+      </div>
+      <div class="step">
+        <div class="shead"><span class="sno">STEP 05</span><h3 class="serif">需給契約・受電開始</h3><span class="dur">—</span></div>
+        <p>電気そのものの購入は、<b>小売電気事業者との需給契約</b>で行います（大口向けの料金交渉・市場連動型・再エネメニューなどの選択はここ）。受電開始後は電気主任技術者による保安体制のもとで運用します。増設（受電容量の引上げ）は再び系統協議からやり直しになるため、将来の拡張分は最初の計画に織り込んでおくのが実務の知恵です——ただし上記の「最終需要規模まで引き上げる要件」があるため、<b>実需に裏付けられた計画</b>であることが前提です。</p>
+      </div>
+    </div>
+    <p class="tbl-note">※ 高圧受電（2,000kW未満）の場合は、上記より大幅に簡素です。電力会社への事前相談→引込工事の流れで、配電網に余裕があれば数カ月〜1年程度で受電できるケースが一般的です。小さく速く始められることが、コンテナ型・エッジ級の大きな優位性です。</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 04</span><h2>開発の視点で電力をどう考えるか</h2></div>
+    <div class="reads">
+      <div class="rcard">
+        <h3>すべてに先立つのは系統協議</h3>
+        <p>土地の取得もGPUの調達も、電力の目処が立たなければ空振りになります。逆に供給の枠を確保した土地は、それ自体が希少な資産です。<b>検討の初日にウェルカムゾーンマップを確認し、最速で事前相談に入る</b>——順番を間違えないことが、電力時代の開発の鉄則です。<a href="sitecheck.html">用地簡易診断</a>でもこの点を最重要項目にしています。</p>
+      </div>
+      <div class="rcard">
+        <h3>「2MWの壁」を戦略的に使う</h3>
+        <p>特別高圧が2〜5年待ちでも、高圧なら数カ月〜1年で受電できる場合があります。コンテナ型で高圧級から小さく始めて実績と収益を作り、特高の枠を待つ間に事業を育てる——<b>二段構えの開発戦略</b>は、この制度の境界線を活かした現実的な選択肢です。</p>
+      </div>
+      <div class="rcard">
+        <h3>工事費負担金は「土地代」と同列の費目</h3>
+        <p>引込距離が長い、増強が必要——それだけで数億〜数十億円の負担金が乗り、事業性が変わります。用地の比較は「土地代＋造成費＋<b>負担金の見込み</b>」の合計で行うべきで、安い土地が実は最も高くつくことも珍しくありません。</p>
+      </div>
+      <div class="rcard">
+        <h3>再エネ併設という選択肢</h3>
+        <p>敷地内・近隣の太陽光や蓄電池と組み合わせる構成は、電気代の抑制とGX（脱炭素）対応の両面で価値があります。系統から見れば受電量が平準化される利点もあります。ただし自家消費・自己託送などの制度設計が絡むため、系統協議と一体で計画する必要があります。</p>
+      </div>
+    </div>
+    <p class="calc-note">※ 本ページの期間・費用・制度の記述は、一般的な実務の目安（2026年時点）です。系統協議の運用・接続ルール（ノンファーム型接続・出力制御等を含む）は制度改正により変わります。実際の計画では、対象地域の一般送配電事業者への確認と専門家の関与が不可欠です。本ページは一般的な情報提供であり、個別助言ではありません。</p>
+  </div>
+</div>
+
+<div class="cta-band">
+  <div class="wrap inner">
+    <div>
+      <h2 class="serif">系統協議の進め方から相談できます</h2>
+      <p>空き容量の当たりの付け方、事前相談の持ち込み方、高圧・特高の二段構え戦略まで。電力を軸にした開発計画づくりを支援します。</p>
+    </div>
+    <a href="consult.html">開発の相談をする</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 DC PLATFORM JAPAN（仮称）／一般社団法人グリーンXアライアンス</span>
+    <span><a href="index.html">ホームへ戻る</a>　·　<a href="gpu.html">GPU比較</a>　·　<a href="cooling.html">冷却技術</a>　·　<a href="sitecheck.html">用地簡易診断</a>　·　本ページの解説は一般的な情報提供であり、法務・税務・技術の個別助言ではありません。</span>
+  </div>
+</footer>
+
+</body>
+</html>

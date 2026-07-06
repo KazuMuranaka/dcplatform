@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPU基礎データ・比較表｜DC PLATFORM JAPAN</title>
+<meta name="description" content="H100・H200・B200・B300、AMD Instinctシリーズなど、データセンター開発の中心にあるAI向けGPUの基礎知識と主要スペックの比較表。専門外の方にも分かる言葉で解説します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#182420;--paper:#F6F4ED;--green:#1F4D36;--moss:#43604F;--gold:#A8894A;--line:#DAD5C6;--white:#FFFFFF;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);line-height:1.8;font-size:15px;}
+.serif{font-family:'Noto Serif JP',serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(28px,5vw,64px);}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+header{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;}
+.brand{display:flex;align-items:baseline;gap:10px;}
+.brand .logo{font-family:'Noto Serif JP',serif;font-weight:700;font-size:21px;color:var(--green);}
+.brand .logo em{font-style:normal;color:var(--gold);}
+nav.menu{display:flex;gap:26px;font-size:13.5px;font-weight:500;}
+nav.menu a{padding:6px 0;border-bottom:2px solid transparent;}
+nav.menu a:hover,nav.menu a.on{border-color:var(--gold);}
+.cta-btn{background:var(--green);color:#fff;padding:9px 18px;font-size:13px;font-weight:700;border-radius:2px;}
+.cta-btn:hover{background:var(--moss);}
+
+.page-hero{padding:52px 0 40px;border-bottom:1px solid var(--line);
+ background:linear-gradient(rgba(246,244,237,.95),rgba(246,244,237,.97)),
+ repeating-linear-gradient(90deg,transparent 0 79px,rgba(31,77,54,.06) 79px 80px);}
+.crumb{font-size:12px;color:#8a8674;margin-bottom:14px;}
+.crumb a:hover{color:var(--green);text-decoration:underline;}
+h1{font-family:'Noto Serif JP',serif;font-size:clamp(26px,3vw,34px);color:var(--green);font-weight:600;margin-bottom:12px;}
+.page-hero p{max-width:44em;color:#4a5148;font-size:14.5px;}
+
+.section{padding:56px 0 8px;}
+.section-title{display:flex;align-items:baseline;gap:14px;margin-bottom:26px;}
+.section-title .no{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:.15em;}
+.section-title h2{font-family:'Noto Serif JP',serif;font-size:clamp(20px,2.4vw,26px);color:var(--green);font-weight:600;}
+.lede{max-width:46em;color:#4a5148;font-size:14.5px;margin-bottom:28px;}
+
+/* basics cards */
+.basics{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:20px;}
+.bcard{background:var(--white);border:1px solid var(--line);border-top:3px solid var(--green);border-radius:3px;padding:22px 20px;}
+.bcard h3{font-family:'Noto Serif JP',serif;font-size:16.5px;color:var(--green);margin-bottom:8px;font-weight:600;}
+.bcard .en{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:.1em;display:block;margin-bottom:4px;}
+.bcard p{font-size:13.5px;color:#4a5148;line-height:1.75;}
+
+/* comparison table */
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--white);margin-bottom:14px;-webkit-overflow-scrolling:touch;}
+table{border-collapse:collapse;width:100%;min-width:980px;font-size:13px;}
+th,td{padding:12px 14px;border-bottom:1px solid var(--line);border-right:1px solid #EAE6DA;vertical-align:top;text-align:left;}
+thead th{background:var(--green);color:#EDE9DC;font-weight:700;font-size:13px;white-space:nowrap;position:sticky;top:0;}
+thead th small{display:block;font-weight:400;font-size:10.5px;color:#B9C6BB;letter-spacing:.05em;}
+tbody th{background:#F1EEE3;font-weight:700;color:var(--green);white-space:nowrap;font-size:12.5px;position:sticky;left:0;min-width:130px;}
+td{white-space:nowrap;}
+td .mono{font-size:13px;}
+td .sub{display:block;font-size:11px;color:#8a8674;white-space:normal;}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:none;}
+col.hl{background:rgba(168,137,74,.07);}
+thead th.hl{background:#2A5C42;}
+.badge{display:inline-block;background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:2px;margin-left:6px;vertical-align:middle;letter-spacing:.08em;}
+.tbl-note{font-size:12px;color:#8a8674;line-height:1.7;max-width:52em;margin-bottom:8px;}
+
+/* generation trend */
+.trend{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px;}
+.tcard{background:var(--white);border:1px solid var(--line);border-radius:3px;padding:24px 22px;}
+.tcard h3{font-family:'Noto Serif JP',serif;font-size:16px;color:var(--green);margin-bottom:14px;font-weight:600;}
+.bar-row{display:grid;grid-template-columns:88px 1fr 74px;align-items:center;gap:10px;margin-bottom:9px;font-size:12px;}
+.bar-row .lbl{color:#4a5148;white-space:nowrap;}
+.bar-row .val{font-family:'IBM Plex Mono',monospace;color:var(--green);text-align:right;white-space:nowrap;}
+.bar{height:12px;background:#EDE9DC;border-radius:2px;overflow:hidden;}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--moss),var(--green));border-radius:2px;}
+.bar i.g{background:linear-gradient(90deg,#C4A662,var(--gold));}
+.tcard p{font-size:13px;color:#4a5148;line-height:1.75;margin-top:12px;}
+
+/* reading section */
+.reads{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:20px;}
+.rcard{background:var(--white);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:3px;padding:22px 22px;}
+.rcard h3{font-size:15px;color:var(--green);font-weight:700;margin-bottom:8px;}
+.rcard p{font-size:13.5px;color:#4a5148;line-height:1.75;}
+
+.calc-note{font-size:12px;color:#8a8674;line-height:1.8;max-width:56em;background:#F1EEE3;border:1px solid var(--line);border-radius:3px;padding:16px 20px;margin:8px 0 24px;}
+.calc-note b{color:var(--green);}
+
+.cta-band{background:var(--green);color:#EDE9DC;margin-top:48px;padding:44px 0;}
+.cta-band .inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+.cta-band h2{font-family:'Noto Serif JP',serif;font-size:20px;font-weight:600;margin-bottom:6px;color:#fff;}
+.cta-band p{font-size:13.5px;color:#CDD6CE;max-width:38em;}
+.cta-band a{background:var(--gold);color:#fff;padding:12px 26px;font-size:14px;font-weight:700;border-radius:2px;white-space:nowrap;}
+.cta-band a:hover{opacity:.9;}
+
+footer{border-top:1px solid var(--line);padding:26px 0 34px;font-size:11.5px;color:#8a8674;}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+footer a:hover{color:var(--green);text-decoration:underline;}
+
+@media(max-width:860px){
+ nav.menu{display:none;}
+ .bar-row{grid-template-columns:74px 1fr 68px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <a href="index.html" class="logo serif">DC PLATFORM <em>JAPAN</em></a>
+    </div>
+    <nav class="menu" aria-label="主要メニュー">
+      <a href="news.html">ニュースの視点</a>
+      <a href="projectmap.html">プロジェクトMAP</a>
+      <a href="computeindex.html">計算力指数</a>
+      <a href="index.html#basics">基礎知識</a>
+      <a href="glossary.html">用語解説</a>
+      <a href="faq.html">開発FAQ</a>
+    </nav>
+    <a class="cta-btn" href="consult.html">開発の相談をする</a>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">ホーム</a> ／ GPU基礎データ・比較表</div>
+    <h1 class="serif">GPU基礎データ・比較表</h1>
+    <p>AIデータセンターの「中身」であるGPU。土地・電力・建屋の議論も、最終的にはこの一枚のチップが求める電力と冷却に行き着きます。ここでは、開発検討に必要なGPUの基礎知識と、主要製品の公開スペックを一覧で整理します。</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 01</span><h2>まず押さえたい4つの基礎</h2></div>
+    <p class="lede">比較表を読む前に、スペック表に必ず登場する4つの言葉だけ押さえておきましょう。この4つが分かれば、GPUのニュースはほぼ読み解けます。</p>
+    <div class="basics">
+      <div class="bcard">
+        <span class="en">GPU</span>
+        <h3>GPUとは</h3>
+        <p>もともと画像処理用の半導体ですが、単純な計算を大量に並列処理する構造がAIの学習・推論に合致し、AIデータセンターの中核部品になりました。1基あたり数百万円〜数千万円クラスの、施設で最も高価な設備です。</p>
+      </div>
+      <div class="bcard">
+        <span class="en">HBM MEMORY</span>
+        <h3>メモリ容量と帯域</h3>
+        <p>GPUに直結した超高速メモリ（HBM）の容量が大きいほど、大きなAIモデルを1基で動かせます。近年の競争軸は演算速度よりむしろ「メモリをどれだけ積めるか」に移っており、容量と帯域（TB/s）が価格を左右します。</p>
+      </div>
+      <div class="bcard">
+        <span class="en">FP8 / FP4</span>
+        <h3>演算精度と性能表記</h3>
+        <p>FP8・FP4は計算に使う数値の細かさ（精度）です。粗い精度ほど1秒あたりの計算回数（FLOPS）を稼げるため、最新GPUは低精度演算の性能を競っています。カタログの巨大な数字は「どの精度での値か」を必ず確認します。</p>
+      </div>
+      <div class="bcard">
+        <span class="en">TDP / COOLING</span>
+        <h3>消費電力と冷却</h3>
+        <p>TDPはGPU1基の最大消費電力の目安です。3世代で700W→1,000W→1,400Wとほぼ倍増し、最新世代は空冷では冷やしきれず液冷が事実上必須になりました。ここがデータセンター開発（受電容量・冷却方式）に直結します。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="table">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 02</span><h2>主要データセンターGPU 比較表</h2></div>
+    <p class="lede">現在のAIデータセンターで採用が多いNVIDIA・AMDの主要7製品を、公開スペックで横並びにしました。表は横にスクロールできます。</p>
+    <div class="tbl-scroll">
+      <table>
+        <colgroup>
+          <col style="width:140px"><col><col><col><col class="hl"><col><col><col>
+        </colgroup>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>NVIDIA H100<small>SXM</small></th>
+            <th>NVIDIA H200<small>SXM</small></th>
+            <th>NVIDIA B200<small>SXM</small></th>
+            <th class="hl">NVIDIA B300<small>Blackwell Ultra</small><span class="badge">最新</span></th>
+            <th>AMD MI300X<small>OAM</small></th>
+            <th>AMD MI325X<small>OAM</small></th>
+            <th>AMD MI355X<small>OAM</small></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th>アーキテクチャ</th>
+            <td>Hopper</td><td>Hopper</td><td>Blackwell</td><td>Blackwell Ultra</td><td>CDNA 3</td><td>CDNA 3</td><td>CDNA 4</td></tr>
+          <tr><th>出荷開始（目安）</th>
+            <td>2022年後半</td><td>2024年</td><td>2024年末〜</td><td>2025年後半〜</td><td>2023年末</td><td>2024年末〜</td><td>2025年</td></tr>
+          <tr><th>メモリ容量</th>
+            <td><span class="mono">80GB</span><span class="sub">HBM3</span></td>
+            <td><span class="mono">141GB</span><span class="sub">HBM3e</span></td>
+            <td><span class="mono">192GB</span><span class="sub">HBM3e</span></td>
+            <td><span class="mono">288GB</span><span class="sub">HBM3e（12段積層）</span></td>
+            <td><span class="mono">192GB</span><span class="sub">HBM3</span></td>
+            <td><span class="mono">256GB</span><span class="sub">HBM3e</span></td>
+            <td><span class="mono">288GB</span><span class="sub">HBM3e</span></td></tr>
+          <tr><th>メモリ帯域</th>
+            <td><span class="mono">3.35TB/s</span></td><td><span class="mono">4.8TB/s</span></td><td><span class="mono">8TB/s</span></td><td><span class="mono">8TB/s</span></td><td><span class="mono">5.3TB/s</span></td><td><span class="mono">6TB/s</span></td><td><span class="mono">8TB/s</span></td></tr>
+          <tr><th>FP8演算（dense）</th>
+            <td><span class="mono">約2.0 PF</span></td><td><span class="mono">約2.0 PF</span></td><td><span class="mono">約4.5 PF</span></td><td><span class="mono">約4.5 PF</span></td><td><span class="mono">約2.6 PF</span></td><td><span class="mono">約2.6 PF</span></td><td><span class="mono">約5.0 PF</span></td></tr>
+          <tr><th>FP4演算（dense）</th>
+            <td>非対応</td><td>非対応</td><td><span class="mono">約9 PF</span></td><td><span class="mono">約14〜15 PF</span></td><td>非対応</td><td>非対応</td><td><span class="mono">約10 PF</span></td></tr>
+          <tr><th>最大消費電力（TDP）</th>
+            <td><span class="mono">700W</span></td><td><span class="mono">700W</span></td><td><span class="mono">1,000W</span></td><td><span class="mono">1,400W</span></td><td><span class="mono">750W</span></td><td><span class="mono">1,000W</span></td><td><span class="mono">1,400W</span></td></tr>
+          <tr><th>冷却方式</th>
+            <td>空冷／液冷</td><td>空冷／液冷</td><td>液冷推奨</td><td><b>液冷必須</b></td><td>空冷可</td><td>空冷可</td><td><b>液冷必須</b></td></tr>
+          <tr><th>GPU間接続</th>
+            <td><span class="mono">NVLink4</span><span class="sub">900GB/s</span></td>
+            <td><span class="mono">NVLink4</span><span class="sub">900GB/s</span></td>
+            <td><span class="mono">NVLink5</span><span class="sub">1.8TB/s</span></td>
+            <td><span class="mono">NVLink5</span><span class="sub">1.8TB/s</span></td>
+            <td><span class="mono">Infinity Fabric</span></td>
+            <td><span class="mono">Infinity Fabric</span></td>
+            <td><span class="mono">Infinity Fabric</span><span class="sub">153.6GB/s×7</span></td></tr>
+          <tr><th>主な位置づけ</th>
+            <td><span class="sub" style="white-space:normal;min-width:9em;display:block;">前世代の標準機。中古・レンタル流通が豊富</span></td>
+            <td><span class="sub" style="white-space:normal;min-width:9em;display:block;">H100のメモリ増強版。推論向け</span></td>
+            <td><span class="sub" style="white-space:normal;min-width:9em;display:block;">現行世代の主力。学習・推論とも</span></td>
+            <td><span class="sub" style="white-space:normal;min-width:9em;display:block;">推論特化の最上位。大規模モデルを1基で保持</span></td>
+            <td><span class="sub" style="white-space:normal;min-width:9em;display:block;">AMDの対抗軸。大容量メモリが強み</span></td>
+            <td><span class="sub" style="white-space:normal;min-width:9em;display:block;">MI300Xのメモリ増強版</span></td>
+            <td><span class="sub" style="white-space:normal;min-width:9em;display:block;">AMD最新。B300と同じ288GB級</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-note">※ PF＝ペタフロップス（1秒あたり1,000兆回の演算）。演算性能はスパース（疎行列）加速を含まないdense値の概算です。メーカー公表値・公開資料に基づく参考値であり、SKU・構成により異なります。</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 03</span><h2>3世代でこう変わった</h2></div>
+    <p class="lede">NVIDIAの主力3世代（H100→B200→B300）を並べると、データセンター開発の前提条件がどれだけ短期間で書き換わったかが分かります。</p>
+    <div class="trend">
+      <div class="tcard">
+        <h3>GPU1基の消費電力（TDP）</h3>
+        <div class="bar-row"><span class="lbl">H100（2022）</span><span class="bar"><i style="width:50%"></i></span><span class="val">700W</span></div>
+        <div class="bar-row"><span class="lbl">B200（2024）</span><span class="bar"><i style="width:71%"></i></span><span class="val">1,000W</span></div>
+        <div class="bar-row"><span class="lbl">B300（2025）</span><span class="bar"><i class="g" style="width:100%"></i></span><span class="val">1,400W</span></div>
+        <p>3年でちょうど2倍。サーバー1台（GPU8基）なら電源系込みで14kW級に達し、従来型データセンターのラック（数kW）では収容できません。<b>受電容量と冷却が開発の最初の論点になる</b>理由がここにあります。</p>
+      </div>
+      <div class="tcard">
+        <h3>GPU1基のメモリ容量（HBM）</h3>
+        <div class="bar-row"><span class="lbl">H100（2022）</span><span class="bar"><i style="width:28%"></i></span><span class="val">80GB</span></div>
+        <div class="bar-row"><span class="lbl">B200（2024）</span><span class="bar"><i style="width:67%"></i></span><span class="val">192GB</span></div>
+        <div class="bar-row"><span class="lbl">B300（2025）</span><span class="bar"><i class="g" style="width:100%"></i></span><span class="val">288GB</span></div>
+        <p>3年で3.6倍。大容量化により、これまで複数基に分割していた大規模AIモデルを少ない基数で動かせるようになりました。<b>「何基必要か」の計算式そのものが世代ごとに変わる</b>点に注意が必要です。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 04</span><h2>開発の視点でスペックをどう読むか</h2></div>
+    <div class="reads">
+      <div class="rcard">
+        <h3>TDP × 基数 ＝ 必要電力の出発点</h3>
+        <p>GPUのTDPに基数を掛け、サーバー・冷却・ネットワークの分を上乗せしたものが施設の必要電力の出発点です。B300クラスなら100基前後で冷却込み300kW〜が目安になり、逆算すれば「確保できる電力から搭載可能な基数」が決まります。</p>
+      </div>
+      <div class="rcard">
+        <h3>液冷必須化は建屋・コンテナの設計条件</h3>
+        <p>1,400W級のGPUは空冷では冷やせません。液冷（DLC・液浸など）は配管・熱交換・水源の設計を伴うため、後付けが難しく、施設計画の初期段階で織り込む必要があります。詳しくは<a href="cooling.html" style="color:var(--green);text-decoration:underline;">冷却技術の基礎・比較</a>をご覧ください。</p>
+      </div>
+      <div class="rcard">
+        <h3>世代交代の速さは事業計画のリスク</h3>
+        <p>主力GPUは1〜1.5年周期で世代交代し、レンタル単価は新世代登場とともに下落してきました。設備投資の回収計画は「現行単価が続く前提」ではなく、単価下落と残存価値を織り込んで組む必要があります。当プラットフォームの<a href="computeindex.html" style="color:var(--green);text-decoration:underline;">計算力指数</a>で相場観を確認できます。</p>
+      </div>
+      <div class="rcard">
+        <h3>スペック表の「数字の罠」に注意</h3>
+        <p>カタログの演算性能は、スパース（2:1疎行列）加速を含む値と含まないdense値が混在し、同じGPUでも2倍違って見えます。また精度（FP4かFP8か）が異なる数字同士は比較できません。提案書の数字は「精度」と「dense/sparse」の条件を必ず揃えて確認しましょう。</p>
+      </div>
+    </div>
+    <p class="calc-note">※ 本ページの数値はメーカー公表資料・公開情報に基づく<b>参考値</b>です（2026年時点）。製品のSKU・構成・ファームウェアにより実際の値は異なります。価格・レンタル相場は市況により大きく変動します。本ページは一般的な情報提供であり、特定製品の推奨や投資判断の助言ではありません。</p>
+  </div>
+</div>
+
+<div class="cta-band">
+  <div class="wrap inner">
+    <div>
+      <h2 class="serif">GPUの選定・調達から相談できます</h2>
+      <p>どの世代を・何基・どの方式で載せるかは、電力・冷却・資金計画と一体で決まります。機種選定の段階からの相談も受け付けています。</p>
+    </div>
+    <a href="consult.html">開発の相談をする</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 DC PLATFORM JAPAN（仮称）／一般社団法人グリーンXアライアンス</span>
+    <span><a href="index.html">ホームへ戻る</a>　·　<a href="glossary.html">用語解説</a>　·　本ページの解説は一般的な情報提供であり、法務・税務・技術の個別助言ではありません。</span>
+  </div>
+</footer>
+
+</body>
+</html>

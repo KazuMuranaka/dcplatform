@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>冷却技術の基礎・比較｜DC PLATFORM JAPAN</title>
+<meta name="description" content="空冷・リアドア・DLC（コールドプレート）・液浸——AIデータセンターの成否を分ける冷却方式を、PUE・ラック密度・コストの観点から専門外の方にも分かる言葉で比較解説します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#182420;--paper:#F6F4ED;--green:#1F4D36;--moss:#43604F;--gold:#A8894A;--line:#DAD5C6;--white:#FFFFFF;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);line-height:1.8;font-size:15px;}
+.serif{font-family:'Noto Serif JP',serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(28px,5vw,64px);}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+header{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;}
+.brand{display:flex;align-items:baseline;gap:10px;}
+.brand .logo{font-family:'Noto Serif JP',serif;font-weight:700;font-size:21px;color:var(--green);}
+.brand .logo em{font-style:normal;color:var(--gold);}
+nav.menu{display:flex;gap:26px;font-size:13.5px;font-weight:500;}
+nav.menu a{padding:6px 0;border-bottom:2px solid transparent;}
+nav.menu a:hover,nav.menu a.on{border-color:var(--gold);}
+.cta-btn{background:var(--green);color:#fff;padding:9px 18px;font-size:13px;font-weight:700;border-radius:2px;}
+.cta-btn:hover{background:var(--moss);}
+
+.page-hero{padding:52px 0 40px;border-bottom:1px solid var(--line);
+ background:linear-gradient(rgba(246,244,237,.95),rgba(246,244,237,.97)),
+ repeating-linear-gradient(90deg,transparent 0 79px,rgba(31,77,54,.06) 79px 80px);}
+.crumb{font-size:12px;color:#8a8674;margin-bottom:14px;}
+.crumb a:hover{color:var(--green);text-decoration:underline;}
+h1{font-family:'Noto Serif JP',serif;font-size:clamp(26px,3vw,34px);color:var(--green);font-weight:600;margin-bottom:12px;}
+.page-hero p{max-width:44em;color:#4a5148;font-size:14.5px;}
+
+.section{padding:56px 0 8px;}
+.section-title{display:flex;align-items:baseline;gap:14px;margin-bottom:26px;}
+.section-title .no{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:.15em;}
+.section-title h2{font-family:'Noto Serif JP',serif;font-size:clamp(20px,2.4vw,26px);color:var(--green);font-weight:600;}
+.lede{max-width:46em;color:#4a5148;font-size:14.5px;margin-bottom:28px;}
+
+.basics{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:20px;}
+.bcard{background:var(--white);border:1px solid var(--line);border-top:3px solid var(--green);border-radius:3px;padding:22px 20px;}
+.bcard h3{font-family:'Noto Serif JP',serif;font-size:16.5px;color:var(--green);margin-bottom:8px;font-weight:600;}
+.bcard .en{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:.1em;display:block;margin-bottom:4px;}
+.bcard p{font-size:13.5px;color:#4a5148;line-height:1.75;}
+.bcard .num{font-family:'IBM Plex Mono',monospace;color:var(--gold);font-weight:600;}
+
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--white);margin-bottom:14px;-webkit-overflow-scrolling:touch;}
+table{border-collapse:collapse;width:100%;min-width:980px;font-size:13px;}
+th,td{padding:12px 14px;border-bottom:1px solid var(--line);border-right:1px solid #EAE6DA;vertical-align:top;text-align:left;}
+thead th{background:var(--green);color:#EDE9DC;font-weight:700;font-size:13px;white-space:nowrap;position:sticky;top:0;}
+thead th small{display:block;font-weight:400;font-size:10.5px;color:#B9C6BB;letter-spacing:.05em;}
+tbody th{background:#F1EEE3;font-weight:700;color:var(--green);white-space:nowrap;font-size:12.5px;position:sticky;left:0;min-width:130px;}
+td .mono{font-size:13px;}
+td .sub{display:block;font-size:11px;color:#8a8674;white-space:normal;min-width:11em;}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:none;}
+col.hl{background:rgba(168,137,74,.07);}
+thead th.hl{background:#2A5C42;}
+.badge{display:inline-block;background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:2px;margin-left:6px;vertical-align:middle;letter-spacing:.08em;}
+.tbl-note{font-size:12px;color:#8a8674;line-height:1.7;max-width:52em;margin-bottom:8px;}
+
+/* density ladder */
+.ladder{background:var(--white);border:1px solid var(--line);border-radius:3px;padding:26px 24px;margin-bottom:20px;}
+.ladder h3{font-family:'Noto Serif JP',serif;font-size:16px;color:var(--green);margin-bottom:16px;font-weight:600;}
+.bar-row{display:grid;grid-template-columns:150px 1fr 110px;align-items:center;gap:10px;margin-bottom:9px;font-size:12px;}
+.bar-row .lbl{color:#4a5148;white-space:nowrap;}
+.bar-row .val{font-family:'IBM Plex Mono',monospace;color:var(--green);text-align:right;white-space:nowrap;}
+.bar{height:12px;background:#EDE9DC;border-radius:2px;overflow:hidden;}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--moss),var(--green));border-radius:2px;}
+.bar i.g{background:linear-gradient(90deg,#C4A662,var(--gold));}
+.ladder p{font-size:13px;color:#4a5148;line-height:1.75;margin-top:12px;max-width:52em;}
+
+.reads{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:20px;}
+.rcard{background:var(--white);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:3px;padding:22px 22px;}
+.rcard h3{font-size:15px;color:var(--green);font-weight:700;margin-bottom:8px;}
+.rcard p{font-size:13.5px;color:#4a5148;line-height:1.75;}
+.rcard a{color:var(--green);text-decoration:underline;}
+
+/* heat reuse band */
+.reuse{background:var(--green);border-radius:4px;color:#EDE9DC;padding:34px 30px;margin-bottom:20px;}
+.reuse h3{font-family:'Noto Serif JP',serif;font-size:19px;color:#fff;font-weight:600;margin-bottom:10px;}
+.reuse>p{font-size:13.5px;color:#CDD6CE;max-width:52em;margin-bottom:20px;}
+.reuse-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.reuse-grid div{background:rgba(255,255,255,.06);border:1px solid rgba(237,233,220,.18);border-radius:3px;padding:18px 18px;}
+.reuse-grid h4{font-size:14px;color:#E8D9B5;font-weight:700;margin-bottom:6px;}
+.reuse-grid p{font-size:12.5px;color:#CDD6CE;line-height:1.7;}
+
+.calc-note{font-size:12px;color:#8a8674;line-height:1.8;max-width:56em;background:#F1EEE3;border:1px solid var(--line);border-radius:3px;padding:16px 20px;margin:8px 0 24px;}
+.calc-note b{color:var(--green);}
+
+.cta-band{background:var(--green);color:#EDE9DC;margin-top:48px;padding:44px 0;}
+.cta-band .inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+.cta-band h2{font-family:'Noto Serif JP',serif;font-size:20px;font-weight:600;margin-bottom:6px;color:#fff;}
+.cta-band p{font-size:13.5px;color:#CDD6CE;max-width:38em;}
+.cta-band a{background:var(--gold);color:#fff;padding:12px 26px;font-size:14px;font-weight:700;border-radius:2px;white-space:nowrap;}
+.cta-band a:hover{opacity:.9;}
+
+footer{border-top:1px solid var(--line);padding:26px 0 34px;font-size:11.5px;color:#8a8674;}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+footer a:hover{color:var(--green);text-decoration:underline;}
+
+@media(max-width:860px){
+ nav.menu{display:none;}
+ .bar-row{grid-template-columns:110px 1fr 90px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <a href="index.html" class="logo serif">DC PLATFORM <em>JAPAN</em></a>
+    </div>
+    <nav class="menu" aria-label="主要メニュー">
+      <a href="news.html">ニュースの視点</a>
+      <a href="projectmap.html">プロジェクトMAP</a>
+      <a href="computeindex.html">計算力指数</a>
+      <a href="index.html#basics">基礎知識</a>
+      <a href="glossary.html">用語解説</a>
+      <a href="faq.html">開発FAQ</a>
+    </nav>
+    <a class="cta-btn" href="consult.html">開発の相談をする</a>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">ホーム</a> ／ 冷却技術の基礎・比較</div>
+    <h1 class="serif">冷却技術の基礎・比較</h1>
+    <p>AIデータセンターに投入される電力は、最後はすべて「熱」になります。その熱をどう捨てるか——冷却方式の選択は、建屋・コンテナの設計、電気代、そして立地条件まで決めてしまう、開発の分かれ道です。<a href="gpu.html" style="color:var(--green);text-decoration:underline;">GPU基礎データ・比較表</a>と併せてお読みください。</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 01</span><h2>まず押さえたい4つの基礎</h2></div>
+    <p class="lede">冷却の議論に出てくる言葉は多くありません。この4つを押さえれば、方式比較が読めるようになります。</p>
+    <div class="basics">
+      <div class="bcard">
+        <span class="en">HEAT = POWER</span>
+        <h3>電力は全部、熱になる</h3>
+        <p>GPUが消費した電力は、計算を終えるとほぼ100％熱に変わります。1,400WのGPUは1,400Wの電気ストーブと同じ発熱体。GPU100基なら常時140kW超の熱を、24時間365日捨て続ける仕組みが必要です。</p>
+      </div>
+      <div class="bcard">
+        <span class="en">PUE</span>
+        <h3>PUE（電力使用効率）</h3>
+        <p>施設全体の消費電力÷IT機器の消費電力。<span class="num">1.0</span>に近いほど「冷却などのムダ」が少ない施設です。従来型空冷は<span class="num">1.5〜2.0</span>、最新の液冷施設は<span class="num">1.1前後</span>。PUEの差はそのまま毎月の電気代の差になります。</p>
+      </div>
+      <div class="bcard">
+        <span class="en">RACK DENSITY</span>
+        <h3>ラック密度（kW/ラック）</h3>
+        <p>サーバーラック1本あたりの消費電力。従来のデータセンターは<span class="num">数kW〜10kW</span>で設計されていますが、最新AIラックは<span class="num">100kW超</span>。この10倍以上の密度差こそ、既存施設の転用が難しい根本原因です。</p>
+      </div>
+      <div class="bcard">
+        <span class="en">AIR vs LIQUID</span>
+        <h3>空気か、液体か</h3>
+        <p>水は空気の約3,000倍以上の熱を運べます（同体積比）。発熱密度が上がるほど空気では追いつかず、液体で直接熱を奪う方式へ——これが「液冷シフト」の物理的な理由です。1,400W級GPUでは液冷が事実上必須になりました。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="table">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 02</span><h2>主要冷却方式 比較表</h2></div>
+    <p class="lede">現在のデータセンターで使われる5つの方式を横並びにしました。右へ行くほど新しい高密度向けの方式です。表は横にスクロールできます。</p>
+    <div class="tbl-scroll">
+      <table>
+        <colgroup>
+          <col style="width:140px"><col><col><col class="hl"><col><col>
+        </colgroup>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>空冷<small>CRAC / 空調機</small></th>
+            <th>リアドア熱交換<small>RDHx</small></th>
+            <th class="hl">DLC（コールドプレート）<small>Direct Liquid Cooling</small><span class="badge">主流</span></th>
+            <th>単相液浸<small>Single-Phase Immersion</small></th>
+            <th>二相液浸<small>Two-Phase Immersion</small></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th>仕組み</th>
+            <td><span class="sub">冷えた空気をサーバーに送り、熱気を空調機で回収する。従来からの標準方式</span></td>
+            <td><span class="sub">ラック背面の扉に冷水コイルを組み込み、排気をその場で冷やす。空冷の増強策</span></td>
+            <td><span class="sub">GPU・CPUに金属の冷却板を密着させ、冷却水を直接通して熱を奪う</span></td>
+            <td><span class="sub">サーバーごと絶縁性の液体に沈め、液を循環させて冷やす</span></td>
+            <td><span class="sub">沸点の低い液に沈め、沸騰（気化）の力で熱を奪う。冷却能力は最高クラス</span></td></tr>
+          <tr><th>対応ラック密度（目安）</th>
+            <td><span class="mono">〜15kW</span></td>
+            <td><span class="mono">〜40kW前後</span></td>
+            <td><span class="mono">80〜130kW超</span></td>
+            <td><span class="mono">100kW級</span></td>
+            <td><span class="mono">100kW級以上</span></td></tr>
+          <tr><th>PUEの目安</th>
+            <td><span class="mono">1.4〜2.0</span></td>
+            <td><span class="mono">1.2〜1.4</span></td>
+            <td><span class="mono">1.1〜1.2</span></td>
+            <td><span class="mono">1.05〜1.1</span></td>
+            <td><span class="mono">1.05前後</span></td></tr>
+          <tr><th>対応GPU世代</th>
+            <td><span class="sub">H100/H200世代まで。1,000W級以上は困難</span></td>
+            <td><span class="sub">空冷サーバーの高密度化に対応。1,400W級は困難</span></td>
+            <td><span class="sub">B300・MI355Xなど最新1,400W級の標準方式</span></td>
+            <td><span class="sub">最新世代まで対応可</span></td>
+            <td><span class="sub">最新世代・将来世代まで対応可</span></td></tr>
+          <tr><th>導入コスト感</th>
+            <td><span class="sub">低い（枯れた技術・機器が豊富）</span></td>
+            <td><span class="sub">中（既存施設の増強に使いやすい）</span></td>
+            <td><span class="sub">中〜高（配管・CDU・二次冷却系が必要）</span></td>
+            <td><span class="sub">高（専用槽・液剤・対応サーバーが必要）</span></td>
+            <td><span class="sub">高（液剤が高価。環境規制の動向に注意）</span></td></tr>
+          <tr><th>保守性</th>
+            <td><span class="sub">容易。人手・ノウハウとも豊富</span></td>
+            <td><span class="sub">比較的容易</span></td>
+            <td><span class="sub">水回り管理が必要だが、サーバー保守は従来に近い</span></td>
+            <td><span class="sub">機器の出し入れに専用手順。液剤管理が必要</span></td>
+            <td><span class="sub">最も特殊。対応できる事業者が限られる</span></td></tr>
+          <tr><th>主な採用場面</th>
+            <td><span class="sub">一般的なサーバー・通信機器、既存施設</span></td>
+            <td><span class="sub">既存データセンターのAI対応改修</span></td>
+            <td><span class="sub">新設AIデータセンター、コンテナ型AI-DCの標準</span></td>
+            <td><span class="sub">暗号資産マイニング、エッジ、一部AI施設</span></td>
+            <td><span class="sub">超高密度の実験的・先端的施設</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-note">※ 数値は業界で一般に使われる目安のレンジです。外気条件・設計・運用により実際の値は大きく異なります。CDU＝冷却水分配装置。液浸の液剤（フッ素系など）は環境規制の動向により選択肢が変わる場合があります。</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 03</span><h2>ラック密度が決める「方式の境界線」</h2></div>
+    <div class="ladder">
+      <h3>ラック1本の電力と、対応できる冷却方式</h3>
+      <div class="bar-row"><span class="lbl">従来型DC（汎用）</span><span class="bar"><i style="width:8%"></i></span><span class="val">〜10kW｜空冷</span></div>
+      <div class="bar-row"><span class="lbl">高密度空冷</span><span class="bar"><i style="width:12%"></i></span><span class="val">〜15kW｜空冷限界</span></div>
+      <div class="bar-row"><span class="lbl">AI対応改修</span><span class="bar"><i style="width:30%"></i></span><span class="val">〜40kW｜リアドア</span></div>
+      <div class="bar-row"><span class="lbl">最新AIラック</span><span class="bar"><i class="g" style="width:100%"></i></span><span class="val">100kW超｜液冷必須</span></div>
+      <p>例えばGPU72基を1本のラックに収める最新のラック型システムは1本で<b>130kW級</b>——従来型データセンターのラック10本分以上の電力を、たった1本で消費します。「いまあるデータセンターを改修すればAI対応できるのでは」という発想が多くの場合成立しないのは、この密度の壁があるためです。</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 04</span><h2>開発の視点で冷却をどう考えるか</h2></div>
+    <div class="reads">
+      <div class="rcard">
+        <h3>冷却方式は「後から変えられない」</h3>
+        <p>空冷から液冷への転換は、配管・ポンプ・熱交換設備・床荷重まで変わる大工事です。搭載するGPU世代（＝<a href="gpu.html">TDP</a>）から逆算して、最初に方式を決めるのが定石。将来の世代交代を見越し、余裕を持った冷却容量で設計します。</p>
+      </div>
+      <div class="rcard">
+        <h3>立地条件と冷却は表裏一体</h3>
+        <p>冷涼な気候なら外気冷却（フリークーリング）で電気代を下げられ、水源が近ければ水冷の選択肢が広がります。逆に高温多湿な立地では冷却コストが嵩みます。「電力が安い場所」だけでなく「熱を捨てやすい場所」という視点が用地選定には欠かせません。</p>
+      </div>
+      <div class="rcard">
+        <h3>PUEの差は、毎月の請求書の差</h3>
+        <p>IT負荷2MWの施設なら、PUE 1.5と1.1の差は常時0.8MW——年間で約700万kWhの電力差になります。冷却の初期投資が高くても、電気代の削減で回収できるケースは少なくありません。冷却は「コスト」ではなく「収益性を左右する投資」として比較すべき項目です。</p>
+      </div>
+      <div class="rcard">
+        <h3>コンテナ型は「冷却込みの製品」</h3>
+        <p>コンテナ型データセンターは、液冷の配管・CDU・熱交換系を工場で組み込んだ状態で出荷されます。現地での冷却工事を最小化でき、工期とリスクを抑えやすいのが特長。液冷必須時代において、コンテナ型が注目される大きな理由の一つです。</p>
+      </div>
+    </div>
+
+    <div class="reuse">
+      <h3>排熱は「捨てる」から「使う」へ</h3>
+      <p>液冷の普及には、もう一つの意味があります。空気に散らばっていた熱が「温水」という使える形で回収できるようになったこと。データセンターの排熱（30〜50℃程度の温水）は、地域の産業のエネルギー源になり得ます。</p>
+      <div class="reuse-grid">
+        <div><h4>農業ハウスの加温</h4><p>冬季の暖房費が経営を圧迫する施設園芸に、排熱温水を供給。データセンターと農業が隣り合う立地設計は、地方開発ならではの選択肢です。</p></div>
+        <div><h4>陸上養殖の水温管理</h4><p>年間を通じた水温維持が必要な陸上養殖と、年間を通じて熱を出し続けるデータセンターは、熱の需給が噛み合う組み合わせです。</p></div>
+        <div><h4>地域熱供給・温浴施設</h4><p>欧州では排熱の地域暖房利用が先行。国内でも温浴施設・融雪・公共施設への熱供給など、地域に還元する設計が広がりつつあります。</p></div>
+      </div>
+    </div>
+
+    <p class="calc-note">※ 本ページの数値は業界で一般に用いられる<b>参考値</b>です（2026年時点）。PUE・対応密度・コストは、機器構成・外気条件・設計・運用体制により大きく異なります。本ページは一般的な情報提供であり、特定方式・特定製品の推奨や個別助言ではありません。</p>
+  </div>
+</div>
+
+<div class="cta-band">
+  <div class="wrap inner">
+    <div>
+      <h2 class="serif">冷却方式の選定から相談できます</h2>
+      <p>GPU世代・電力・立地・排熱利用まで、冷却は開発全体と一体で決まります。構想段階からの相談も受け付けています。</p>
+    </div>
+    <a href="consult.html">開発の相談をする</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 DC PLATFORM JAPAN（仮称）／一般社団法人グリーンXアライアンス</span>
+    <span><a href="index.html">ホームへ戻る</a>　·　<a href="gpu.html">GPU基礎データ・比較表</a>　·　本ページの解説は一般的な情報提供であり、法務・税務・技術の個別助言ではありません。</span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -101,6 +101,22 @@ h2{font-family:'Noto Serif JP',serif;font-size:27px;font-weight:600;color:var(--
 /* 8 tsumari grid */
 .tsumari{background:var(--white);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
 .grid8{display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid var(--line);border-top:1px solid var(--line);}
+/* 基礎知識セクション */
+.kb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.kb{background:var(--white);border:1px solid var(--line);border-top:3px solid var(--green);border-radius:3px;padding:24px 22px;display:flex;flex-direction:column;transition:box-shadow .15s,border-color .15s;}
+.kb:hover{border-color:var(--gold);box-shadow:0 3px 12px rgba(31,77,54,.08);}
+.kb .no{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:.14em;margin-bottom:6px;}
+.kb h3{font-family:'Noto Serif JP',serif;font-size:17px;color:var(--green);font-weight:600;margin-bottom:6px;}
+.kb p{font-size:12.5px;color:#4a5148;line-height:1.7;flex:1;}
+.kb .go2{margin-top:14px;font-size:12.5px;font-weight:700;color:var(--green);}
+.kb .go2::after{content:"→";margin-left:6px;color:var(--gold);}
+.kb.tool{background:var(--green);border-color:var(--green);}
+.kb.tool .no{color:#E8D9B5;}
+.kb.tool h3{color:#fff;}
+.kb.tool p{color:#CDD6CE;}
+.kb.tool .go2{color:#E8D9B5;}
+@media(max-width:900px){.kb-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.kb-grid{grid-template-columns:1fr;}}
 .cell{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 22px 22px;position:relative;background:var(--white);transition:background .25s;}
 .cell:hover{background:#FBFAF4;}
 .cell .no{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.1em;margin-bottom:10px;display:block;}
@@ -204,6 +220,7 @@ footer a:hover{color:#fff;}
       <a href="news.html">ニュースの視点</a>
       <a href="projectmap.html">プロジェクトMAP</a>
       <a href="computeindex.html">計算力指数</a>
+      <a href="#basics">基礎知識</a>
       <a href="glossary.html">用語解説</a>
       <a href="faq.html">開発FAQ</a>
     </nav>
@@ -266,6 +283,55 @@ footer a:hover{color:#fff;}
       <div class="cell"><span class="no">VIEW 06</span><h3>施工</h3><p>コンテナ型に対応できるEPC・電気工事のパートナーを業種別限定枠からご紹介します。</p><a class="go" href="consult.html">施工パートナーとして参加する</a></div>
       <div class="cell"><span class="no">VIEW 07</span><h3>顧客</h3><p>計算力取引板と需要家仲介で、稼働率＝売り先の確保を開業前から支援します。</p><a class="go" href="consult.html">計算力取引について相談する</a></div>
       <div class="cell"><span class="no">VIEW 08</span><h3>運用</h3><p>遠隔監視・保守体制・人材確保まで、稼働後の運用設計を担い手とともに支えます。</p><a class="go" href="consult.html">運用パートナーとして参加する</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- 基礎知識・診断 -->
+<section id="basics" style="background:var(--white);border-top:1px solid var(--line);">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="eyebrow">KNOWLEDGE</div>
+      <h2>データセンター開発の基礎知識・診断</h2>
+      <p>開発の検討に必要な基礎を、5つのテーマで無料公開しています。まずは9問で分かる用地診断からどうぞ。</p>
+    </div>
+    <div class="kb-grid reveal">
+      <a class="kb tool" href="sitecheck.html">
+        <span class="no">SELF CHECK</span>
+        <h3>用地簡易診断ツール</h3>
+        <p>お持ちの土地はデータセンターに向いているか。高圧／特別高圧の2コース・9つの要件で、適性の目安と次に確認すべきことが分かります。</p>
+        <span class="go2">いますぐ診断する</span>
+      </a>
+      <a class="kb" href="gpu.html">
+        <span class="no">BASICS 01</span>
+        <h3>GPU基礎データ・比較表</h3>
+        <p>NVIDIA H100〜B300、AMD Instinctまで主要7製品を横並び比較。メモリ・演算性能・消費電力の読み方を解説します。</p>
+        <span class="go2">読む</span>
+      </a>
+      <a class="kb" href="cooling.html">
+        <span class="no">BASICS 02</span>
+        <h3>冷却技術の基礎・比較</h3>
+        <p>空冷からDLC・液浸まで5方式を比較。PUE・ラック密度・液冷必須化、そして排熱の地域利用までを整理します。</p>
+        <span class="go2">読む</span>
+      </a>
+      <a class="kb" href="power.html">
+        <span class="no">BASICS 03</span>
+        <h3>電力・系統接続の基礎</h3>
+        <p>高圧と特別高圧の分かれ目、需要側の系統接続手続きと期間、工事費負担金——開発最大の関門を解説します。</p>
+        <span class="go2">読む</span>
+      </a>
+      <a class="kb" href="network.html">
+        <span class="no">BASICS 04</span>
+        <h3>通信・回線の基礎</h3>
+        <p>ダークファイバ・専用線・IX・冗長化。遅延の正体は距離——AI学習用DCの地方立地が成立する技術的根拠も。</p>
+        <span class="go2">読む</span>
+      </a>
+      <a class="kb" href="reliability.html">
+        <span class="no">BASICS 05</span>
+        <h3>信頼性・Tier等級の基礎</h3>
+        <p>Tier I〜IVの違い、N+1と2Nの冗長構成、UPSと発電機のリレー。「高いほど良い」ではない信頼性設計の考え方。</p>
+        <span class="go2">読む</span>
+      </a>
     </div>
   </div>
 </section>
@@ -363,6 +429,8 @@ footer a:hover{color:#fff;}
           <li>補助金カレンダー</li>
           <li>電力・系統情報</li>
           <li>用語解説（DC開発辞典）</li>
+          <li>基礎知識シリーズ（GPU・冷却・電力・通信・信頼性）</li>
+          <li>用地簡易診断ツール</li>
           <li>データセンター開発FAQ</li>
         </ul>
         <p class="fee">どなたでも、登録なしで閲覧できます。</p>
@@ -421,7 +489,7 @@ footer a:hover{color:#fff;}
         <h5 class="serif" style="font-size:16px;">DC PLATFORM <span style="color:var(--gold);">JAPAN</span></h5>
         <p style="line-height:1.9;">データセンター開発プラットフォーム<br>運営：一般社団法人グリーンXアライアンス<br>事業実務：グリーンX合同会社</p>
       </div>
-      <div><h5>情報</h5><ul><li><a href="news.html">ニュースの視点</a></li><li><a href="projectmap.html">プロジェクトMAP</a></li><li><a href="projectmap.html">事業者名鑑（準備中）</a></li><li><a href="computeindex.html">計算力指数</a></li><li><a href="glossary.html">用語解説</a></li><li><a href="faq.html">開発FAQ</a></li></ul></div>
+      <div><h5>情報</h5><ul><li><a href="news.html">ニュースの視点</a></li><li><a href="projectmap.html">プロジェクトMAP</a></li><li><a href="projectmap.html">事業者名鑑（準備中）</a></li><li><a href="computeindex.html">計算力指数</a></li><li><a href="#basics">基礎知識</a></li><li><a href="glossary.html">用語解説</a></li><li><a href="faq.html">開発FAQ</a></li></ul></div>
       <div><h5>サービス</h5><ul><li><a href="consult.html">開発コンサルティング</a></li><li><a href="consult.html">計算力取引板</a></li><li><a href="consult.html">案件情報室</a></li><li><a href="consult.html">会員制度</a></li></ul></div>
       <div><h5>運営</h5><ul><li><a href="consult.html">運営体制と中立性ポリシー</a></li><li><a href="consult.html">掲載・審査基準（準備中）</a></li><li><a href="computeindex.html">指数の算定要領</a></li><li><a href="consult.html">お問い合わせ</a></li></ul></div>
     </div>

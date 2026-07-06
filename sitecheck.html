@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用地簡易診断｜DC PLATFORM JAPAN</title>
+<meta name="description" content="お持ちの土地はデータセンターに向いているか。高圧（コンテナ・エッジ級）と特別高圧（中〜大規模）の2コースで、9つの要件を一覧で確認しながら選ぶだけの簡易セルフ診断。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#182420;--paper:#F6F4ED;--green:#1F4D36;--moss:#43604F;--gold:#A8894A;--line:#DAD5C6;--white:#FFFFFF;--alert:#C56A4A;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);line-height:1.8;font-size:15px;}
+.serif{font-family:'Noto Serif JP',serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(28px,5vw,64px);}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+header{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;}
+.brand .logo{font-family:'Noto Serif JP',serif;font-weight:700;font-size:21px;color:var(--green);}
+.brand .logo em{font-style:normal;color:var(--gold);}
+nav.menu{display:flex;gap:26px;font-size:13.5px;font-weight:500;}
+nav.menu a{padding:6px 0;border-bottom:2px solid transparent;}
+nav.menu a:hover,nav.menu a.on{border-color:var(--gold);}
+.cta-btn{background:var(--green);color:#fff;padding:9px 18px;font-size:13px;font-weight:700;border-radius:2px;}
+.cta-btn:hover{background:var(--moss);}
+
+.page-hero{padding:52px 0 40px;border-bottom:1px solid var(--line);
+ background:linear-gradient(rgba(246,244,237,.95),rgba(246,244,237,.97)),
+ repeating-linear-gradient(90deg,transparent 0 79px,rgba(31,77,54,.06) 79px 80px);}
+.crumb{font-size:12px;color:#8a8674;margin-bottom:14px;}
+.crumb a:hover{color:var(--green);text-decoration:underline;}
+h1{font-family:'Noto Serif JP',serif;font-size:clamp(26px,3vw,34px);color:var(--green);font-weight:600;margin-bottom:12px;}
+.page-hero p{max-width:44em;color:#4a5148;font-size:14.5px;}
+
+.section{padding:44px 0 80px;}
+
+/* track tabs */
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-bottom:10px;background:var(--white);}
+.tab{padding:20px 22px;cursor:pointer;background:#F1EEE3;border:none;font-family:inherit;text-align:left;border-bottom:3px solid transparent;transition:background .15s;}
+.tab+.tab{border-left:1px solid var(--line);}
+.tab .en{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);letter-spacing:.12em;display:block;margin-bottom:3px;}
+.tab h3{font-family:'Noto Serif JP',serif;font-size:16.5px;color:#6b6f66;font-weight:600;}
+.tab p{font-size:12px;color:#8a8674;line-height:1.6;margin-top:2px;}
+.tab.on{background:var(--white);border-bottom-color:var(--gold);}
+.tab.on h3{color:var(--green);}
+.tab:hover h3{color:var(--green);}
+.tab-note{font-size:12px;color:#8a8674;margin-bottom:26px;}
+
+/* checklist form */
+.check-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:14px;}
+.check-head h2{font-family:'Noto Serif JP',serif;font-size:clamp(18px,2.2vw,23px);color:var(--green);font-weight:600;}
+.check-head .st{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold);}
+.checklist{background:var(--white);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-bottom:18px;}
+.item{display:grid;grid-template-columns:200px 1fr 300px;gap:18px;align-items:center;padding:18px 22px;border-bottom:1px solid #EAE6DA;}
+.item:last-child{border-bottom:none;}
+.item .cat{display:flex;align-items:baseline;gap:8px;}
+.item .no{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--gold);}
+.item .cat b{font-size:14px;color:var(--green);}
+.item .q{font-size:13px;color:#4a5148;line-height:1.65;}
+.item .q .hint{display:block;font-size:11.5px;color:#8a8674;}
+.item select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:3px;background:#FBFAF5;font-family:inherit;font-size:13.5px;color:var(--ink);cursor:pointer;}
+.item select:focus{border-color:var(--green);outline:none;}
+.item.miss select{border-color:var(--alert);background:#FBF1ED;}
+.item.miss .cat b{color:var(--alert);}
+@media(max-width:900px){.item{grid-template-columns:1fr;gap:8px;}}
+
+.runrow{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:10px;}
+.run-btn{background:var(--green);color:#fff;border:none;font-family:inherit;font-size:15px;font-weight:700;padding:15px 40px;border-radius:2px;cursor:pointer;}
+.run-btn:hover{background:var(--moss);}
+.reset-btn{background:none;border:1px solid var(--line);border-radius:2px;font-family:inherit;font-size:13px;color:#4a5148;cursor:pointer;padding:12px 22px;}
+.reset-btn:hover{border-color:var(--gold);color:var(--green);}
+.miss-msg{font-size:13px;color:var(--alert);display:none;}
+
+/* result */
+#result{display:none;margin-top:36px;}
+.scorebox{background:var(--green);color:#EDE9DC;border-radius:4px;padding:38px 32px;text-align:center;margin-bottom:26px;}
+.scorebox .trk{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.15em;color:#B9C6BB;margin-bottom:8px;}
+.scorebox .rank{font-family:'Noto Serif JP',serif;font-size:clamp(32px,5vw,46px);font-weight:700;color:#E8D9B5;line-height:1.2;}
+.scorebox .scr{font-family:'IBM Plex Mono',monospace;font-size:16px;color:#CDD6CE;margin:8px 0 14px;}
+.scorebox .msg{font-size:14px;color:#EDE9DC;max-width:36em;margin:0 auto;}
+.breakdown{background:var(--white);border:1px solid var(--line);border-radius:4px;padding:26px 26px;margin-bottom:26px;}
+.breakdown h3{font-family:'Noto Serif JP',serif;font-size:17px;color:var(--green);font-weight:600;margin-bottom:16px;}
+.brow{display:grid;grid-template-columns:minmax(120px,180px) 1fr 60px;align-items:center;gap:12px;margin-bottom:10px;font-size:12.5px;}
+.brow .lbl{color:#4a5148;}
+.brow .val{font-family:'IBM Plex Mono',monospace;color:var(--green);text-align:right;}
+.bbar{height:10px;background:#EDE9DC;border-radius:2px;overflow:hidden;}
+.bbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,var(--moss),var(--green));}
+.bbar i.low{background:var(--alert);}
+.bbar i.mid{background:linear-gradient(90deg,#C4A662,var(--gold));}
+.issues{background:var(--white);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:4px;padding:26px 26px;margin-bottom:26px;}
+.issues h3{font-size:15px;color:var(--green);font-weight:700;margin-bottom:12px;}
+.issues li{margin:0 0 12px 1.2em;font-size:13.5px;color:#4a5148;}
+.issues li b{color:var(--green);}
+.rcta{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;background:#F1EEE3;border:1px solid var(--line);border-radius:4px;padding:24px 26px;margin-bottom:10px;}
+.rcta p{font-size:13.5px;color:#4a5148;max-width:36em;}
+.rcta a{background:var(--green);color:#fff;padding:12px 26px;font-size:14px;font-weight:700;border-radius:2px;white-space:nowrap;}
+.rcta a:hover{background:var(--moss);}
+.calc-note{font-size:12px;color:#8a8674;line-height:1.8;max-width:56em;background:#F1EEE3;border:1px solid var(--line);border-radius:3px;padding:16px 20px;margin-top:16px;}
+.calc-note b{color:var(--green);}
+
+footer{border-top:1px solid var(--line);padding:26px 0 34px;font-size:11.5px;color:#8a8674;}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+footer a:hover{color:var(--green);text-decoration:underline;}
+@media(max-width:860px){nav.menu{display:none;}.tabs{grid-template-columns:1fr;}.tab+.tab{border-left:none;border-top:1px solid var(--line);}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <a href="index.html" class="logo serif">DC PLATFORM <em>JAPAN</em></a>
+    </div>
+    <nav class="menu" aria-label="主要メニュー">
+      <a href="news.html">ニュースの視点</a>
+      <a href="projectmap.html">プロジェクトMAP</a>
+      <a href="computeindex.html">計算力指数</a>
+      <a href="index.html#basics">基礎知識</a>
+      <a href="glossary.html">用語解説</a>
+      <a href="faq.html">開発FAQ</a>
+    </nav>
+    <a class="cta-btn" href="consult.html">開発の相談をする</a>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">ホーム</a> ／ 用地簡易診断</div>
+    <h1 class="serif">用地簡易診断</h1>
+    <p>お持ちの土地・候補地はデータセンターに向いているか。開発に必要な<b>9つの要件</b>を一覧にしました。各項目をプルダウンで選ぶだけで、適性の目安と「次に確認すべきこと」が分かります。まず上のタブで、想定する規模を選んでください。</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+
+    <!-- track tabs -->
+    <div class="tabs" role="tablist">
+      <button class="tab on" data-track="hv" role="tab" aria-selected="true">
+        <span class="en">HIGH VOLTAGE ／ 高圧受電</span>
+        <h3>コンテナ・エッジ級コース</h3>
+        <p>受電2,000kW（2MW）未満。コンテナ型・エッジ拠点を想定。</p>
+      </button>
+      <button class="tab" data-track="ehv" role="tab" aria-selected="false">
+        <span class="en">EXTRA-HIGH VOLTAGE ／ 特別高圧受電</span>
+        <h3>中〜大規模コース</h3>
+        <p>受電2,000kW（2MW）以上。建屋型・複数コンテナの本格施設を想定。</p>
+      </button>
+    </div>
+    <p class="tab-note">※ 迷う場合の目安：コンテナ1〜2台程度の構想なら「高圧」、それ以上なら「特別高圧」。タブを切り替えて両方試すこともできます。</p>
+
+    <!-- checklist -->
+    <div class="check-head">
+      <h2 class="serif" id="listTitle">9つの要件チェックリスト</h2>
+      <span class="st" id="listStat">回答 0 / 9</span>
+    </div>
+    <div class="checklist" id="checklist"></div>
+
+    <div class="runrow">
+      <button class="run-btn" id="runBtn">診断する</button>
+      <button class="reset-btn" id="resetBtn">選択をリセット</button>
+      <span class="miss-msg" id="missMsg">未選択の項目があります（赤色の項目をご確認ください）</span>
+    </div>
+
+    <!-- result -->
+    <div id="result">
+      <div class="scorebox">
+        <div class="trk" id="rTrack"></div>
+        <div class="rank serif" id="rRank"></div>
+        <div class="scr" id="rScore"></div>
+        <p class="msg" id="rMsg"></p>
+      </div>
+      <div class="breakdown">
+        <h3>項目別の評価</h3>
+        <div id="rBars"></div>
+      </div>
+      <div class="issues">
+        <h3>次に確認すべきこと（優先度順）</h3>
+        <ul id="rIssues"></ul>
+      </div>
+      <div class="rcta">
+        <p><b>この診断はあくまで入口です。</b>実際の適性は、系統協議・現地調査・法規制の確認で初めて確定します。診断結果を添えてご相談いただければ、具体的な検討ステップをご案内します。</p>
+        <a href="consult.html">診断結果をもとに相談する</a>
+      </div>
+    </div>
+
+    <p class="calc-note">※ 本診断は公開情報と一般的な開発実務に基づく<b>簡易的なセルフチェック</b>であり、開発可否・事業性を保証するものではありません。電力会社への正式な系統協議、法規制・ハザードの個別確認、現地調査に代わるものではありません。選択内容はお使いのブラウザ内でのみ処理され、サーバーに送信・保存されることはありません。</p>
+
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 DC PLATFORM JAPAN（仮称）／一般社団法人グリーンXアライアンス</span>
+    <span><a href="index.html">ホームへ戻る</a>　·　<a href="gpu.html">GPU比較</a>　·　<a href="cooling.html">冷却技術</a>　·　本診断は一般的な情報提供であり、個別助言ではありません。</span>
+  </div>
+</footer>
+
+<script>
+const QUESTIONS = {
+ hv: [
+  {cat:"土地面積", q:"土地の広さは？", hint:"変電設備・搬入動線・保守スペース込みで考えます。",
+   opts:[["1,000㎡以上ある",10],["300〜1,000㎡程度",8],["300㎡未満",4],["わからない",3]],
+   advice:"コンテナ1台の設置自体は数十㎡でも可能ですが、変電設備・発電機・搬入動線・保守スペースを含めた敷地計画が必要です。測量図・公図で正確な面積と形状を確認しましょう。"},
+  {cat:"土地の状態", q:"土地の現況は？", hint:"地目と造成状態は、工期と初期費用に直結します。",
+   opts:[["造成済みで平坦（宅地・雑種地・工場跡地など）",10],["ほぼ平坦だが一部造成が必要",7],["農地・山林（転用・造成が必要）",3],["わからない",3]],
+   advice:"農地は農地転用の許可、山林は開発許可・造成が必要で、それぞれ数カ月〜年単位の期間を要します。登記簿で地目を、自治体で規制を確認しましょう。"},
+  {cat:"配電線への近さ", q:"高圧配電線（電柱の太い線）はどこに？", hint:"高圧受電の生命線。引込距離が短いほど費用も期間も抑えられます。",
+   opts:[["敷地の前面道路に高圧配電線が通っている",15],["200m以内にある",11],["それより遠い",4],["わからない",5]],
+   advice:"高圧引込の距離は工事費に直結します。現地で電柱の配線を確認するか、電力会社の配電部門に照会しましょう。"},
+  {cat:"電力の空き", q:"電力会社への相談状況は？", hint:"高圧でも、地域の配電網に余裕がないと希望容量が取れないことがあります。",
+   opts:[["相談済みで、必要容量の見込みあり",15],["これから相談する（未確認）",7],["容量が厳しいと言われた",2]],
+   advice:"最寄りの電力会社に「高圧受電・想定kW」を伝えて事前相談を。ここが確定しないと他の検討が進みません。"},
+  {cat:"通信回線", q:"光ファイバ回線は？", hint:"電力と通信の両方が揃って初めて成立します。",
+   opts:[["敷地まで光回線が来ている・引込可能と確認済み",10],["近隣まで幹線が来ているようだ",7],["わからない・遠い可能性",3]],
+   advice:"通信事業者に提供エリアと引込可否を照会しましょう。エッジ用途では複数回線の冗長化も検討事項です。"},
+  {cat:"水源", q:"水は使えますか？", hint:"閉鎖循環式なら常時給水は必須ではありませんが、あると選択肢が広がります。",
+   opts:[["上水道または井戸がある",10],["ない（閉鎖循環式で対応予定）",7],["わからない",4]],
+   advice:"閉鎖循環式の液冷なら常時給水は必須ではありませんが、初期充填・補給・防火の観点で水源の確認は必要です。"},
+  {cat:"災害リスク", q:"ハザードマップでの評価は？", hint:"洪水・土砂・液状化。サーバーは水没に最も弱い設備です。",
+   opts:[["洪水・土砂等のリスクが低いことを確認済み",10],["一部リスク区域にかかる",5],["リスクが高い／確認していない",2]],
+   advice:"自治体のハザードマップ（重ねるハザードマップ）で洪水・土砂・液状化を確認しましょう。かさ上げ等で対応できる場合もあります。"},
+  {cat:"搬入路", q:"大型車両は入れますか？", hint:"コンテナはトレーラーとクレーンで搬入します。前面道路の幅がカギです。",
+   opts:[["大型トレーラーが進入・転回できる",10],["中型までなら可能／要確認",6],["狭い・困難",2]],
+   advice:"20ft/40ftコンテナの搬入にはトレーラーの進入路とクレーン作業スペースが必要です。前面道路幅員と電線の高さを確認しましょう。"},
+  {cat:"法規制", q:"用途地域などの規制は？", hint:"建築確認や工作物の扱いは自治体・規模により異なります。",
+   opts:[["工業系地域など、立地に支障がないと確認済み",10],["確認していない",5],["市街化調整区域・規制が厳しい可能性",3]],
+   advice:"用途地域・建築基準法上の扱い（建築物か工作物か）・条例を自治体の建築指導課に確認しましょう。コンテナ型でも建築確認が必要なケースが一般的です。"}
+ ],
+ ehv: [
+  {cat:"土地面積", q:"土地の広さは？", hint:"特高受電では、受変電設備だけでまとまった面積を使います。",
+   opts:[["20,000㎡（2ha）以上",10],["5,000〜20,000㎡",8],["5,000㎡未満",4],["わからない",3]],
+   advice:"特高受変電設備・建屋またはコンテナ群・冷却設備・緩衝帯を含めた配置計画が必要です。拡張余地も評価に含まれます。"},
+  {cat:"土地の状態", q:"土地の現況は？", hint:"地目と造成状態は、工期と初期費用に直結します。",
+   opts:[["造成済みで平坦（工場跡地・遊休産業用地など）",10],["ほぼ平坦だが一部造成が必要",7],["農地・山林（転用・造成が必要）",3],["わからない",3]],
+   advice:"大規模開発では開発許可・環境アセスの要否も関わります。地目・都市計画・関連条例を早期に確認しましょう。"},
+  {cat:"変電所への近さ", q:"最寄りの変電所（154kV/66kV級）までの距離は？", hint:"特高は変電所から専用線で受電します。距離＝送電線建設費です。",
+   opts:[["2km以内",15],["2〜10km程度",10],["10km超・わからない",4]],
+   advice:"特高受電線の建設は1kmあたり億円単位になり得ます。電力会社の系統図・公開資料で最寄り変電所と電圧階級を確認しましょう。"},
+  {cat:"系統空き容量", q:"系統の「空き容量」は？", hint:"特高最大の関門。空きがなければ増強工事に数年〜10年待ちもあります。",
+   opts:[["電力会社に確認済みで、空きの見込みあり",15],["未確認（これから系統協議）",6],["空きがない・増強待ちと言われた",2]],
+   advice:"一般送配電事業者が公開する「ウェルカムゾーンマップ」（早期供給可能地点の地図）で概況を掴み、事前相談→需要側の接続検討という手続きに早期に入ることが最優先です。"},
+  {cat:"通信回線", q:"通信インフラは？", hint:"大規模施設は大容量・冗長の回線（ダークファイバ等）が前提です。",
+   opts:[["光幹線・通信局舎が近く、引込見込みを確認済み",10],["近隣に幹線があるようだ（未確認）",6],["わからない・通信過疎地の可能性",3]],
+   advice:"複数事業者・複数ルートでの冗長化が求められます。通信事業者にダークファイバ等の提供可否を照会しましょう。"},
+  {cat:"水源", q:"冷却用の水は確保できますか？", hint:"大規模液冷では、補給水・冷却塔用の水量が立地条件になります。",
+   opts:[["工業用水・上水・井戸など確保の見込みあり",10],["水源はあるが水量は未確認",6],["乏しい・わからない",3]],
+   advice:"冷却方式（水冷却塔かドライクーラーか）で必要水量は大きく変わります。水利権・地下水規制も含めて確認しましょう。"},
+  {cat:"災害リスク", q:"ハザードマップでの評価は？", hint:"大規模投資ほど、災害リスクは資金調達の審査項目になります。",
+   opts:[["洪水・土砂・液状化のリスクが低いと確認済み",10],["一部リスク区域にかかる",5],["リスクが高い／確認していない",2]],
+   advice:"金融機関・テナントのデューデリジェンスでは必ず確認される項目です。活断層・浸水想定・液状化マップを揃えておきましょう。"},
+  {cat:"アクセス・地域", q:"工事・運用のアクセスは？", hint:"大型資機材の搬入路と、保守人材が通える立地かどうか。",
+   opts:[["幹線道路に近く、大型車両の搬入も問題ない",10],["搬入はできそうだが要確認",6],["道路が狭い・遠隔で人材確保が不安",3]],
+   advice:"変圧器など超重量物の輸送ルート、建設期間中の交通、運用フェーズの保守人材アクセスまで含めて評価します。"},
+  {cat:"自治体の姿勢", q:"地元自治体の反応は？", hint:"誘致に積極的な自治体かどうかで、許認可も地域調整も速度が変わります。",
+   opts:[["誘致に積極的・相談済みで好感触",10],["まだ相談していない",6],["慎重・反対の声がある",2]],
+   advice:"企業誘致担当への早期相談を。優遇制度の有無、地域への説明の進め方、排熱利用など地域還元の設計が円滑化のカギです。"}
+ ]
+};
+const TRACKNAME = {hv:"高圧受電（コンテナ・エッジ級）コース", ehv:"特別高圧受電（中〜大規模）コース"};
+const MAXPTS = {}; Object.keys(QUESTIONS).forEach(k=>{MAXPTS[k]=QUESTIONS[k].reduce((s,q)=>s+Math.max(...q.opts.map(o=>o[1])),0);});
+
+let track='hv';
+const $=id=>document.getElementById(id);
+
+function buildList(){
+  const qs=QUESTIONS[track], box=$('checklist'); box.innerHTML='';
+  qs.forEach((q,i)=>{
+    const row=document.createElement('div'); row.className='item'; row.dataset.i=i;
+    const opts=q.opts.map((o,j)=>`<option value="${j}">${o[0]}</option>`).join('');
+    row.innerHTML=`
+      <div class="cat"><span class="no">${String(i+1).padStart(2,'0')}</span><b>${q.cat}</b></div>
+      <div class="q">${q.q}<span class="hint">${q.hint}</span></div>
+      <div><select aria-label="${q.cat}"><option value="">— 選択してください —</option>${opts}</select></div>`;
+    row.querySelector('select').addEventListener('change',()=>{row.classList.remove('miss');updateStat();});
+    box.appendChild(row);
+  });
+  $('result').style.display='none'; $('missMsg').style.display='none';
+  updateStat();
+}
+function updateStat(){
+  const sels=[...document.querySelectorAll('#checklist select')];
+  const done=sels.filter(s=>s.value!=='').length;
+  $('listStat').textContent=`回答 ${done} / ${sels.length}`;
+}
+
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  if(t.dataset.track===track) return;
+  document.querySelectorAll('.tab').forEach(x=>{x.classList.remove('on');x.setAttribute('aria-selected','false');});
+  t.classList.add('on'); t.setAttribute('aria-selected','true');
+  track=t.dataset.track; buildList();
+}));
+
+$('resetBtn').addEventListener('click',buildList);
+
+$('runBtn').addEventListener('click',()=>{
+  const qs=QUESTIONS[track];
+  const rows=[...document.querySelectorAll('#checklist .item')];
+  let missing=false;
+  const data=rows.map((row,i)=>{
+    const v=row.querySelector('select').value;
+    if(v===''){row.classList.add('miss');missing=true;return null;}
+    row.classList.remove('miss');
+    const q=qs[i], pts=q.opts[+v][1], max=Math.max(...q.opts.map(o=>o[1]));
+    return {cat:q.cat,pts,max,ratio:pts/max,advice:q.advice,chosen:q.opts[+v][0]};
+  });
+  if(missing){
+    $('missMsg').style.display='inline';
+    document.querySelector('#checklist .item.miss').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  $('missMsg').style.display='none';
+  showResult(data);
+});
+
+function showResult(rows){
+  const total=rows.reduce((s,r)=>s+r.pts,0);
+  const pct=Math.round(total/MAXPTS[track]*100);
+  let rank,msg;
+  if(pct>=80){rank="適性：高い";msg="主要条件が高い水準で揃っています。系統協議・現地調査など、確定に向けた次のステップに進む価値が十分ある候補地です。";}
+  else if(pct>=60){rank="適性：あり";msg="基本条件は揃っていますが、いくつか確認・解消すべき論点があります。下の「次に確認すべきこと」を優先度順に潰していきましょう。";}
+  else if(pct>=40){rank="適性：課題あり";msg="現状のままでは開発ハードルが複数あります。ただし、確認不足で点が伸びていないだけの可能性もあります。まず不明項目の確認から始めましょう。";}
+  else{rank="適性：ハードル高い";msg="この規模での開発は現状では難しい条件です。規模の見直し（もう一方のコース）や、別の活用方法の検討も選択肢になります。";}
+  $('rTrack').textContent=TRACKNAME[track];
+  $('rRank').textContent=rank;
+  $('rScore').textContent=`SCORE ${pct} / 100`;
+  $('rMsg').textContent=msg;
+  const bars=$('rBars'); bars.innerHTML='';
+  rows.forEach(r=>{
+    const cls=r.ratio>=0.8?'':r.ratio>=0.5?'mid':'low';
+    const div=document.createElement('div'); div.className='brow';
+    div.innerHTML=`<span class="lbl">${r.cat}</span><span class="bbar"><i class="${cls}" style="width:${Math.max(6,r.ratio*100)}%"></i></span><span class="val">${r.pts}/${r.max}</span>`;
+    bars.appendChild(div);
+  });
+  const worst=[...rows].sort((a,b)=>a.ratio-b.ratio).slice(0,3);
+  const ul=$('rIssues'); ul.innerHTML='';
+  worst.forEach(r=>{
+    const li=document.createElement('li');
+    li.innerHTML=`<b>${r.cat}</b>（回答：${r.chosen}）— ${r.advice}`;
+    ul.appendChild(li);
+  });
+  $('result').style.display='block';
+  $('result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+buildList();
+</script>
+</body>
+</html>

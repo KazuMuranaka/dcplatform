@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>通信・回線の基礎｜DC PLATFORM JAPAN</title>
+<meta name="description" content="ダークファイバ・専用線・IX・冗長化——データセンターの第3のライフラインである通信を、帯域と遅延の基礎から回線調達の選択肢まで、専門外の方にも分かる言葉で解説します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#182420;--paper:#F6F4ED;--green:#1F4D36;--moss:#43604F;--gold:#A8894A;--line:#DAD5C6;--white:#FFFFFF;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);line-height:1.8;font-size:15px;}
+.serif{font-family:'Noto Serif JP',serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(28px,5vw,64px);}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+header{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;}
+.brand .logo{font-family:'Noto Serif JP',serif;font-weight:700;font-size:21px;color:var(--green);}
+.brand .logo em{font-style:normal;color:var(--gold);}
+nav.menu{display:flex;gap:26px;font-size:13.5px;font-weight:500;}
+nav.menu a{padding:6px 0;border-bottom:2px solid transparent;}
+nav.menu a:hover,nav.menu a.on{border-color:var(--gold);}
+.cta-btn{background:var(--green);color:#fff;padding:9px 18px;font-size:13px;font-weight:700;border-radius:2px;}
+.cta-btn:hover{background:var(--moss);}
+
+.page-hero{padding:52px 0 40px;border-bottom:1px solid var(--line);
+ background:linear-gradient(rgba(246,244,237,.95),rgba(246,244,237,.97)),
+ repeating-linear-gradient(90deg,transparent 0 79px,rgba(31,77,54,.06) 79px 80px);}
+.crumb{font-size:12px;color:#8a8674;margin-bottom:14px;}
+.crumb a:hover{color:var(--green);text-decoration:underline;}
+h1{font-family:'Noto Serif JP',serif;font-size:clamp(26px,3vw,34px);color:var(--green);font-weight:600;margin-bottom:12px;}
+.page-hero p{max-width:44em;color:#4a5148;font-size:14.5px;}
+.page-hero a{color:var(--green);text-decoration:underline;}
+
+.section{padding:56px 0 8px;}
+.section-title{display:flex;align-items:baseline;gap:14px;margin-bottom:26px;}
+.section-title .no{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:.15em;}
+.section-title h2{font-family:'Noto Serif JP',serif;font-size:clamp(20px,2.4vw,26px);color:var(--green);font-weight:600;}
+.lede{max-width:46em;color:#4a5148;font-size:14.5px;margin-bottom:28px;}
+
+.basics{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:20px;}
+.bcard{background:var(--white);border:1px solid var(--line);border-top:3px solid var(--green);border-radius:3px;padding:22px 20px;}
+.bcard h3{font-family:'Noto Serif JP',serif;font-size:16.5px;color:var(--green);margin-bottom:8px;font-weight:600;}
+.bcard .en{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:.1em;display:block;margin-bottom:4px;}
+.bcard p{font-size:13.5px;color:#4a5148;line-height:1.75;}
+.bcard .num{font-family:'IBM Plex Mono',monospace;color:var(--gold);font-weight:600;}
+
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:3px;background:var(--white);margin-bottom:14px;-webkit-overflow-scrolling:touch;}
+table{border-collapse:collapse;width:100%;min-width:880px;font-size:13px;}
+th,td{padding:12px 14px;border-bottom:1px solid var(--line);border-right:1px solid #EAE6DA;vertical-align:top;text-align:left;}
+thead th{background:var(--green);color:#EDE9DC;font-weight:700;font-size:13px;white-space:nowrap;position:sticky;top:0;}
+thead th small{display:block;font-weight:400;font-size:10.5px;color:#B9C6BB;letter-spacing:.05em;}
+tbody th{background:#F1EEE3;font-weight:700;color:var(--green);white-space:nowrap;font-size:12.5px;position:sticky;left:0;min-width:130px;}
+td .mono{font-size:13px;}
+td .sub{display:block;font-size:11px;color:#8a8674;white-space:normal;min-width:11em;}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:none;}
+col.hl{background:rgba(168,137,74,.07);}
+thead th.hl{background:#2A5C42;}
+.badge{display:inline-block;background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:2px;margin-left:6px;vertical-align:middle;letter-spacing:.08em;}
+.tbl-note{font-size:12px;color:#8a8674;line-height:1.7;max-width:52em;margin-bottom:8px;}
+
+/* latency chart */
+.latency{background:var(--white);border:1px solid var(--line);border-radius:3px;padding:26px 24px;margin-bottom:20px;}
+.latency h3{font-family:'Noto Serif JP',serif;font-size:16px;color:var(--green);margin-bottom:16px;font-weight:600;}
+.bar-row{display:grid;grid-template-columns:190px 1fr 96px;align-items:center;gap:10px;margin-bottom:9px;font-size:12px;}
+.bar-row .lbl{color:#4a5148;white-space:nowrap;}
+.bar-row .val{font-family:'IBM Plex Mono',monospace;color:var(--green);text-align:right;white-space:nowrap;}
+.bar{height:12px;background:#EDE9DC;border-radius:2px;overflow:hidden;}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--moss),var(--green));border-radius:2px;}
+.bar i.g{background:linear-gradient(90deg,#C4A662,var(--gold));}
+.latency p{font-size:13px;color:#4a5148;line-height:1.75;margin-top:12px;max-width:52em;}
+.latency b{color:var(--green);}
+
+.reads{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:20px;}
+.rcard{background:var(--white);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:3px;padding:22px 22px;}
+.rcard h3{font-size:15px;color:var(--green);font-weight:700;margin-bottom:8px;}
+.rcard p{font-size:13.5px;color:#4a5148;line-height:1.75;}
+.rcard a{color:var(--green);text-decoration:underline;}
+
+.calc-note{font-size:12px;color:#8a8674;line-height:1.8;max-width:56em;background:#F1EEE3;border:1px solid var(--line);border-radius:3px;padding:16px 20px;margin:8px 0 24px;}
+.calc-note b{color:var(--green);}
+
+.cta-band{background:var(--green);color:#EDE9DC;margin-top:48px;padding:44px 0;}
+.cta-band .inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+.cta-band h2{font-family:'Noto Serif JP',serif;font-size:20px;font-weight:600;margin-bottom:6px;color:#fff;}
+.cta-band p{font-size:13.5px;color:#CDD6CE;max-width:38em;}
+.cta-band a{background:var(--gold);color:#fff;padding:12px 26px;font-size:14px;font-weight:700;border-radius:2px;white-space:nowrap;}
+.cta-band a:hover{opacity:.9;}
+
+footer{border-top:1px solid var(--line);padding:26px 0 34px;font-size:11.5px;color:#8a8674;}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+footer a:hover{color:var(--green);text-decoration:underline;}
+@media(max-width:860px){nav.menu{display:none;}.bar-row{grid-template-columns:120px 1fr 86px;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <a href="index.html" class="logo serif">DC PLATFORM <em>JAPAN</em></a>
+    </div>
+    <nav class="menu" aria-label="主要メニュー">
+      <a href="news.html">ニュースの視点</a>
+      <a href="projectmap.html">プロジェクトMAP</a>
+      <a href="computeindex.html">計算力指数</a>
+      <a href="index.html#basics">基礎知識</a>
+      <a href="glossary.html">用語解説</a>
+      <a href="faq.html">開発FAQ</a>
+    </nav>
+    <a class="cta-btn" href="consult.html">開発の相談をする</a>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">ホーム</a> ／ 通信・回線の基礎</div>
+    <h1 class="serif">通信・回線の基礎</h1>
+    <p>電力・冷却と並ぶ、データセンターの第3のライフラインが通信です。どれだけ計算しても、結果を届ける回線がなければサービスになりません。ここでは帯域と遅延の基礎から、回線調達の選択肢、用地選定への影響までを整理します。<a href="gpu.html">GPU比較</a>・<a href="cooling.html">冷却技術</a>・<a href="power.html">電力・系統接続</a>と併せてお読みください。</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 01</span><h2>まず押さえたい4つの基礎</h2></div>
+    <p class="lede">通信の議論は「太さ（帯域）」「速さ（遅延）」「持ち方（回線種別）」「備え（冗長化）」の4軸で整理できます。</p>
+    <div class="basics">
+      <div class="bcard">
+        <span class="en">BANDWIDTH / LATENCY</span>
+        <h3>帯域と遅延は別物</h3>
+        <p>帯域（bps）は「一度に運べるデータ量＝道路の車線数」、遅延（ms）は「片道にかかる時間＝距離と信号の数」。太い回線でも遠ければ遅延は縮みません。<b>どちらが自分の用途に効くのか</b>を分けて考えるのが出発点です。</p>
+      </div>
+      <div class="bcard">
+        <span class="en">DARK FIBER</span>
+        <h3>ダークファイバとは</h3>
+        <p>通信事業者が敷設済みで、まだ使われていない（光が通っていない＝暗い）光ファイバ芯線を借りる仕組み。自前の機器で好きな帯域・用途に使え、大規模施設の生命線です。<b>ただし空き芯線があるかは地域次第</b>——電力の空き容量と同じ構図です。</p>
+      </div>
+      <div class="bcard">
+        <span class="en">IX / POP</span>
+        <h3>IXと接続点</h3>
+        <p>IX（インターネットエクスチェンジ）は、通信事業者やクラウドが相互接続する「交換所」。国内では東京・大阪に集中しています。自施設からIXや通信局舎（POP）までの距離と経路が、実質的な「ネットへの近さ」を決めます。</p>
+      </div>
+      <div class="bcard">
+        <span class="en">REDUNDANCY</span>
+        <h3>冗長化はルートで考える</h3>
+        <p>回線を2本引いても、同じ電柱・同じ管路を通っていれば、1回の切断で両方落ちます。事業者を分け、<b>物理的な経路（ルート）を分ける</b>のが本当の冗長化。用地の段階で「別ルートを確保できるか」が問われます。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="table">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 02</span><h2>回線調達の選択肢 比較表</h2></div>
+    <p class="lede">データセンターが外部とつながる回線には、大きく4つの持ち方があります。表は横にスクロールできます。</p>
+    <div class="tbl-scroll">
+      <table>
+        <colgroup><col style="width:150px"><col><col><col class="hl"><col></colgroup>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>一般光回線<small>BEST EFFORT</small></th>
+            <th>専用線・広域イーサ<small>LEASED LINE</small></th>
+            <th class="hl">ダークファイバ<small>DARK FIBER</small><span class="badge">大規模の標準</span></th>
+            <th>自営線<small>PRIVATE FIBER</small></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th>概要</th>
+            <td><span class="sub">法人向け光サービス。帯域は他利用者と共用（ベストエフォート）</span></td>
+            <td><span class="sub">事業者が帯域と品質を保証して貸す回線サービス</span></td>
+            <td><span class="sub">敷設済みの光ファイバ芯線そのものを借り、自前の機器で運用</span></td>
+            <td><span class="sub">自ら光ファイバを敷設・保有。電柱共架や管路の許可が必要</span></td></tr>
+          <tr><th>帯域の目安</th>
+            <td><span class="mono">〜10Gbps級</span><span class="sub">（実効は変動）</span></td>
+            <td><span class="mono">〜100Gbps級</span></td>
+            <td><span class="mono">機器次第で無制限</span><span class="sub">1芯で400Gbps以上も可能</span></td>
+            <td><span class="mono">機器次第で無制限</span></td></tr>
+          <tr><th>品質保証</th>
+            <td><span class="sub">なし（混雑時は速度低下）</span></td>
+            <td><span class="sub">SLA（品質保証）あり</span></td>
+            <td><span class="sub">物理層のみ提供。品質は自社設計次第</span></td>
+            <td><span class="sub">すべて自社責任</span></td></tr>
+          <tr><th>費用感</th>
+            <td><span class="sub">低（月額数千円〜数万円）</span></td>
+            <td><span class="sub">中〜高（帯域と距離に比例）</span></td>
+            <td><span class="sub">中（芯線の月額借料＋自前機器）。大容量ほど割安に</span></td>
+            <td><span class="sub">初期は高額だが、長期・大容量では最安になり得る</span></td></tr>
+          <tr><th>調達の難所</th>
+            <td><span class="sub">提供エリア外だと引込工事</span></td>
+            <td><span class="sub">地方では提供拠点が限られる</span></td>
+            <td><span class="sub">空き芯線の有無が地域次第。照会しないと分からない</span></td>
+            <td><span class="sub">道路占用・電柱共架の許認可、施工、保守体制</span></td></tr>
+          <tr><th>向く用途</th>
+            <td><span class="sub">小規模エッジの副回線、管理用回線</span></td>
+            <td><span class="sub">中規模施設、拠点間接続、確実性重視の用途</span></td>
+            <td><span class="sub">AIデータセンターの主回線。大容量・自由設計</span></td>
+            <td><span class="sub">最寄りの局舎・幹線まで距離が短い場合の「最後の区間」</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-note">※ 費用・提供条件は事業者・地域・距離により大きく異なります。実務では「主回線＝ダークファイバ、副回線＝専用線や別事業者の光回線」のように、種別と事業者を組み合わせて冗長構成を作るのが一般的です。</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 03</span><h2>遅延の正体は「距離」——地方立地が成立する理由</h2></div>
+    <div class="latency">
+      <h3>東京からの往復遅延（RTT）の目安</h3>
+      <div class="bar-row"><span class="lbl">同一都市内</span><span class="bar"><i style="width:4%"></i></span><span class="val">1ms未満</span></div>
+      <div class="bar-row"><span class="lbl">東京 — 大阪</span><span class="bar"><i style="width:9%"></i></span><span class="val">約8ms</span></div>
+      <div class="bar-row"><span class="lbl">東京 — 九州</span><span class="bar"><i style="width:16%"></i></span><span class="val">約15ms</span></div>
+      <div class="bar-row"><span class="lbl">東京 — シンガポール</span><span class="bar"><i class="g" style="width:70%"></i></span><span class="val">約70ms</span></div>
+      <div class="bar-row"><span class="lbl">東京 — 米国西海岸</span><span class="bar"><i class="g" style="width:100%"></i></span><span class="val">約100ms</span></div>
+      <p>光ファイバの中を進む光の速さはおよそ<b>1ミリ秒で200km</b>（片道）。つまり遅延は物理的な距離でほぼ決まり、お金では縮められません。ここで重要なのは用途との関係です。株取引や対戦ゲームは1msを争いますが、<b>AIの学習は「遅延に寛容で帯域に貪欲」</b>な仕事——計算は施設の中で完結し、外部とは学習データと結果をやり取りするだけだからです。国内どこに置いても15ms程度に収まる日本では、<b>AI学習用データセンターは電力と土地の条件が良い地方に置く合理性がある</b>——これが地方立地の技術的な根拠です。一方、リアルタイム性が求められる推論・配信は利用者の近く（エッジ）へ。用途によって最適な場所が違うのです。</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+    <div class="section-title"><span class="no">SECTION 04</span><h2>開発の視点で通信をどう考えるか</h2></div>
+    <div class="reads">
+      <div class="rcard">
+        <h3>用途が回線要件を決める</h3>
+        <p>「AI学習・バッチ処理」なら大帯域・遅延寛容で地方適地、「推論・配信・エッジ」なら利用者への近さが価値、「企業向けコロケーション」なら冗長性と実績。<b>誰にどんな計算を売る施設か</b>を先に決めないと、回線計画は立てられません。<a href="gpu.html">GPUの選定</a>とも表裏の関係です。</p>
+      </div>
+      <div class="rcard">
+        <h3>ダークファイバ照会は用地検討と同時に</h3>
+        <p>空き芯線の有無・引込可否は、通信事業者に照会して初めて分かります。回答には時間がかかることもあり、<b>電力の事前相談と同じタイミングで動くべき項目</b>です。<a href="sitecheck.html">用地簡易診断</a>でも通信を独立項目にしているのはこのためです。</p>
+      </div>
+      <div class="rcard">
+        <h3>「最後の1km」が総費用を左右する</h3>
+        <p>幹線が近くを通っていても、敷地までの引込（ラストワンマイル）は個別工事です。道路横断・河川横断・電柱の新設が絡むと費用と期間が膨らみます。用地比較では<b>最寄りの局舎・幹線ルートまでの距離と経路</b>を、電力の引込距離と同じ重みで見るべきです。</p>
+      </div>
+      <div class="rcard">
+        <h3>冗長化の設計は「地図」でする</h3>
+        <p>事業者2社と契約しても、物理経路が同じ橋・同じ管路なら共倒れします。冗長化の検討は契約書ではなく地図の上で——<b>別方向から敷地に入る2ルート</b>を確保できる用地は、それだけで通信面の価値が高いと言えます。</p>
+      </div>
+    </div>
+    <p class="calc-note">※ 本ページの帯域・遅延・費用の数値は一般的な<b>参考値</b>です（2026年時点）。実際の提供可否・条件は通信事業者・地域・経路により異なります。本ページは一般的な情報提供であり、個別助言ではありません。</p>
+  </div>
+</div>
+
+<div class="cta-band">
+  <div class="wrap inner">
+    <div>
+      <h2 class="serif">回線計画から相談できます</h2>
+      <p>ダークファイバの照会の進め方、冗長構成の設計、用途に応じた回線調達まで。電力・冷却と一体の開発計画づくりを支援します。</p>
+    </div>
+    <a href="consult.html">開発の相談をする</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 DC PLATFORM JAPAN（仮称）／一般社団法人グリーンXアライアンス</span>
+    <span><a href="index.html">ホームへ戻る</a>　·　<a href="gpu.html">GPU比較</a>　·　<a href="cooling.html">冷却技術</a>　·　<a href="power.html">電力・系統接続</a>　·　本ページの解説は一般的な情報提供であり、法務・税務・技術の個別助言ではありません。</span>
+  </div>
+</footer>
+
+</body>
+</html>
