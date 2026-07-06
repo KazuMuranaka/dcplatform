@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用語解説（DC開発辞典）｜DC PLATFORM JAPAN</title>
+<meta name="description" content="PUE・系統接続・液冷・コロケーションなど、データセンター開発の業界用語を専門外の方にも分かる言葉で解説します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#182420;--paper:#F6F4ED;--green:#1F4D36;--moss:#43604F;--gold:#A8894A;--line:#DAD5C6;--white:#FFFFFF;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);line-height:1.8;font-size:15px;}
+.serif{font-family:'Noto Serif JP',serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(28px,5vw,64px);}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+header{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;}
+.brand{display:flex;align-items:baseline;gap:10px;}
+.brand .logo{font-family:'Noto Serif JP',serif;font-weight:700;font-size:21px;color:var(--green);}
+.brand .logo em{font-style:normal;color:var(--gold);}
+.brand .op{font-size:10.5px;color:#7a766a;}
+nav.menu{display:flex;gap:26px;font-size:13.5px;font-weight:500;}
+nav.menu a{padding:6px 0;border-bottom:2px solid transparent;}
+nav.menu a:hover,nav.menu a.on{border-color:var(--gold);}
+.cta-btn{background:var(--green);color:#fff;padding:9px 18px;font-size:13px;font-weight:700;border-radius:2px;}
+.cta-btn:hover{background:var(--moss);}
+
+.page-hero{padding:52px 0 40px;border-bottom:1px solid var(--line);
+ background:linear-gradient(rgba(246,244,237,.95),rgba(246,244,237,.97)),
+ repeating-linear-gradient(90deg,transparent 0 79px,rgba(31,77,54,.06) 79px 80px);}
+.crumb{font-size:12px;color:#8a8674;margin-bottom:14px;}
+.crumb a:hover{color:var(--green);text-decoration:underline;}
+h1{font-family:'Noto Serif JP',serif;font-size:clamp(26px,3vw,34px);color:var(--green);font-weight:600;margin-bottom:12px;}
+.page-hero p{max-width:44em;color:#4a5148;font-size:14.5px;}
+.count{font-family:'IBM Plex Mono',monospace;color:var(--gold);}
+
+.toolbar{position:sticky;top:64px;background:var(--paper);z-index:40;border-bottom:1px solid var(--line);padding:16px 0;}
+.tool-grid{display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
+.searchbox{flex:1;min-width:240px;position:relative;}
+.searchbox input{width:100%;padding:11px 14px 11px 40px;border:1px solid var(--line);border-radius:3px;background:var(--white);font-family:inherit;font-size:14px;color:var(--ink);}
+.searchbox input:focus{border-color:var(--green);outline:none;}
+.searchbox::before{content:"⌕";position:absolute;left:13px;top:50%;transform:translateY(-52%);font-size:18px;color:var(--gold);}
+.kana-nav{display:flex;gap:4px;flex-wrap:wrap;}
+.kana-nav button{border:1px solid var(--line);background:var(--white);padding:6px 11px;font-size:12.5px;cursor:pointer;border-radius:2px;font-family:inherit;color:var(--ink);}
+.kana-nav button:hover{border-color:var(--gold);}
+.kana-nav button.on{background:var(--green);color:#fff;border-color:var(--green);}
+
+.layout{display:grid;grid-template-columns:230px 1fr;gap:44px;padding:44px 0 80px;}
+aside.catnav{position:sticky;top:150px;align-self:start;}
+aside.catnav h2{font-size:11px;letter-spacing:.2em;color:var(--gold);font-weight:700;margin-bottom:12px;}
+aside.catnav button{display:block;width:100%;text-align:left;background:none;border:none;border-left:2px solid var(--line);padding:8px 14px;font-size:13.5px;cursor:pointer;font-family:inherit;color:#4a5148;}
+aside.catnav button:hover{color:var(--green);border-color:var(--gold);}
+aside.catnav button.on{color:var(--green);font-weight:700;border-color:var(--green);}
+aside .consult{margin-top:28px;background:var(--green);color:#EDE9DC;border-radius:4px;padding:20px;}
+aside .consult p{font-size:12.5px;line-height:1.7;margin-bottom:12px;color:#CDD6CE;}
+aside .consult strong{color:#fff;font-size:13.5px;display:block;margin-bottom:8px;font-family:'Noto Serif JP',serif;}
+aside .consult a{display:inline-block;background:var(--gold);color:#1c1c14;font-weight:700;font-size:12px;padding:8px 14px;border-radius:2px;}
+
+.cat-sec{margin-bottom:52px;}
+.cat-head{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--green);padding-bottom:10px;margin-bottom:6px;}
+.cat-head .no{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gold);letter-spacing:.1em;}
+.cat-head h2{font-family:'Noto Serif JP',serif;font-size:21px;color:var(--green);font-weight:600;}
+.term{border-bottom:1px solid var(--line);}
+.term>summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:17px 36px 17px 2px;position:relative;transition:background .15s;}
+.term>summary::-webkit-details-marker{display:none;}
+.term>summary::marker{content:"";}
+.term>summary:hover{background:rgba(31,77,54,.03);}
+.term>summary:hover .w{color:var(--moss);}
+.term summary .w{font-size:16.5px;font-weight:700;color:var(--green);}
+.term summary .y{font-size:11.5px;color:#8a8674;}
+.term summary .en{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);}
+.term .chev{position:absolute;right:9px;top:23px;width:8px;height:8px;border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(45deg);transition:transform .2s;}
+.term[open]>summary .chev{transform:rotate(-135deg);top:26px;}
+.term[open]{background:rgba(31,77,54,.028);}
+.term[open]>summary{padding-bottom:4px;}
+.term .def{font-size:13.8px;color:#3d453f;padding:0 6px 20px 2px;}
+.term .def .rel{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;color:var(--green);}
+.term .def .rel::before{content:"→ 関連サービス：";color:var(--gold);font-weight:500;}
+.term .def .rel:hover{text-decoration:underline;}
+.term .def .caution{display:block;margin-top:6px;font-size:11.5px;color:#8a8674;}
+.term.hide{display:none;}
+.bulk{display:flex;gap:6px;}
+.bulk button{border:1px solid var(--line);background:var(--white);padding:6px 12px;font-size:12px;cursor:pointer;border-radius:2px;font-family:inherit;color:var(--moss);}
+.bulk button:hover{border-color:var(--gold);color:var(--green);}
+.cat-sec.hide{display:none;}
+.noresult{display:none;padding:60px 0;text-align:center;color:#8a8674;font-size:14px;}
+.noresult.show{display:block;}
+
+footer{background:var(--ink);color:#9aa79e;font-size:12.5px;padding:40px 0;}
+footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+footer a:hover{color:#fff;}
+
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr;}
+  aside.catnav{position:static;display:flex;gap:8px;flex-wrap:wrap;}
+  aside.catnav h2,aside .consult{display:none;}
+  aside.catnav button{width:auto;border:1px solid var(--line);border-radius:2px;}
+  nav.menu{display:none;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <a href="dcplatform_japan_home.html" class="logo serif">DC PLATFORM <em>JAPAN</em></a>
+    </div>
+    <nav class="menu" aria-label="主要メニュー">
+      <a href="dcplatform_japan_news.html">ニュースの視点</a>
+      <a href="dcplatform_japan_projectmap.html">プロジェクトMAP</a>
+      <a href="dcplatform_japan_index.html">計算力指数</a>
+      <a href="#" class="on">用語解説</a>
+      <a href="dcplatform_japan_faq.html">開発FAQ</a>
+    </nav>
+    <a class="cta-btn" href="dcplatform_japan_consult.html">開発の相談をする</a>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="wrap">
+    <div class="crumb"><a href="dcplatform_japan_home.html">ホーム</a> ／ 用語解説（DC開発辞典）</div>
+    <h1 class="serif">用語解説（DC開発辞典）</h1>
+    <p>データセンター開発の検討で出会う業界用語を、専門外の方にも分かる言葉で解説します。開発に必要な「8つの視点」に沿った7カテゴリ・<span class="count" id="termCount">66</span>語を収録。随時更新します。</p>
+  </div>
+</div>
+
+<div class="toolbar">
+  <div class="wrap tool-grid">
+    <div class="searchbox"><input type="search" id="q" placeholder="用語を検索（例：PUE、系統接続、液浸）" aria-label="用語を検索"></div>
+    <div class="kana-nav" role="group" aria-label="五十音索引">
+      <button data-kana="all" class="on">すべて</button>
+      <button data-kana="あ">あ</button><button data-kana="か">か</button><button data-kana="さ">さ</button>
+      <button data-kana="た">た</button><button data-kana="な">な</button><button data-kana="は">は</button>
+      <button data-kana="ま">ま</button><button data-kana="や">や</button><button data-kana="ら">ら</button>
+      <button data-kana="わ">わ</button><button data-kana="en">英数</button>
+    </div>
+    <div class="bulk"><button id="openAll" type="button">すべて開く</button><button id="closeAll" type="button">すべて閉じる</button></div>
+  </div>
+</div>
+
+<main class="wrap layout">
+  <aside class="catnav">
+    <h2>カテゴリ</h2>
+    <button data-cat="all" class="on">すべて表示</button>
+    <button data-cat="c1">1. 基礎・DCの形態</button>
+    <button data-cat="c2">2. 性能・評価指標</button>
+    <button data-cat="c3">3. 電力・エネルギー</button>
+    <button data-cat="c4">4. 冷却技術</button>
+    <button data-cat="c5">5. IT・計算力</button>
+    <button data-cat="c6">6. 建設・許認可</button>
+    <button data-cat="c7">7. 事業・投資</button>
+    <div class="consult">
+      <strong class="serif">用語の先の、実務の相談へ</strong>
+      <p>立地・電力・許認可・資金——個別の検討は無料相談で承ります。</p>
+      <a href="dcplatform_japan_consult.html">無料相談はこちら</a>
+    </div>
+  </aside>
+
+  <div id="terms">
+
+  <!-- ================= C1 ================= -->
+  <section class="cat-sec" data-cat="c1">
+    <div class="cat-head"><span class="no">CATEGORY 01</span><h2>基礎・DCの形態</h2></div>
+    
+      <details class="term" data-kana="た"><summary><span class="w">データセンター</span><span class="en">Data Center</span><span class="chev" aria-hidden="true"></span></summary><div class="def">サーバーや通信機器を安全に収容し、電力・冷却・通信回線・セキュリティを一体で備えた専用施設です。私たちが日常使うクラウドサービス、動画配信、そして生成AIは、すべてどこかのデータセンターの中で動いています。電気を計算に変える工場という意味で「デジタル社会の発電所」とも呼ばれ、生成AIの普及により世界的に建設ラッシュが続いています。日本では首都圏への集中が課題とされ、電力・災害リスクの観点から地方分散が国の政策課題になっています。この分散の受け皿として注目されているのが、次項のコンテナ型です。</div></details>
+
+      <details class="term" data-kana="か"><summary><span class="w">コンテナ型データセンター</span><span class="en">Containerized DC</span><span class="chev" aria-hidden="true"></span></summary><div class="def">輸送用コンテナ規格の筐体に、サーバー・電源・空調・監視設備まで一式を収めたデータセンターです。ビルを建てる従来型と異なり、工場であらかじめ作り込んだものをトレーラーで運んで現地に据え付けるため、工期を月単位まで短縮でき、需要に合わせて一台ずつ増設・移設できます。随時移動できる等の条件を満たせば建築確認が原則不要と整理されている点も、スピードの制度的な裏付けです。初期投資を段階化できるため、大資本でなくても参入可能な業態であり、遊休地活用や地方立地との相性が良いことから、現在のデータセンター分散化の主役となりつつあります。<a class="rel" href="dcplatform_japan_consult.html">DC開設コンサルティング</a></div></details>
+
+      <details class="term" data-kana="ま"><summary><span class="w">モジュール型・ユニット型</span><span class="chev" aria-hidden="true"></span></summary><div class="def">規格化した部材（モジュール／ユニット）を積み木のように組み合わせて構築するデータセンターです。輸送用コンテナの寸法に縛られないため、天井高・通路幅・ラック配置の設計自由度が高く、働く人の作業性にも優れます。コンテナ型と同様に工場生産による品質の安定と短工期が持ち味で、ユニットハウス業界からの参入企業は「コンテナ型よりさらに短納期・高拡張」を訴求しています。コンテナ型・モジュール型・ユニット型に厳密な境界があるわけではなく、いずれも「工場で作って現地に置く」プレハブ型データセンターの仲間と理解すれば十分です。案件では呼び名より、建築法規上の扱いと拡張計画への適合で選ぶことが大切です。</div></details>
+
+      <details class="term" data-kana="え"><summary><span class="w">エッジデータセンター</span><span class="en">Edge DC</span><span class="chev" aria-hidden="true"></span></summary><div class="def">利用者や工場・店舗の「すぐ近く」に置く小規模データセンターです。クラウドの巨大データセンターは遠方にあるため通信にわずかな遅延が生じますが、自動運転、工場の機械制御、店舗のAIカメラなど、一瞬の遅れが許されない用途ではこの遅延が問題になります。エッジDCはデータを遠くまで運ばず手元で処理することでこれを解決します。5GやローカルAIの普及とともに需要が拡大しており、各地域に小さな拠点を多数置く「分散」の思想はコンテナ型・マイクロ型と一体です。地方にとっては、地元企業のDX需要を地元で受け止める産業インフラという意味も持ちます。</div></details>
+
+      <details class="term" data-kana="ま"><summary><span class="w">マイクロデータセンター</span><span class="en">Micro DC</span><span class="chev" aria-hidden="true"></span></summary><div class="def">ラック数本規模の超小型データセンターで、冷蔵庫ほどの筐体に電源・冷却・消火・監視までを内蔵した製品もあります。防塵防水仕様（IP65等級など）を選べば屋外や工場内にそのまま設置でき、サーバールームを新築するより早く・安く導入できるのが売りです。遠隔監視と組み合わせた実質無人運用が前提で、故障時は部品を送ってもらい差し替えるセンドバック保守が一般的です。エッジ用途の最小単位として、自治体庁舎、病院、工場、学校など「小さくても手元に計算力が欲しい」現場での採用が広がっています。データセンター事業の入口として、最小の投資で始められる形態でもあります。</div></details>
+
+      <details class="term" data-kana="は"><summary><span class="w">ハイパースケール</span><span class="en">Hyperscale</span><span class="chev" aria-hidden="true"></span></summary><div class="def">クラウド大手（いわゆるビッグテック）などが運営する、受電容量数十MW級以上の超大規模データセンターです。一施設で中規模都市に匹敵する電力を消費し、建設費は数千億円規模に達することもあります。日本では首都圏と関西圏への集中が顕著で、これが電力逼迫・災害リスク・地方との格差という政策課題を生んでいます。コンテナ型・エッジ型の分散モデルは、このハイパースケール集中への対案という文脈で理解すると位置づけが明確になります。両者は敵対ではなく役割分担の関係で、巨大な学習はハイパースケール、地域の推論・データ主権はエッジという棲み分けが進むと見られています。</div></details>
+
+      <details class="term" data-kana="か"><summary><span class="w">コロケーション</span><span class="en">Colocation</span><span class="chev" aria-hidden="true"></span></summary><div class="def">データセンターのスペース（ラック）・電力・回線・空調を借り、そこに自社のサーバーを持ち込んで設置するサービス形態です。借りる側は施設建設の巨額投資なしに堅牢な環境を使え、貸す側はラック単位の安定した賃料収入を得ます。ホテルに例えれば「部屋貸し」であり、これに対して計算力そのものを売るGPUaaSは「料理まで提供するレストラン」に相当します。コロケーションは収入が安定的で運営もシンプルな半面、単価は計算力売りより低くなります。データセンター事業の収益モデルを設計する際の、最も基本的な選択肢です。</div></details>
+
+      <details class="term" data-kana="en"><summary><span class="w">DC in DC</span><span class="y">ディーシー・イン・ディーシー</span><span class="chev" aria-hidden="true"></span></summary><div class="def">既存データセンターの建屋内や敷地内に、コンテナ型DCなどを追加設置する提供形態です。既存施設の受電設備・通信回線・セキュリティ・運用体制をそのまま活かせるため、更地から開発するより早く安く増強でき、既存DC側にとっても遊休スペースの収益化になります。さらに、構築したコンテナDCを発注者のブランド名で運営・再販できるサービスも登場しており、自社で施設を持たない企業が「自社データセンター」を短期間で掲げる手段にもなっています。既存インフラの再利用という点で、投資効率の高い開発手法です。</div></details>
+
+      <details class="term" data-kana="ら"><summary><span class="w">ラック</span><span class="en">Rack</span><span class="chev" aria-hidden="true"></span></summary><div class="def">サーバーや通信機器を縦に積み重ねて収める専用の棚で、幅19インチ（約48cm）が世界共通の標準規格です。データセンターの収容能力は「ラック何本」、貸し出しの課金も「1ラックあたり月額いくら」で語られることが多く、業界の基本の取引単位となっています。1本のラックには標準で40〜48U分の機器を搭載でき、ラックあたりの消費電力（電力密度）が施設の世代を示す指標になります。かつては1ラック数kWが普通でしたが、AI用GPUサーバーの登場で数十kW級のラックが求められるようになり、これが冷却革命（液冷化）を引き起こしています。</div></details>
+
+      <details class="term" data-kana="en"><summary><span class="w">RU（ラックユニット）</span><span class="en">Rack Unit / U</span><span class="chev" aria-hidden="true"></span></summary><div class="def">ラック内の機器の高さを表す単位で、1RU（1U）＝約4.45cmです。「2Uサーバー」といえば厚さ約8.9cmのサーバーを指し、標準的なラック1本には40〜48U分の空間があります。マイクロデータセンターの容量表記（12RU・25RU・38RUなど）にも使われ、この数字でどの程度の機器が収容できるかが分かります。不動産でいう「坪」にあたる業界の基礎単位で、機器選定・見積書・賃貸契約のあらゆる場面に登場します。カタログを読むための必修用語として最初に覚えておくと、その後の検討がスムーズになります。</div></details>
+    
+  </section>
+
+  <!-- ================= C2 ================= -->
+  <section class="cat-sec" data-cat="c2">
+    <div class="cat-head"><span class="no">CATEGORY 02</span><h2>性能・評価指標</h2></div>
+    
+      <details class="term" data-kana="en"><summary><span class="w">PUE</span><span class="y">ピーユーイー</span><span class="en">Power Usage Effectiveness</span><span class="chev" aria-hidden="true"></span></summary><div class="def">データセンターの電力効率を示す世界共通の代表指標で、施設全体の消費電力をIT機器（サーバー等）の消費電力で割って求めます。理論上の最小値は1.0で、これは「冷却や照明に一切電力を使わず、全部を計算に使っている」状態を意味します。従来型の空冷施設では1.5前後が一般的な水準とされ、最新の液浸冷却や寒冷地の外気活用では1.0台前半という報告もあります。電気代はデータセンター最大の運営コストなので、PUEの差はそのまま収益力の差になり、加えて脱炭素を求める顧客への営業力にも直結します。冷却方式と立地の選択が、この数字の大半を決めます。</div></details>
+
+      <details class="term" data-kana="en"><summary><span class="w">WUE</span><span class="y">ダブリューユーイー</span><span class="en">Water Usage Effectiveness</span><span class="chev" aria-hidden="true"></span></summary><div class="def">データセンターが冷却のためにどれだけ水を使ったかを示す指標で、IT機器の消費電力量あたりの水使用量で表します。蒸発を利用する冷却方式は電力効率（PUE）が良い一方で大量の水を消費するため、電気と水はしばしばトレードオフの関係になります。海外では地域の水資源をめぐりデータセンターが批判を受けた事例もあり、水の使用量は立地地域への説明責任の重要項目になりつつあります。水をほとんど使わないドライクーラー方式や、地下水を熱交換にだけ使い戻す方式など、地域の水事情に合わせた設計の選択が求められます。地方立地では、電力とあわせて「水の物語」を語れることが地域合意の助けになります。</div></details>
+
+      <details class="term" data-kana="た"><summary><span class="w">Tier（ティア基準）</span><span class="en">Tier I–IV</span><span class="chev" aria-hidden="true"></span></summary><div class="def">データセンターの信頼性（止まりにくさ）を4段階で示す国際的なグレードです。電源や冷却が一系統だけのTier I から、すべてを二重化し保守中でも無停止で運転できるTier IVまで、冗長性のレベルで区分されます。数字が上がるほど建設費・運営費は跳ね上がるため、高ければ良いのではなく「顧客の用途に見合ったTierを選ぶ」ことが事業性の要点です。例えば金融基幹システムなら高Tierが必須ですが、AIの学習用途は一時停止を許容できる場合も多く、過剰品質は価格競争力を損ないます。顧客との契約（SLA）と表裏一体で決める設計条件です。</div></details>
+
+      <details class="term" data-kana="en"><summary><span class="w">SLA</span><span class="y">エスエルエー</span><span class="en">Service Level Agreement</span><span class="chev" aria-hidden="true"></span></summary><div class="def">サービスの品質を数値で約束する契約条項で、データセンターでは稼働率（例：99.9%以上）、障害時の復旧時間、電源・空調の提供条件などを定めます。約束を破った場合の利用料減額（ペナルティ）とセットになっており、貸す側にとっては設備投資と保険の水準を決める基準、借りる側にとっては価格と並ぶ最重要の比較項目です。数字の見た目は似ていても、計画停電を除外するか、賠償の上限をどこに置くかで実質は大きく変わるため、条文の読み込みが欠かせません。計算力の取引が広がる中で、GPUの提供品質（故障時の代替機提供など）を定める新しいSLAの形も生まれています。</div></details>
+
+      <details class="term" data-kana="か"><summary><span class="w">稼働率</span><span class="chev" aria-hidden="true"></span></summary><div class="def">設備や計算力がどれだけ実際に使われている（＝売れている）かの割合で、データセンター事業の収益を最も左右する変数です。施設は満室でも空室でも電気の基本料金・減価償却・保守費がかかり続けるため、稼働率が損益分岐点を下回ると赤字が続きます。だからこそ「開業してから顧客を探す」は最も危険な進め方で、計画段階から長期契約で土台の稼働を固め、残りを時間貸しで埋める二層構造が定石とされます。事業計画の審査でも、金融機関が最初に見るのはこの前提の妥当性です。当プラットフォームの計算力取引板は、開業前の需要打診にも使える稼働率対策の道具です。<a class="rel" href="dcplatform_japan_home.html#menu">計算力取引板</a></div></details>
+
+      <details class="term" data-kana="て"><summary><span class="w">電力密度（kW/ラック）</span><span class="chev" aria-hidden="true"></span></summary><div class="def">ラック1本あたりの消費電力で、データセンターの「世代」を最も端的に示す数字です。従来の業務サーバーは1ラック数kW程度でしたが、AI用GPUサーバーは1台で数kW〜十数kWを消費し、満載すれば1ラックで数十kWを超えます。電力密度が上がると、空気で冷やす空冷では熱を運びきれなくなり、液冷設備・太い受電・床荷重対策が必要になります。つまりこの数字は、受電計画・冷却方式・建屋設計・収容できる顧客層のすべてを決める設計の起点です。施設を比較するときは「何ラックあるか」より「1ラック何kWまで受け入れられるか」を見るのが目利きの第一歩です。</div></details>
+
+      <details class="term" data-kana="en"><summary><span class="w">TCO</span><span class="y">ティーシーオー</span><span class="en">Total Cost of Ownership</span><span class="chev" aria-hidden="true"></span></summary><div class="def">導入時の初期費用だけでなく、電気代・保守費・人件費・更新費まで含めた「持ち続けるための総コスト」です。データセンターは電気代の比重が極めて大きいため、初期費が安い提案でも電力効率が悪ければ数年でTCOが逆転する、ということが実際に起こります。比較検討では5年程度の期間でTCOを並べるのが実務の作法で、マイクロDC製品などは「従来のサーバールーム比で5年35%削減」のようにTCOで価値を訴求します。投資判断・ベンダー選定・顧客への提案のいずれでも、「買値」ではなく「総額」で考える習慣がこの一語に凝縮されています。</div></details>
+    
+  </section>
+
+  <!-- ================= C3 ================= -->
+  <section class="cat-sec" data-cat="c3">
+    <div class="cat-head"><span class="no">CATEGORY 03</span><h2>電力・エネルギー</h2></div>
+    
+      <details class="term" data-kana="し"><summary><span class="w">受電容量</span><span class="chev" aria-hidden="true"></span></summary><div class="def">その施設が電力会社から受け取れる最大電力のことで、データセンター立地における最初にして最大の制約条件です。どれほど広く安い土地でも、必要な電力を引き込めなければデータセンターは成立せず、「土地はあるが電気が来ない」が開発の典型的な停滞パターンになっています。逆に、廃工場など過去に大きな受電をしていた土地は、設備や契約の下地が残っているため有望です。開発の正しい順番は「土地を買ってから電力を調べる」ではなく「電力を調べてから土地を決める」であり、候補地の受電可能量の確認が事業化検討の第一歩です。<a class="rel" href="dcplatform_japan_home.html#solve">立地評価・電力調達支援</a></div></details>
+
+      <details class="term" data-kana="た"><summary><span class="w">特別高圧・高圧</span><span class="chev" aria-hidden="true"></span></summary><div class="def">電力会社から受電する電圧の区分で、契約電力おおむね50kW以上2,000kW未満が「高圧」、2,000kW（2MW）以上が「特別高圧」とされます。特別高圧になると専用の受電設備・保安体制が必要になり、工事の規模・期間・費用が段違いに大きくなるため、計画がこの線をまたぐかどうかは設計の分水嶺です。実務では、2MW級の計画をあえて高圧×複数受電に分ける、段階増設で当初は高圧に収めるといった工夫も検討されます。受電方式は電気主任技術者の選任義務などの運用コストにも影響するため、初期段階から電気の専門家を交えて決めるべき項目です。数字の目安として「2MW＝特高の入口」と覚えておくと会話が楽になります。</div></details>
+
+      <details class="term" data-kana="か"><summary><span class="w">キュービクル</span><span class="chev" aria-hidden="true"></span></summary><div class="def">電力会社から高圧で受け取った電気を、施設内で使える電圧に変換する受変電設備一式を金属製の箱に収めたものです。正式には「キュービクル式高圧受電設備」といい、コンテナ型データセンターでは本体コンテナとは別に敷地内へ設置するのが一般的です。データセンターの見積りや契約では、コンテナ本体・GPU・キュービクルの三つが主要な費目となり、誰が調達し誰が工事するかの分担を契約書で明確にしておくべき設備です。設置には基礎工事・保安距離・消防への届出などが伴い、納期も数ヶ月単位を要するため、機材より先に手配が動く「隠れたクリティカルパス」でもあります。</div></details>
+
+      <details class="term" data-kana="け"><summary><span class="w">系統接続</span><span class="chev" aria-hidden="true"></span></summary><div class="def">発電設備や大口の需要設備を、送配電ネットワーク（電力系統）につなぐことです。接続には電力会社への申込み・技術検討・契約・工事という段階があり、地域の系統の混み具合によっては回答だけで数ヶ月、送電線の増強工事が必要と判断されれば年単位の待ちが発生します。全国的にこの「接続待ち」が深刻化しており、データセンター開発の全工程の中で最も読みにくく、最も遅延リスクの大きい部分です。実務の鉄則は、土地の契約より先に電力会社への事前相談で系統の見立てを取ること、そして複数候補地を並行検討して系統条件の良い方を選ぶことです。系統を制する者が開発を制す、と言っても過言ではありません。</div></details>
+
+      <details class="term" data-kana="あ"><summary><span class="w">空き容量・ノンファーム型接続</span><span class="chev" aria-hidden="true"></span></summary><div class="def">送電線には運べる電気の量に上限があり、その余裕分を「空き容量」と呼びます。従来は空き容量がない送電線には増強工事を待たないと接続できませんでしたが、ノンファーム型接続は「混雑時には送電を制御されることを受け入れる代わりに、工事を待たずに早くつなぐ」という柔軟な仕組みです。再エネ発電所の接続で普及した考え方ですが、データセンターのような大口需要側にも同様の柔軟な接続を広げる議論が進んでいます。混雑時に計算を減らせるAI学習用途とは相性が良く、「止まれる需要」であることが接続の早さという武器に変わる可能性があります。系統情報の読み方次第で、立地の選択肢は大きく広がります。</div></details>
+
+      <details class="term" data-kana="し"><summary><span class="w">出力抑制</span><span class="chev" aria-hidden="true"></span></summary><div class="def">太陽光や風力の発電量が地域の電力需要を上回りそうなとき、電力会社が再エネの発電を一時的に止めることです。電気は需要と供給を常に一致させないと停電するため、晴れた休日の昼など需要の少ない時間帯に、せっかく発電できる電気が「捨てられる」事態が九州などで頻発しています。この抑制されている電気の受け皿として、地方に大口需要＝データセンターを作る構想が注目されており、地域の再エネを無駄にしない・安価な電力調達の交渉余地がある・地元への説明がしやすい、という三拍子が揃います。抑制の多い地域は、データセンター誘致において「弱み」ではなく「強み」を持っていると言えます。</div></details>
+
+      <details class="term" data-kana="か"><summary><span class="w">コーポレートPPA</span><span class="en">Corporate PPA</span><span class="chev" aria-hidden="true"></span></summary><div class="def">企業（需要家）が発電事業者と直接、再エネ電力の長期購入契約を結ぶ仕組みで、Power Purchase Agreement の頭文字です。敷地内や隣接地に発電設備を置くオンサイト型と、離れた発電所から送電網を介して調達するオフサイト型があり、契約期間は10〜20年の長期が一般的です。データセンターにとっては、カーボンフリー電力の確保と電力価格の長期固定という二つの効果があり、燃料価格に振り回されない収支の安定化手段にもなります。発電事業者にとっても長期の売り先が確定するため、新しい再エネ発電所の建設を後押しする効果（追加性）があり、脱炭素経営の文脈で最も評価される調達方法とされています。</div></details>
+
+      <details class="term" data-kana="は"><summary><span class="w">非化石証書</span><span class="chev" aria-hidden="true"></span></summary><div class="def">電気そのものと、その電気が持つ「再エネ由来である」という環境価値を切り分け、環境価値だけを証書として取引できるようにした仕組みです。物理的には通常の系統電力を使いながら、使用量に見合う証書を購入して組み合わせることで、実質的に再エネ電力を使用したものと扱えます。自前の発電設備やPPAを持たなくてもカーボンフリーを掲げられる、最も手軽な手段です。ただし国際的には、証書だけに頼る方法より、新しい再エネ設備を生むPPAの方が高く評価される傾向が強まっています。実務では「まず証書で基準を満たし、段階的にPPA・自家発電へ移行する」というロードマップを描くのが現実的です。</div></details>
+
+      <details class="term" data-kana="か"><summary><span class="w">カーボンフリー電力</span><span class="chev" aria-hidden="true"></span></summary><div class="def">発電時にCO2を排出しない電源——太陽光・風力・水力・地熱・原子力など——による電力の総称です。生成AIの電力消費が世界的な議論となる中、AI企業やクラウド大手は自社が使うデータセンターにカーボンフリー電力を強く求めるようになっており、電源構成はもはや環境対応ではなく「顧客獲得の条件」になりつつあります。大口顧客の入居審査で再エネ比率を問われる、再エネ対応施設だけが入札に呼ばれる、といった場面は今後さらに増えると見られます。調達手段はPPA・非化石証書・自家発電の組み合わせで、地域の再エネ資源が豊富な地方立地はこの点で構造的に有利です。「安い電気」から「きれいで安い電気」へ、競争軸が移っています。</div></details>
+
+      <details class="term" data-kana="ち"><summary><span class="w">蓄電池併設</span><span class="chev" aria-hidden="true"></span></summary><div class="def">データセンターの敷地に大型蓄電池を併設し、電力の貯蔵と放出を組み合わせて運用する構成です。効果は多面的で、電気料金の高い時間帯を避けて充放電するピークシフト、再エネの出力変動や出力抑制分の吸収、停電時のバックアップ強化、さらに電力会社の需給調整市場に応札して収益を得る道もあります。データセンターと蓄電池はどちらも大きな受電設備と土地を必要とするため、一体開発すればインフラを共用でき、投資効率が高まります。蓄電池メーカーがコンテナ型データセンター事業に参入する動きもあり、「電気を使う施設」から「電力系統を支える施設」への進化形として注目されている組み合わせです。</div></details>
+
+      <details class="term" data-kana="en"><summary><span class="w">UPS（無停電電源装置）</span><span class="en">Uninterruptible Power Supply</span><span class="chev" aria-hidden="true"></span></summary><div class="def">停電や瞬間的な電圧低下が起きた瞬間に、内蔵バッテリーから途切れなくサーバーへ電力を供給し続ける装置です。コンピュータは0.1秒の停電でも停止・故障し得るため、UPSはデータセンターの信頼性のいわば土台です。ただしUPSが持ちこたえられるのは数分〜数十分であり、その間に非常用発電機を起動して電源を引き継ぐ、という二段構えで長時間停電に備えます。容量の設計は「どの機器を・何分間守るか」の優先順位づけそのもので、SLAやTierグレードと連動して決まります。バッテリーは数年ごとの交換が必要な消耗品であり、運用コストとして忘れずに計画へ織り込むべき設備です。</div></details>
+
+      <details class="term" data-kana="ひ"><summary><span class="w">非常用発電機</span><span class="chev" aria-hidden="true"></span></summary><div class="def">長時間の停電時に施設へ電力を供給し続けるための自家発電設備で、ディーゼルエンジン式が一般的です。UPSが「瞬間をつなぐ」役割なのに対し、発電機は「長丁場を支える」役割で、燃料タンクの備蓄量が「無補給で何時間（何日）運転できるか」を決めます。設置には消防法上の危険物の届出、騒音・振動・排気への近隣配慮、定期的な試運転といった運用義務が伴い、意外に手のかかる設備でもあります。すべてのデータセンターに必須というわけではなく、顧客の要求水準（SLA・Tier）と費用のバランスで要否・容量を決めるのが実務です。災害の多い日本では、地域のBCP拠点としての価値づけに使える設備でもあります。</div></details>
+
+      <details class="term" data-kana="わ"><summary><span class="w">ワット・ビット連携</span><span class="chev" aria-hidden="true"></span></summary><div class="def">電力（ワット）と通信・デジタル（ビット）のインフラを、別々にではなく一体で計画・整備しようという国の政策の方向性です。背景には、データセンターの電力需要が急増する一方で、送電網の増強には長い年月がかかるという構造問題があります。送電網や再エネ電源の近くにデータセンターを誘導する、地方の余剰電力の場所に需要を作る、通信網の整備と合わせて立地を分散させる——こうした発想はいずれも、電気のある場所へ計算を持っていくという意味で分散型・コンテナ型データセンターへの強い追い風です。関連する支援策・制度設計が続々と動いており、補助金や立地選定の文脈で今後最も頻出するキーワードの一つです。</div></details>
+    
+  </section>
+
+  <!-- ================= C4 ================= -->
+  <section class="cat-sec" data-cat="c4">
+    <div class="cat-head"><span class="no">CATEGORY 04</span><h2>冷却技術</h2></div>
+    
+      <details class="term" data-kana="く"><summary><span class="w">空冷</span><span class="chev" aria-hidden="true"></span></summary><div class="def">冷たい空気をサーバーに送り込み、温まった空気を排出して冷やす、最も歴史の長い冷却方式です。設備が比較的簡素で保守要員も確保しやすく、枯れた技術としての安心感があります。しかし空気は熱を運ぶ能力が小さいため、1ラック数十kWに達するAI用GPUサーバーの発熱には物理的に追いつかず、高密度な構成では限界が明確になっています。当面は「一般的なサーバー・旧世代GPUは空冷、最新GPUは液冷」という住み分けが続くため、空冷が不要になるわけではありません。ただし新設するなら、将来の液冷移行に備えた設計余地（配管スペース・給水・電源余力）を仕込んでおくのが賢明です。</div></details>
+
+      <details class="term" data-kana="す"><summary><span class="w">水冷・DLC（直接液冷）</span><span class="en">Direct Liquid Cooling</span><span class="chev" aria-hidden="true"></span></summary><div class="def">冷却液を配管でサーバー内部のチップ（GPU・CPU）表面まで循環させ、熱を直接奪う方式です。液体は空気の数千倍の熱を運べるため、空冷では不可能な高密度ラックを冷やすことができ、最新世代のAI用GPUではメーカーの標準構成が液冷前提になりつつあります。つまり「液冷に対応しているか」は、最新機材を受け入れられる施設かどうかを分ける世代の踏み絵です。導入には施設側の冷却水設備（一次側）、熱を受け渡すCDU、サーバーまでの配管という一連のインフラが必要で、後付けは容易ではありません。これから開発するデータセンターは、液冷対応を前提に設計するのが事実上の標準と考えるべきです。</div></details>
+
+      <details class="term" data-kana="en"><summary><span class="w">CDU（冷却分配装置）</span><span class="en">Coolant Distribution Unit</span><span class="chev" aria-hidden="true"></span></summary><div class="def">施設側の冷却水（一次側）と、サーバー側を循環する冷却液（二次側）の間で熱を受け渡し、液を各ラックへ分配する装置で、液冷データセンターの心臓部にあたります。一次側と二次側を分離することで、サーバー側には清浄で管理された液だけを流し、漏れや水質のリスクを抑える構造になっています。CDUの能力が、その施設が受け入れられるGPUの総発熱量を実質的に決めるため、機材計画と冷却計画はCDUを介して表裏一体です。最近は、チラー・ポンプ・タンクなど一次側の設備一式を40ftコンテナにまとめた「冷却インフラのパッケージ製品」も登場しており、コンテナ型DCの液冷化を後押ししています。</div></details>
+
+      <details class="term" data-kana="え"><summary><span class="w">液浸冷却</span><span class="en">Immersion Cooling</span><span class="chev" aria-hidden="true"></span></summary><div class="def">サーバーの基板ごと、電気を通さない特殊な液体の槽に沈めて冷やす方式です。機器全体が液体に触れるため冷却効率は極めて高く、ファンが不要になることで静音化・省電力化も進みます。液が沸騰しない温度で循環させる単相式と、沸騰と凝縮の相変化を利用してさらに大きな熱を奪う二相式があります。冷却にかかる電力を空調方式の数分の一に抑えられ、PUE1.0台前半という世界最高水準の効率報告も液浸から生まれています。機器の保守方法が特殊、対応機材が限られるなどの実務課題はありますが、地下水との熱交換と組み合わせるなど日本の地域資源と相性の良い方式として、国内でも商用化が始まっています。</div></details>
+
+      <details class="term" data-kana="は"><summary><span class="w">ハイブリッド冷却</span><span class="chev" aria-hidden="true"></span></summary><div class="def">空冷・水冷・液浸など、複数の冷却方式を同一の施設やコンテナの中に混載する構成です。サーバーの発熱量は機種によって桁違いに異なるため、発熱の小さい機器は空冷、高発熱のGPUは液冷と、適材適所で振り分けることで設備投資を最適化できます。例えば一つの小型コンテナに液浸・空冷・水冷の区画を併設し、電力密度の異なるサーバーを一緒に収容できる製品も登場しています。顧客の機材構成が読みきれない段階でも柔軟に対応でき、将来の機材更新にも段階的に追随できるのが利点です。「どの冷却方式を選ぶか」ではなく「どう組み合わせるか」が、これからの設計の問いになりつつあります。</div></details>
+
+      <details class="term" data-kana="ち"><summary><span class="w">チラー</span><span class="en">Chiller</span><span class="chev" aria-hidden="true"></span></summary><div class="def">冷媒の力で水を冷やし、施設へ冷却水を送り出す冷凍機です。エアコンの室外機の業務用巨大版とイメージすると分かりやすく、データセンターの冷却系で最も電力を消費する主役設備です。したがってチラーの効率と運転方法がPUE、ひいては電気代を大きく左右します。外気が冷たい季節や夜間はチラーを止めて外気で冷やすフリークーリングと併用するのが定石で、年間を通じてチラーの稼働をどれだけ減らせるかが立地と設計の腕の見せどころです。騒音源にもなるため、近隣への配慮（設置位置・防音）も計画段階から織り込むべき設備です。</div></details>
+
+      <details class="term" data-kana="た"><summary><span class="w">ドライクーラー</span><span class="en">Dry Cooler</span><span class="chev" aria-hidden="true"></span></summary><div class="def">温まった冷却水を、外気に熱を逃がすことで冷ます熱交換器です。水を蒸発させて冷やす冷却塔（クーリングタワー）と違い、水をほとんど消費しないのが最大の特長で、水資源に制約のある立地や、水使用量（WUE）への説明責任が問われる場面で選ばれます。仕組みが単純で保守も比較的容易ですが、冷却能力は外気温に左右されるため、気温の低い地域ほど性能を発揮します。寒冷地ではドライクーラー主体でチラーをほぼ使わない運転も可能になり、電気と水の両方を節約できます。立地の気象データと冷却方式の組み合わせ検討で、必ず候補に挙がる設備です。</div></details>
+
+      <details class="term" data-kana="ふ"><summary><span class="w">フリークーリング（外気冷房）</span><span class="chev" aria-hidden="true"></span></summary><div class="def">冷たい外気をそのまま、あるいは熱交換器を介して冷却に利用し、電力を食う冷凍機（チラー）の稼働を減らす手法です。外気温が低いほど長い時間・大きな効果を発揮するため、年間平均気温の低い土地ほど有利で、北海道・東北などの寒冷地立地の優位性の科学的な根拠になっています。冬の間ほぼ外気だけで冷やせる地域なら、冷却の電気代を劇的に削減でき、PUEの改善幅もその分大きくなります。導入自体は特別な先端技術ではなく、立地選定の時点で「その土地の寒さは資源である」と捉えられるかどうかの問題です。雪や地下水の利用と並び、日本の地方が持つ冷熱資源活用の入口となる考え方です。</div></details>
+
+      <details class="term" data-kana="し"><summary><span class="w">自然冷熱利用（雪氷熱・地下水・河川水）</span><span class="chev" aria-hidden="true"></span></summary><div class="def">雪や氷、年間を通じて水温が安定している地下水・河川水・海水など、地域の自然資源を冷却に活用する方式の総称です。例えば地下水は年間14〜18℃前後で安定しており、熱交換に使えば冷凍機の電力を大幅に削減できます。豪雪地帯では冬に貯めた雪で夏まで冷やす雪氷熱利用の実証も行われており、「雪害を資源に変える」という地域振興の物語性も持ちます。冷却電力の削減はPUE・電気代・脱炭素のすべてに効くうえ、地域資源の活用は自治体・住民への説明で強い説得力を発揮します。地方立地型データセンターの差別化要素として、立地評価の際に必ず調べる価値のある項目です。<a class="rel" href="dcplatform_japan_home.html#solve">立地評価</a></div></details>
+    
+  </section>
+
+  <!-- ================= C5 ================= -->
+  <section class="cat-sec" data-cat="c5">
+    <div class="cat-head"><span class="no">CATEGORY 05</span><h2>IT・計算力</h2></div>
+    
+      <details class="term" data-kana="en"><summary><span class="w">GPU</span><span class="y">ジーピーユー</span><span class="en">Graphics Processing Unit</span><span class="chev" aria-hidden="true"></span></summary><div class="def">単純な計算を何千個も同時並行でこなすことに特化した演算装置です。もとはゲームなどの画像処理用でしたが、AIの学習が「大量の掛け算の並列処理」そのものであることから、生成AI時代の中核部品となりました。今やデータセンターの資産価値の大半をGPUが占め、世界的に需給が逼迫した結果、「GPUをどれだけ確保できるか」が国家・企業の競争力を左右する状況が続いています。価格は1基数百万円級、最新のラック一体型システムは数億円に達し、電力消費と発熱も桁違いです。データセンター開発とは、突き詰めれば「GPUに電気と冷却と顧客を届ける事業」だと言えます。</div></details>
+
+      <details class="term" data-kana="en"><summary><span class="w">GPUサーバー</span><span class="chev" aria-hidden="true"></span></summary><div class="def">GPUを複数基（典型的には8基）搭載した、AI計算専用のサーバーです。1台で数kW〜十数kWの電力を消費し、これは一般的な業務サーバーの数倍から数十倍にあたります。重量も数百kgに達するため、床荷重・搬入経路・ラックの耐荷重まで含めた物理設計が必要です。データセンターの電力密度・冷却方式・受電容量は、「GPUサーバーを何台収容するか」からの逆算で決まるため、機材計画こそが施設計画の出発点になります。最新世代は液冷が標準になりつつあり、購入だけでなくリースやメーカー金融の活用も含め、調達と資金の設計が一体で問われる機材です。</div></details>
+
+      <details class="term" data-kana="en"><summary><span class="w">GPUの世代と形態</span><span class="chev" aria-hidden="true"></span></summary><div class="def">GPUには約2年周期で入れ替わる「世代」と、チップ単体／8基搭載ボード／数十基を組み上げたラック一体型システムという「形態」の階層があり、どの世代・形態の話かで価格も冷却要件も納期も桁で変わります。商談で「最新GPU搭載」とだけ聞いて進めると、実際は一世代前だった、ラック一体型で施設側の冷却が全く足りなかった、という齟齬が起こりがちです。また世代交代のたびに旧世代の価格は下がるため、調達のタイミング戦略も収支に直結します。導入契約では特定型番を固定せず「同等以上の後継機を含む」という書き方にしておくと、納入時点での陳腐化リスクに備えられます。契約書に技術の時間軸を織り込む、代表的な論点です。</div></details>
+
+      <details class="term" data-kana="en"><summary><span class="w">GPUaaS</span><span class="y">ジーピーユー・アズ・ア・サービス</span><span class="chev" aria-hidden="true"></span></summary><div class="def">GPUの計算力を、時間貸し・月貸しのサービスとして提供する事業形態です。利用者は1基数百万円のGPUを購入せずに必要な分だけAI開発に使え、提供者は機材を保有して稼働率に応じた継続収益を得ます。データセンター事業の収益モデルが「場所貸し（コロケーション）」から「計算力売り」へ重心を移す流れの中心にあり、単価・利幅が大きい半面、機材投資・販売・運用のリスクを自社で負う点が場所貸しとの違いです。国内では「日本語サポート・請求書払い・データの国内保管」を求める企業需要が根強く、海外クラウドとの差別化余地があります。参入形態としては、自社保有型のほか、大手のGPUaaSに施設を提供する協業型もあります。</div></details>
+
+      <details class="term" data-kana="け"><summary><span class="w">計算力（コンピュート）</span><span class="chev" aria-hidden="true"></span></summary><div class="def">GPUなどの計算資源が生み出す演算能力のことで、生成AI時代の基礎資源です。電気やガスと同じように「GPU1基×1時間あたり何ドル」という時間単価で取引される商品となっており、海外では複数の事業者価格を横断集計した相場情報も整備されています。価格はGPUの世代・契約期間・地域・需給で変動し、新世代の登場とともに旧世代の単価が下がるという、明確な市況性を持ちます。つまりデータセンター事業は、設備業であると同時に「計算力という商品を仕入れて売る」商社的な事業でもあり、相場観が収益を左右します。当プラットフォームの計算力取引板と参考指標は、この相場観を国内で共有するための仕組みです。<a class="rel" href="dcplatform_japan_home.html#menu">計算力取引板</a></div></details>
+
+      <details class="term" data-kana="en"><summary><span class="w">AI学習と推論</span><span class="chev" aria-hidden="true"></span></summary><div class="def">AIには、大量のデータからモデルを育てる「学習」と、できあがったモデルを使って答えを出す「推論」という二つの局面があります。学習は巨大な計算力を数週間〜数ヶ月集中投入する重い処理で、多少の通信遅延は許容されるため、電力が安く豊富な地方立地と好相性です。一方の推論は、チャットの応答のように小さな計算を大量・常時さばく処理で、利用者への近さ（低遅延）が価値になるためエッジ立地に向きます。つまり「学習は地方の大規模拠点、推論は各地のエッジ」と、AIの二つの顔が二種類のデータセンター需要を生んでいるのです。自分の施設がどちらの需要を狙うのかを最初に定めることが、立地・設備・顧客戦略の全部の前提になります。</div></details>
+
+      <details class="term" data-kana="en"><summary><span class="w">LLM（大規模言語モデル）</span><span class="en">Large Language Model</span><span class="chev" aria-hidden="true"></span></summary><div class="def">インターネット規模の膨大な文章から言葉のパターンを学習した、生成AIの中核となるモデルです。対話・文章作成・翻訳・要約・プログラミング支援などを一つのモデルでこなし、対話型AIサービスの頭脳にあたります。LLMの開発（学習）には数千〜数万基のGPUを数ヶ月動かす計算力が必要で、運用（推論）にも継続的な計算力を要するため、世界的なGPU争奪とデータセンター建設ラッシュの直接の原動力となっています。近年は日本語や特定業務に特化した国産LLMの開発も活発で、その学習・運用基盤としての国内データセンター需要——データを国外に出したくないという要請も含め——が拡大しています。</div></details>
+
+      <details class="term" data-kana="en"><summary><span class="w">GPUクラスタとインターコネクト</span><span class="chev" aria-hidden="true"></span></summary><div class="def">多数のGPUサーバーを超高速の専用ネットワーク（インターコネクト）で束ね、全体を一つの巨大な計算機として動かす構成です。大規模なAI学習では数百〜数万基のGPUが休みなくデータをやり取りするため、GPU間の通信速度が全体の計算効率を決めてしまいます。だからこそ配線設計・ネットワーク機器・ラック配置は専門性の高い領域で、規模が大きいほど設計難度と費用が跳ね上がります。コンテナ型では「1コンテナに何基まで束ねられるか」が製品力の指標となり、水冷型で1コンテナ数百基級という構成も登場しています。施設を選ぶ側にとっても、単にGPUの数ではなく「どう束ねられているか」が計算力の質を見分けるポイントです。</div></details>
+
+      <details class="term" data-kana="え"><summary><span class="w">液冷対応サーバー</span><span class="chev" aria-hidden="true"></span></summary><div class="def">冷却液の配管を機体内部まで引き込むことを前提に設計されたサーバーです。最新世代のAI用GPUサーバーは発熱が空冷の限界を超えており、メーカーの標準構成そのものが液冷前提へと移行しつつあります。これは施設側から見ると重大な変化で、CDU・配管・一次側冷却といった液冷インフラを持たないデータセンターは、最新機材を物理的に受け入れられない——つまり最も単価の高い顧客を取り逃がす——ことを意味します。「液冷対応」はもはや先進性のアピールではなく、施設の営業対象範囲を決める基本仕様です。新設計画では液冷を標準とし、空冷は併設区画として設ける構成が、これからの標準形になると見られます。</div></details>
+    
+  </section>
+
+  <!-- ================= C6 ================= -->
+  <section class="cat-sec" data-cat="c6">
+    <div class="cat-head"><span class="no">CATEGORY 06</span><h2>建設・許認可</h2></div>
+    
+      <details class="term" data-kana="け"><summary><span class="w">建築確認（コンテナ型の取扱い）</span><span class="chev" aria-hidden="true"></span></summary><div class="def">建物を建てる前に、計画が建築基準法などに適合しているかを審査してもらう手続きです。通常の建築では数ヶ月を要しますが、コンテナ型データセンターについては、随時かつ任意に移動できる等の要件を満たすコンテナは建築物に該当しないとする国の整理（2011年国土交通省通知）があり、これがコンテナ型の短工期を支える制度的な根拠となっています。ただし、基礎への固定方法、給排水・電気配線の恒久性、複数台の連結など設置の実態によって判断は分かれ、自治体（特定行政庁）ごとの運用差もあります。「コンテナだから無条件で確認不要」と思い込むのは危険で、計画段階での確認が必須です。<span class="caution">※適用の可否は個別判断となります。特定行政庁・建築士等の専門家にご確認ください。</span></div></details>
+
+      <details class="term" data-kana="り"><summary><span class="w">立地条例・事前協議</span><span class="chev" aria-hidden="true"></span></summary><div class="def">自治体が独自に定める、土地利用や開発事業のルールです。一定規模以上の開発について、着工前に自治体との事前協議を完了させることや、住民への説明を義務付けている例が多くあります。この手続きを軽視して着工した事業者が、自治体から勧告を受け、従わなかったために事業者名を公表された実例が現実にあり、そうなれば当該案件だけでなく、他地域での事業展開すべてに傷が残ります。事前協議は突破すべき関門ではなく、その地域で長く事業を営むための入口であり、地域との合意形成は工事より先——これがデータセンター開発の鉄則です。条例の有無・内容は自治体ごとに異なるため、候補地が決まったら最初に確認すべき項目です。<a class="rel" href="dcplatform_japan_home.html#solve">自治体提案・許認可コンサル</a></div></details>
+
+      <details class="term" data-kana="か"><summary><span class="w">開発許可</span><span class="chev" aria-hidden="true"></span></summary><div class="def">一定規模以上の土地の造成や区画変更（区画形質の変更）を行う際に必要となる、都市計画法上の許可です。必要となる規模の基準は区域によって異なり、特に市街化を抑制する「市街化調整区域」では原則として開発が制限されるため、許可のハードルが大きく上がります。同じ「安い土地」でも、都市計画上どの区域にあるかで開発の難易度・期間・可否がまったく変わるのです。コンテナ型は建築確認が不要となる場合でも、造成を伴えば開発許可の検討は別途必要になる点に注意が必要です。候補地評価では、価格や広さより先に「区域区分と規制の確認」——これが土地選びの実務の第一歩です。</div></details>
+
+      <details class="term" data-kana="か"><summary><span class="w">環境アセスメント</span><span class="chev" aria-hidden="true"></span></summary><div class="def">大規模な開発事業が周辺の環境（大気・水・騒音・生態系・景観など）に与える影響を事前に調査・予測・評価し、住民や自治体の意見を聴いて計画に反映させる手続きです。対象となる事業の種類・規模は法律と自治体の条例で定められており、該当すると調査から手続き完了まで年単位の期間と相応の費用がかかります。コンテナ型の中小規模案件が法アセスの対象になることは稀ですが、大規模化や発電設備の併設によっては条例アセスや簡易な環境配慮手続きの対象になり得ます。該当の有無はスケジュール全体を左右するため、構想段階での確認が欠かせません。仮に対象外でも、自主的な環境配慮の説明は地域合意の強い味方になります。</div></details>
+
+      <details class="term" data-kana="の"><summary><span class="w">農地転用</span><span class="chev" aria-hidden="true"></span></summary><div class="def">農地を農業以外の用途（データセンター用地など）に使うために必要な、農地法上の許可手続きです。農地はどこでも転用できるわけではなく、農業上の重要度による区分があり、集団的な優良農地は原則転用不可、市街地に近い農地ほど許可の可能性が高い、という構造になっています。全国で増え続ける遊休農地・耕作放棄地をデータセンターに活用する構想は、土地の有効利用と地域の税収・雇用を両立させる有望なテーマですが、農業委員会・自治体との丁寧な調整と、営農への影響がないことの説明が前提です。太陽光発電で先行した農地活用の経験・課題が、そのままデータセンター立地の参考になります。</div></details>
+
+      <details class="term" data-kana="en"><summary><span class="w">EPC</span><span class="y">イーピーシー</span><span class="en">Engineering, Procurement, Construction</span><span class="chev" aria-hidden="true"></span></summary><div class="def">設計（Engineering）・調達（Procurement）・建設（Construction）を一括で請け負う契約形態、またはその請負事業者を指します。発注者は窓口を一本化でき、性能と完成責任をまとめて負ってもらえるのが利点です。データセンターの工事は、基礎・コンテナ据付・受変電・通信・冷却配管・消防と工種が多岐にわたるため、全体を束ねる存在が不可欠ですが、コンテナ型DCに慣れたEPCの担い手はまだ多くありません。実績の乏しい事業者に丸投げすると、工程の齟齬や責任の押し付け合いが起こりがちです。EPC選定は価格だけでなく類似案件の実績で選ぶこと——そして契約で性能保証と遅延時の責任を明確にすることが肝要です。<a class="rel" href="dcplatform_japan_consult.html">パートナー会員制度</a></div></details>
+
+      <details class="term" data-kana="en"><summary><span class="w">PM・CM</span><span class="y">ピーエム・シーエム</span><span class="chev" aria-hidden="true"></span></summary><div class="def">発注者の側に立って、プロジェクト全体を管理するのがPM（プロジェクトマネジメント）、建設工事の品質・コスト・工程を管理するのがCM（コンストラクションマネジメント）です。施工会社は自らの利益のために動くのが当然なので、専門知識を持たない発注者がその提案や見積りの妥当性を判断するのは容易ではありません。PM・CMはいわば発注者専属の「技術と契約の通訳」であり、初めてデータセンター開発に取り組む企業・自治体ほど起用の価値があります。報酬はかかりますが、仕様の過剰・過少や工事費の割高を防ぐ効果でおおむね回収できるのが実務の相場観です。誰が自分の側に立ってくれるのかを最初に確保する、という発想が大型プロジェクトの基本です。</div></details>
+
+      <details class="term" data-kana="ゆ"><summary><span class="w">遊休地活用</span><span class="chev" aria-hidden="true"></span></summary><div class="def">使われていない土地——工場跡地、遊休農地、鉄道高架下、廃校跡など——をデータセンター立地に転用する開発手法です。コンテナ型は建屋を必要とせず、区画に応じて台数を調整できるため、形状の不揃いな遊休地とも相性が良い業態です。ただし価値の物差しは通常の不動産と異なり、「駅から近い」ではなく「変電所・送電線から近い」土地が優良地となります。特に工場跡地は大口受電の下地が残っているため一等地であり、鉄道高架下のような都市の隙間もエッジ立地として実証が始まっています。土地オーナーにとっては、売却でも駐車場でもない第三の活用法として、自治体にとっては税収と地域デジタル基盤を生む遊休資産の再生策として注目されています。<a class="rel" href="dcplatform_japan_home.html#solve">案件持ち込み窓口</a></div></details>
+    
+  </section>
+
+  <!-- ================= C7 ================= -->
+  <section class="cat-sec" data-cat="c7">
+    <div class="cat-head"><span class="no">CATEGORY 07</span><h2>事業・投資</h2></div>
+    
+      <details class="term" data-kana="en"><summary><span class="w">SPC（特別目的会社）</span><span class="en">Special Purpose Company</span><span class="chev" aria-hidden="true"></span></summary><div class="def">特定の事業や資産を保有・運営するためだけに設立される会社です。データセンター開発では案件ごとにSPCを立て、その事業の資産・負債・収支を親会社から切り離すのが一般的で、仮に一つの案件が行き詰まっても他の事業や本体に累が及ばない仕組み（倒産隔離）として機能します。金融機関からのプロジェクトファイナンスや投資家からの出資も、このSPCを器として組成されます。一方で注意も必要です。契約の相手方がSPCの場合、そのSPCには当該案件の資産しかないため、本体や親会社の信用をあてにした取引はできません。相手の「グループ」ではなく「契約主体の法人そのもの」に何があるかを確認する——これがSPC時代の与信の基本です。</div></details>
+
+      <details class="term" data-kana="ふ"><summary><span class="w">プロジェクトファイナンス</span><span class="chev" aria-hidden="true"></span></summary><div class="def">企業全体の信用力ではなく、その事業（プロジェクト）が将来生み出す収益だけを返済の当てにする融資手法です。返済の裏付けは計算力の販売契約やテナントの長期利用契約であり、担保は事業の資産と契約に限定されます。つまり、大企業でなくても「確実な売り先」を示せれば大型の資金調達が可能になる、挑戦者に開かれた手法です。裏を返せば、金融機関の審査は事業計画の細部——需要の根拠、稼働率の前提、電力コスト、運営体制——に及ぶため、緻密な計画づくりが融資の成否そのものになります。データセンターは長期安定収益型のインフラ資産として金融市場の関心が高く、案件を「投資可能な形」に組成する技術の価値が高まっています。<a class="rel" href="dcplatform_japan_home.html#solve">ファイナンス支援</a></div></details>
+
+      <details class="term" data-kana="こ"><summary><span class="w">小口化投資</span><span class="chev" aria-hidden="true"></span></summary><div class="def">数十億〜百億円級の大型資産を、ラック単位・サーバー単位などの口数に分割し、一口数百万〜数千万円で投資できるようにする仕組みです。これにより、機関投資家でなくても中堅企業や富裕層がデータセンターという成長インフラの持ち分に参加でき、開発側は多数の投資家から大型の資金を集められます。不動産の小口化で先行して確立した手法の応用ですが、権利の設計（現物の共有か、契約上の権利か、組合出資か）によって金融商品取引法など規制の扱いがまったく変わる、法技術の塊のような領域です。設計を誤ると募集行為自体が違法となりかねないため、必ず弁護士・登録金融業者を交えた組成が必要です。正しく設計すれば、地域や個人の資金でデジタルインフラを支える新しい投資の形になります。</div></details>
+
+      <details class="term" data-kana="お"><summary><span class="w">オペレーティングリース</span><span class="chev" aria-hidden="true"></span></summary><div class="def">投資家が匿名組合などを通じて資金を出し合って高額な機材（サーバー・コンテナ・航空機などが典型）を購入し、それを事業者に貸し出して賃料収入を得る投資スキームです。会計上、初年度に大きな減価償却費が計上されるため、出資した法人は利益の出た期の課税を将来に繰り延べる効果が期待でき、法人の決算対策として広く使われてきました。ただしこれは免税ではなく繰延べであり、リース期間満了時の機材売却で益が戻ってくる仕組みである点、そして中途解約が原則できず資金が長期拘束される点は正しく理解が必要です。GPUサーバーは高額・旺盛な賃貸需要という点でこのスキームと親和的ですが、中古価値の見通しなど商品設計の巧拙が結果を分けます。<span class="caution">※税務上の効果は個別の状況により異なります。必ず税理士にご確認ください。</span></div></details>
+
+      <details class="term" data-kana="と"><summary><span class="w">匿名組合（TK）出資</span><span class="chev" aria-hidden="true"></span></summary><div class="def">投資家が事業者（営業者）に出資し、事業から生じる利益の分配を受ける、商法上の契約形態です。投資家の名前が表に出ず（匿名）、経営には関与せず、責任は出資額の範囲に限定されるという特徴から、オペレーティングリースや不動産・再エネの小口化商品の「器」として広く使われています。重要なのは規制面で、匿名組合の持分は金融商品取引法上「みなし有価証券」にあたり、その募集や取扱いを業として行うには金融商品取引業の登録が必要です。つまり、良い投資商品を思いついても、無登録の会社が自ら投資家を募ることは原則できません。組成には登録業者（証券会社・第二種金融商品取引業者）の関与が必須——これが投資スキームづくりの大前提です。</div></details>
+
+      <details class="term" data-kana="そ"><summary><span class="w">即時償却・一括償却</span><span class="chev" aria-hidden="true"></span></summary><div class="def">設備の取得費用を、通常の減価償却のように数年に分けず、初年度に全額または大きく費用計上できる税制上の特例措置の総称です。利益の出た期に大きな損金を作れるため投資を後押しする制度ですが、適用には対象設備・事業内容・企業規模・事前手続きなどの厳格な要件があります。特に近年は、自らは使わず他者への貸付けに供する資産を優遇の対象から外す税制改正が行われており、「機材を買って貸すだけで節税」という単純な図式はすでに成り立ちません。世の中の「節税になります」という営業トークほど、要件の確認が省かれがちです。制度は毎年の税制改正で変わるため、投資判断の前に必ず最新の要件を税理士に確認する——この一手間が、後の税務否認リスクからあなたを守ります。<span class="caution">※適用可否は必ず税理士にご確認ください。当サイトは税務助言を行いません。</span></div></details>
+
+      <details class="term" data-kana="en"><summary><span class="w">J-クレジット・カーボンクレジット</span><span class="chev" aria-hidden="true"></span></summary><div class="def">省エネや再エネ導入、森林管理などによるCO2の削減・吸収量を第三者が認証し、「クレジット」として売買できるようにした仕組みで、日本の国の制度がJ-クレジットです。削減を実現した側はクレジットの売却収入を得られ、購入した企業は自社の排出量の埋め合わせ（オフセット）に使えます。データセンターは大量の電力を使う施設として買い手になり得る一方、再エネ併設や地域の脱炭素プロジェクトと組み合わせれば創出側にも回れる、両面の当事者です。取引先や金融機関から排出量の説明を求められる場面は今後確実に増えるため、電力調達と並ぶ脱炭素経営の基本ツールとして押さえておきたい制度です。クレジットの種類や質（由来）によって評価が異なる点にも留意が必要です。</div></details>
+
+      <details class="term" data-kana="て"><summary><span class="w">データセンター関連補助金</span><span class="chev" aria-hidden="true"></span></summary><div class="def">国（経済産業省・総務省など）や自治体が用意する、データセンターの立地・省エネ設備・地方分散・GX投資などへの支援策の総称です。デジタルインフラの地方分散や電力・通信の一体整備（ワット・ビット連携）は国策となっており、関連する支援メニューは多層的に存在しますが、制度は毎年変わり、公募期間は数週間と短いことも珍しくありません。獲得の実務は「公募が出てから慌てて書く」のではなく、事業計画を先に磨き込み、合いそうな制度の公募時期を見越して準備しておく段取り勝負です。加えて自治体独自の企業立地優遇（税減免・奨励金）との併用設計も効きます。まずは自分の案件に使える制度の見取り図づくりから始めてください。<a class="rel" href="dcplatform_japan_home.html#solve">補助金獲得支援</a></div></details>
+
+      <details class="term" data-kana="け"><summary><span class="w">計算力取引</span><span class="chev" aria-hidden="true"></span></summary><div class="def">GPUなどの計算力を、売りたいデータセンター運営者・保有者と、使いたい企業との間で売買・仲介する取引です。海外では複数の事業者の空き計算力を横断して時間単価で貸し借りする市場が形成され、価格の相場情報も日々更新されています。一方国内では、日本語での契約・サポート、請求書払い、データの国内保管といった日本企業の実務要件を満たす中立的な取引の場はまだ確立されていません。運営者にとっては空き計算力の収益化と稼働率の平準化、利用者にとっては割高な海外クラウドに代わる調達手段となる、双方に利益のある市場です。当プラットフォームの計算力取引板は、この国内市場を業界の共有インフラとして育てる試みです。<a class="rel" href="dcplatform_japan_home.html#menu">計算力取引板</a></div></details>
+
+      <details class="term" data-kana="し"><summary><span class="w">市場参考指標（インデックス）</span><span class="chev" aria-hidden="true"></span></summary><div class="def">過去の取引実績を匿名の統計値として集計し、公表する価格の目安です。計算力のように新しく相場観の共有されていない市場では、売り手も買い手も「いくらが適正か」が分からず、交渉のたびに手探りになります。信頼できる参考指標があれば、価格交渉の共通の物差し、事業計画の収入前提、金融機関の審査資料として機能し、市場全体の取引コストが下がります。重要なのは、これが特定の価格への準拠を求める「標準価格」ではないことです。過去実績の統計であること、個社が特定されない匿名集計であること、利用はあくまで任意であること——この原則を守ることが、業界団体が指標を扱う際の独占禁止法上の作法でもあります。当プラットフォームは海外指標の定点表示から始め、国内成約データに基づく指数の整備を目指します。<a class="rel" href="dcplatform_japan_home.html#index">計算力指数を見る</a></div></details>
+    
+  </section>
+
+  <p class="noresult" id="noresult">該当する用語が見つかりませんでした。別の言葉でお試しいただくか、<a href="dcplatform_japan_consult.html" style="color:var(--green);font-weight:700;text-decoration:underline;">無料相談</a>で直接お尋ねください。</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 DC PLATFORM JAPAN（仮称）／一般社団法人グリーンXアライアンス</span>
+    <span><a href="dcplatform_japan_home.html">ホームへ戻る</a>　·　<a href="dcplatform_japan_faq.html">開発FAQ</a>　·　本ページの解説は一般的な情報提供であり、法務・税務・技術の個別助言ではありません。</span>
+  </div>
+</footer>
+
+<script>
+const terms = Array.from(document.querySelectorAll('.term'));
+const secs = Array.from(document.querySelectorAll('.cat-sec'));
+const q = document.getElementById('q');
+const noresult = document.getElementById('noresult');
+let kana = 'all', cat = 'all';
+document.getElementById('termCount').textContent = terms.length;
+
+const kanaRows = {
+ 'あ':'あいうえお','か':'かきくけこがぎぐげご','さ':'さしすせそざじずぜぞ','た':'たちつてとだぢづでど',
+ 'な':'なにぬねの','は':'はひふへほばびぶべぼぱぴぷぺぽ','ま':'まみむめも','や':'やゆよ','ら':'らりるれろ','わ':'わをん'
+};
+function inRow(k,row){ return row!=='en' ? (kanaRows[row]||'').includes(k) : false; }
+
+function apply(){
+  const s = q.value.trim().toLowerCase();
+  let visible = 0;
+  terms.forEach(t=>{
+    const tk = t.dataset.kana;
+    const okKana = kana==='all' || (kana==='en' ? tk==='en' : inRow(tk,kana) || tk===kana);
+    const okText = !s || t.textContent.toLowerCase().includes(s);
+    const okCat = cat==='all' || t.closest('.cat-sec').dataset.cat===cat;
+    const show = okKana && okText && okCat;
+    t.classList.toggle('hide', !show);
+    if(show){ visible++; if(s) t.open = true; }
+  });
+  secs.forEach(sec=>{
+    const any = sec.querySelectorAll('.term:not(.hide)').length>0;
+    sec.classList.toggle('hide', !any);
+  });
+  noresult.classList.toggle('show', visible===0);
+}
+q.addEventListener('input', apply);
+document.querySelectorAll('.kana-nav button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.kana-nav button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); kana=b.dataset.kana; apply();
+}));
+document.querySelectorAll('.catnav button[data-cat]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.catnav button[data-cat]').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); cat=b.dataset.cat; apply();
+}));
+const visibleTerms = ()=>terms.filter(t=>!t.classList.contains('hide'));
+document.getElementById('openAll').addEventListener('click',()=>visibleTerms().forEach(t=>t.open=true));
+document.getElementById('closeAll').addEventListener('click',()=>visibleTerms().forEach(t=>t.open=false));
+</script>
+</body>
+</html>
