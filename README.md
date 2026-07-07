@@ -1,11 +1,11 @@
-[README.md](https://github.com/user-attachments/files/29689497/README.md)
 # DC PLATFORM JAPAN
 
 データセンターをつくる、すべての人のためのプラットフォーム。
 
 一般社団法人グリーンXアライアンスが運営する、データセンター開発の中立的な情報・支援サイトです（事業実務：グリーンX合同会社）。
 
-**公開URL:** https://kazumuranaka.github.io/dcplatform/
+**公開URL:** https://dcplatform.jp/
+（旧URL https://kazumuranaka.github.io/dcplatform/ からは自動転送）
 
 ## サイト構成
 
@@ -30,13 +30,16 @@
 | `network.html` | 通信・回線の基礎（ダークファイバ・遅延・冗長化） |
 | `reliability.html` | 信頼性・Tier等級の基礎（Tier I〜IV・N+1/2N・UPS） |
 
-### 素材
+### 素材・設定ファイル
 - `dc_hero.jpg` — トップページのヒーロー画像
+- `CNAME` — 独自ドメイン設定（GitHubが自動管理。削除しないこと）
+- `sitemap.xml` — 検索エンジン用サイトマップ（ページ追加時に更新）
+- `robots.txt` — クローラー設定
 
 ## 技術構成
 
 - 静的HTML（フレームワーク・ビルド不要）。各ページにCSS/JSを内包した単一ファイル構成
-- ホスティング：GitHub Pages
+- ホスティング：GitHub Pages ＋ 独自ドメイン `dcplatform.jp`（お名前.com管理、Aレコード＋www CNAME）
 - フォント：Noto Serif JP / Noto Sans JP / IBM Plex Mono（Google Fonts）
 - デザイントークン：深緑 `#1F4D36`・オフホワイト `#F6F4ED`・金 `#A8894A`
 

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>案件ボード｜DC PLATFORM JAPAN</title>
+<meta name="description" content="用地・接続枠付き案件・計算力/GPU・設備・電力/環境価値・排熱連携——データセンター開発に関わる案件情報の掲示板。掲載無料、費用は成約時のみ。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#182420;--paper:#F6F4ED;--green:#1F4D36;--moss:#43604F;--gold:#A8894A;--line:#DAD5C6;--white:#FFFFFF;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);line-height:1.8;font-size:15px;}
+.serif{font-family:'Noto Serif JP',serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(28px,5vw,64px);}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+header{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;}
+.cta-btn{background:var(--green);color:#fff;padding:9px 18px;font-size:13px;font-weight:700;border-radius:2px;}
+.cta-btn:hover{background:var(--moss);}
+/* ===== two-row header ===== */
+.nav-top{display:flex;align-items:center;justify-content:space-between;height:54px;}
+.logo{font-family:'Noto Serif JP',serif;font-weight:700;font-size:21px;color:var(--green);}
+.logo em{font-style:normal;color:var(--gold);}
+.nav-menu{display:flex;gap:26px;font-size:13.5px;font-weight:500;align-items:center;height:44px;border-top:1px solid var(--line);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.nav-menu::-webkit-scrollbar{display:none;}
+.nav-menu a{padding:5px 0;border-bottom:2px solid transparent;white-space:nowrap;flex:0 0 auto;}
+.nav-menu a:hover,.nav-menu a.on{border-color:var(--gold);}
+@media(max-width:640px){.nav-menu{gap:20px;font-size:12.5px;}.nav-top{height:50px;}.logo{font-size:18px;}.cta-btn{padding:8px 14px;font-size:12px;}}
+
+.page-hero{padding:52px 0 40px;border-bottom:1px solid var(--line);
+ background:linear-gradient(rgba(246,244,237,.95),rgba(246,244,237,.97)),
+ repeating-linear-gradient(90deg,transparent 0 79px,rgba(31,77,54,.06) 79px 80px);}
+.crumb{font-size:12px;color:#8a8674;margin-bottom:14px;}
+.crumb a:hover{color:var(--green);text-decoration:underline;}
+h1{font-family:'Noto Serif JP',serif;font-size:clamp(26px,3vw,34px);color:var(--green);font-weight:600;margin-bottom:12px;}
+.page-hero p{max-width:46em;color:#4a5148;font-size:14.5px;}
+
+.section{padding:40px 0 72px;}
+
+/* category tabs */
+.cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.cat{border:1px solid var(--line);background:var(--white);border-radius:2px;padding:8px 16px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;color:#4a5148;transition:all .12s;}
+.cat:hover{border-color:var(--gold);color:var(--green);}
+.cat.on{background:var(--green);border-color:var(--green);color:#fff;font-weight:700;}
+.cat-note{font-size:12px;color:#8a8674;margin-bottom:24px;}
+
+/* listing cards */
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px;margin-bottom:32px;}
+.card{background:var(--white);border:1px solid var(--line);border-radius:4px;padding:24px 24px 20px;display:flex;flex-direction:column;transition:box-shadow .15s,border-color .15s;}
+.card:hover{border-color:var(--gold);box-shadow:0 3px 14px rgba(31,77,54,.08);}
+.card .head{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.tag{font-size:11px;font-weight:700;padding:3px 10px;border-radius:2px;background:#EDE9DC;color:var(--green);letter-spacing:.04em;}
+.tag.real{background:var(--gold);color:#fff;}
+.tag.sample{background:#E4E0D2;color:#8a8674;}
+.card .no{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#B9B49F;margin-left:auto;}
+.card h3{font-family:'Noto Serif JP',serif;font-size:16.5px;color:var(--green);font-weight:600;line-height:1.55;margin-bottom:12px;}
+.specs{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:12.5px;margin-bottom:12px;}
+.specs dt{color:#8a8674;white-space:nowrap;}
+.specs dd{color:var(--ink);}
+.card .desc{font-size:12.5px;color:#4a5148;line-height:1.7;flex:1;margin-bottom:16px;}
+.card .ask{display:block;text-align:center;background:var(--green);color:#fff;padding:11px 0;border-radius:2px;font-weight:700;font-size:13px;}
+.card .ask:hover{background:var(--moss);}
+.card.hidden{display:none;}
+
+/* submit band */
+.submit-band{background:var(--green);color:#EDE9DC;border-radius:4px;padding:36px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:28px;}
+.submit-band h2{font-family:'Noto Serif JP',serif;font-size:20px;color:#fff;font-weight:600;margin-bottom:6px;}
+.submit-band p{font-size:13.5px;color:#CDD6CE;max-width:40em;}
+.submit-band a{background:var(--gold);color:#fff;padding:13px 28px;border-radius:2px;font-weight:700;font-size:14px;white-space:nowrap;}
+.submit-band a:hover{opacity:.9;}
+
+.legal{font-size:12px;color:#8a8674;line-height:1.9;max-width:60em;background:#F1EEE3;border:1px solid var(--line);border-radius:3px;padding:18px 22px;}
+.legal b{color:var(--green);}
+
+footer{background:var(--ink);color:#9aa79e;font-size:12.5px;padding:52px 0 32px;border-top:none;}
+footer .wrap{display:block;}
+.f-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:36px;margin-bottom:32px;}
+.f-brand .flogo{font-family:'Noto Serif JP',serif;font-weight:700;font-size:17px;color:#E8E4D6;}
+.f-brand .flogo em{font-style:normal;color:var(--gold);}
+.f-brand p{line-height:1.9;margin:10px 0 16px;}
+.f-cta{display:inline-block;background:var(--gold);color:#fff;padding:9px 18px;border-radius:2px;font-weight:700;font-size:12.5px;}
+.f-cta:hover{opacity:.9;color:#fff;}
+footer h5{color:#E8E4D6;font-size:13px;margin-bottom:12px;font-weight:700;}
+footer ul{list-style:none;margin:0;padding:0;}
+footer li{list-style:none;padding:4px 0;}
+footer a:hover{color:#fff;}
+.f-note{border-top:1px solid #2c3a33;padding-top:20px;line-height:1.9;}
+.f-note b{color:#CFC9B8;font-weight:500;}
+.f-extra{margin-top:10px;line-height:1.9;color:#8a978d;}
+.f-bottom{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;border-top:1px solid #2c3a33;margin-top:22px;padding-top:18px;color:#8a978d;}
+@media(max-width:900px){.f-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.f-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav-top">
+    <a href="index.html" class="logo serif">DC PLATFORM <em>JAPAN</em></a>
+    <a class="cta-btn" href="consult.html">開発の相談をする</a>
+  </div>
+  <nav class="wrap nav-menu" aria-label="主要メニュー">
+    <a href="news.html">ニュースの視点</a>
+      <a href="projectmap.html">プロジェクトMAP</a>
+      <a href="#" class="on">案件ボード</a>
+      <a href="computeindex.html">計算力指数</a>
+      <a href="index.html#basics">基礎知識</a>
+      <a href="glossary.html">用語解説</a>
+      <a href="faq.html">開発FAQ</a>
+  </nav>
+</header>
+
+<div class="page-hero">
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">ホーム</a> ／ 案件ボード</div>
+    <h1 class="serif">案件ボード</h1>
+    <p>用地、接続枠付き案件、計算力・GPU、設備、電力・環境価値、そして排熱の地域連携まで——データセンター開発に関わる案件情報を一つの掲示板に集約します。<b>掲載・閲覧は無料、費用は成約時のみ。</b>詳細情報は個別のお問い合わせにてご案内します。</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="wrap">
+
+    <div class="cats" role="tablist">
+      <button class="cat on" data-cat="all">すべて</button>
+      <button class="cat" data-cat="land">用地</button>
+      <button class="cat" data-cat="powered">接続枠付き案件</button>
+      <button class="cat" data-cat="gpu">計算力・GPU</button>
+      <button class="cat" data-cat="equip">設備・コンテナ</button>
+      <button class="cat" data-cat="energy">電力・環境価値</button>
+      <button class="cat" data-cat="heat">排熱・地域連携</button>
+    </div>
+    <p class="cat-note">※ 正式オープンに向けて掲載準備中です。「掲載イメージ」の札が付いた案件は、掲載内容の見本としてご覧ください。</p>
+
+    <div class="list" id="list">
+
+      <div class="card" data-cat="powered">
+        <div class="head"><span class="tag real">実案件・準備中</span><span class="tag">接続枠付き案件</span><span class="no">PJ-0001</span></div>
+        <h3>九州・2MW級 コンテナ型AIデータセンター開発（第一号案件）</h3>
+        <dl class="specs">
+          <dt>地域</dt><dd>九州南部</dd>
+          <dt>規模</dt><dd>受電2MW級・最新世代GPU搭載計画</dd>
+          <dt>募集</dt><dd>施工・設備パートナー、事業参画</dd>
+        </dl>
+        <p class="desc">本プラットフォーム第一号のコンテナ型データセンター開発案件。発注プロセスは本プラットフォーム経由で実施予定です。パートナー会員には案件情報への優先アクセスを提供します。</p>
+        <a class="ask" href="consult.html">この案件について問い合わせる</a>
+      </div>
+
+      <div class="card" data-cat="land">
+        <div class="head"><span class="tag sample">掲載イメージ</span><span class="tag">用地</span><span class="no">LD-0001</span></div>
+        <h3>中国地方・工場跡地 約30,000㎡（特別高圧の受電実績あり）</h3>
+        <dl class="specs">
+          <dt>現況</dt><dd>造成済み・建屋あり（解体応相談）</dd>
+          <dt>電力</dt><dd>特高受電の利用実績あり（要系統協議）</dd>
+          <dt>希望</dt><dd>売却または事業用定期借地</dd>
+        </dl>
+        <p class="desc">製造業撤退に伴う遊休化。特高受電の実績を持つ産業用地で、データセンター転用の初期条件が揃った希少物件の例。</p>
+        <a class="ask" href="consult.html">この案件について問い合わせる</a>
+      </div>
+
+      <div class="card" data-cat="land">
+        <div class="head"><span class="tag sample">掲載イメージ</span><span class="tag">用地</span><span class="no">LD-0002</span></div>
+        <h3>関東近郊・雑種地 約1,500㎡（前面道路に高圧配電線）</h3>
+        <dl class="specs">
+          <dt>現況</dt><dd>平坦・造成済み・大型車進入可</dd>
+          <dt>電力</dt><dd>高圧引込が容易な立地</dd>
+          <dt>希望</dt><dd>賃貸（コンテナ型設置を歓迎）</dd>
+        </dl>
+        <p class="desc">コンテナ型・エッジ級の設置に適した小規模用地の例。高圧受電なら数カ月での事業開始が視野に入ります。</p>
+        <a class="ask" href="consult.html">この案件について問い合わせる</a>
+      </div>
+
+      <div class="card" data-cat="powered">
+        <div class="head"><span class="tag sample">掲載イメージ</span><span class="tag">接続枠付き案件</span><span class="no">PW-0001</span></div>
+        <h3>東北エリア・特高10MW 供給承諾済み開発用地</h3>
+        <dl class="specs">
+          <dt>状態</dt><dd>系統協議完了・供給承諾取得済み</dd>
+          <dt>用地</dt><dd>約40,000㎡・造成済み</dd>
+          <dt>希望</dt><dd>共同開発または開発権譲渡</dd>
+        </dl>
+        <p class="desc">数年待ちが常態化した系統接続の「枠」を確保済みの案件例。電力枠付き用地（Powered Land）は、用地単体とは別次元の価値を持ちます。</p>
+        <a class="ask" href="consult.html">この案件について問い合わせる</a>
+      </div>
+
+      <div class="card" data-cat="gpu">
+        <div class="head"><span class="tag sample">掲載イメージ</span><span class="tag">計算力・GPU</span><span class="no">CP-0001</span></div>
+        <h3>最新世代GPUクラウド利用枠 卸売り（2027年稼働分）</h3>
+        <dl class="specs">
+          <dt>内容</dt><dd>B300級クラスタの計算力利用権</dd>
+          <dt>単位</dt><dd>8GPU単位・月極〜年間契約</dd>
+          <dt>対象</dt><dd>AI開発企業・研究機関・再販事業者</dd>
+        </dl>
+        <p class="desc">国内新設データセンターの稼働前キャパシティを先行確保できる利用枠の例。価格水準は<a href="computeindex.html" style="text-decoration:underline;">計算力指数</a>を参照。</p>
+        <a class="ask" href="consult.html">この案件について問い合わせる</a>
+      </div>
+
+      <div class="card" data-cat="gpu">
+        <div class="head"><span class="tag sample">掲載イメージ</span><span class="tag">計算力・GPU</span><span class="no">CP-0002</span></div>
+        <h3>サーバー分割投資（案件別組成・準備中）</h3>
+        <dl class="specs">
+          <dt>内容</dt><dd>稼働データセンターのサーバー持分投資</dd>
+          <dt>形態</dt><dd>案件ごとに適法なスキームで組成</dd>
+          <dt>状態</dt><dd>制度設計中</dd>
+        </dl>
+        <p class="desc">GPUサーバーを投資対象として分割・小口化する構想。金融商品取引法上の募集・勧誘に該当する行為は、登録を受けた事業者を通じて適法に取り扱います。</p>
+        <a class="ask" href="consult.html">この案件について問い合わせる</a>
+      </div>
+
+      <div class="card" data-cat="gpu">
+        <div class="head"><span class="tag sample">掲載イメージ</span><span class="tag">計算力・GPU</span><span class="no">CP-0003</span></div>
+        <h3>【買い手】AI開発企業・計算力の大口需要（H100級 数百GPU規模）</h3>
+        <dl class="specs">
+          <dt>需要</dt><dd>学習用クラスタ・長期利用</dd>
+          <dt>条件</dt><dd>国内設置・専有環境を希望</dd>
+          <dt>対象</dt><dd>データセンター事業者・クラウド事業者</dd>
+        </dl>
+        <p class="desc">計算力取引板は売り手だけでなく買い手（需要側）の掲載も受け付けます。開業前の施設にとって、確度の高い需要情報は事業計画の裏付けになります。</p>
+        <a class="ask" href="consult.html">この需要について問い合わせる</a>
+      </div>
+
+      <div class="card" data-cat="equip">
+        <div class="head"><span class="tag sample">掲載イメージ</span><span class="tag">設備・コンテナ</span><span class="no">EQ-0001</span></div>
+        <h3>40ft級 液冷対応コンテナ筐体（新品・短納期）</h3>
+        <dl class="specs">
+          <dt>仕様</dt><dd>DLC対応・CDU組込・受電盤付き</dd>
+          <dt>納期</dt><dd>国内在庫・数カ月以内</dd>
+          <dt>形態</dt><dd>販売・リース応相談</dd>
+        </dl>
+        <p class="desc">液冷必須時代の主役、冷却込み設計のコンテナ筐体の例。中古・リースアップ品の流通情報も扱います。</p>
+        <a class="ask" href="consult.html">この案件について問い合わせる</a>
+      </div>
+
+      <div class="card" data-cat="energy">
+        <div class="head"><span class="tag sample">掲載イメージ</span><span class="tag">電力・環境価値</span><span class="no">EN-0001</span></div>
+        <h3>九州エリア・太陽光2MW コーポレートPPA 供給先募集</h3>
+        <dl class="specs">
+          <dt>電源</dt><dd>太陽光（蓄電池併設可）</dd>
+          <dt>形態</dt><dd>オフサイトPPA・長期契約</dd>
+          <dt>対象</dt><dd>データセンター事業者・大口需要家</dd>
+        </dl>
+        <p class="desc">再エネ電源とデータセンターを直接つなぐPPAマッチングの例。カーボンフリーの計算力は販売時の付加価値になります。</p>
+        <a class="ask" href="consult.html">この案件について問い合わせる</a>
+      </div>
+
+      <div class="card" data-cat="heat">
+        <div class="head"><span class="tag sample">掲載イメージ</span><span class="tag">排熱・地域連携</span><span class="no">HT-0001</span></div>
+        <h3>データセンター排熱の受入先募集（農業ハウス・陸上養殖）</h3>
+        <dl class="specs">
+          <dt>供給</dt><dd>30〜50℃温水・年間安定供給</dd>
+          <dt>地域</dt><dd>九州南部（施設隣接地を想定）</dd>
+          <dt>対象</dt><dd>施設園芸・養殖・温浴事業者</dd>
+        </dl>
+        <p class="desc">「捨てる熱」を地域の産業エネルギーに変える連携の例。冬季暖房費の削減と、データセンターの地域共生を同時に実現します。詳しくは<a href="cooling.html" style="text-decoration:underline;">冷却技術の基礎</a>へ。</p>
+        <a class="ask" href="consult.html">この案件について問い合わせる</a>
+      </div>
+
+    </div>
+
+    <div class="submit-band">
+      <div>
+        <h2 class="serif">案件をお持ちの方へ——掲載は無料です</h2>
+        <p>土地・電力枠・計算力・設備・電源・排熱の受け手まで、開発に関わる案件の持ち込みを受け付けています。掲載内容は匿名化のうえ当方で整理します。費用は成約時のみ。</p>
+      </div>
+      <a href="consult.html">案件を持ち込む</a>
+    </div>
+
+    <p class="legal"><b>掲載と取引に関する注記：</b>本ページは案件情報の掲載とお引き合わせ（紹介）を行うものであり、宅地建物取引業法上の媒介、金融商品取引法上の募集・勧誘その他の免許・登録を要する行為は、それぞれ免許・登録を受けた提携事業者を通じて適法に取り扱います。掲載情報は概要のみを匿名化して表示しており、正確性・成約を保証するものではありません。「掲載イメージ」表示の案件は掲載内容の見本です。</p>
+
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div class="f-brand">
+        <span class="flogo">DC PLATFORM <em>JAPAN</em></span>
+        <p>データセンターをつくる、すべての人のためのプラットフォーム。</p>
+        <a class="f-cta" href="consult.html">開発の相談をする</a>
+      </div>
+      <div>
+        <h5>情報</h5>
+        <ul>
+          <li><a href="news.html">ニュースの視点</a></li>
+          <li><a href="projectmap.html">プロジェクトMAP</a></li>
+          <li><a href="marketplace.html">案件ボード</a></li>
+          <li><a href="computeindex.html">計算力指数</a></li>
+          <li><a href="glossary.html">用語解説（DC開発辞典）</a></li>
+          <li><a href="faq.html">開発FAQ</a></li>
+          <li><a href="projectmap.html">事業者名鑑（準備中）</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5><a href="index.html#basics">基礎知識・診断</a></h5>
+        <ul>
+          <li><a href="sitecheck.html">用地簡易診断ツール</a></li>
+          <li><a href="gpu.html">GPU基礎データ・比較表</a></li>
+          <li><a href="cooling.html">冷却技術の基礎・比較</a></li>
+          <li><a href="power.html">電力・系統接続の基礎</a></li>
+          <li><a href="network.html">通信・回線の基礎</a></li>
+          <li><a href="reliability.html">信頼性・Tier等級の基礎</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>サービス・運営</h5>
+        <ul>
+          <li><a href="consult.html">開発コンサルティング</a></li>
+          <li><a href="marketplace.html">計算力取引板</a></li>
+          <li><a href="consult.html">パートナー会員制度</a></li>
+          <li><a href="consult.html">運営体制と中立性ポリシー</a></li>
+          <li><a href="consult.html">お問い合わせ</a></li>
+          <li>運営：一般社団法人グリーンXアライアンス</li>
+          <li>事業実務：グリーンX合同会社</li>
+        </ul>
+      </div>
+    </div>
+    <div class="f-note">
+      <b>中立性について：</b>本サイトは一般社団法人グリーンXアライアンスが運営し、仲介・コンサルティング等の収益実務はグリーンX合同会社が受託しています。運営者およびその関係先が関与する案件を掲載する場合は、その旨を必ず表示します。本サイトの解説・数値は一般的な情報提供であり、法務・税務・投資・技術の個別助言ではありません。
+    </div>
+    <div class="f-bottom">
+      <span>© 2026 DC PLATFORM JAPAN（仮称）／一般社団法人グリーンXアライアンス</span>
+      <a href="index.html">ホームへ戻る</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.cat').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.cat').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const c = btn.dataset.cat;
+  document.querySelectorAll('#list .card').forEach(card=>{
+    card.classList.toggle('hidden', c!=='all' && card.dataset.cat!==c);
+  });
+}));
+</script>
+</body>
+</html>
