@@ -469,7 +469,7 @@ function handleSubmit(e){
     method:'POST',
     body:new FormData(contactForm),
     headers:{'Accept':'application/json'}
-  }).then(res=>{
+  }).then(async res=>{
     if(res.ok){
       contactForm.reset();
       allyNote.classList.remove('show');
@@ -477,11 +477,17 @@ function handleSubmit(e){
       formStatus.innerHTML='<b>送信が完了しました</b>ご相談ありがとうございます。内容を確認のうえ、担当より折り返しご連絡いたします。しばらくお待ちください。';
       formStatus.scrollIntoView({behavior:'smooth',block:'center'});
     }else{
-      throw new Error('送信エラー');
+      let detail='HTTP '+res.status;
+      try{
+        const j=await res.json();
+        if(j.errors){detail+=' ｜ '+j.errors.map(e=>(e.code?e.code+': ':'')+e.message).join(' ／ ');}
+        else if(j.error){detail+=' ｜ '+j.error;}
+      }catch(_){}
+      throw new Error(detail);
     }
-  }).catch(()=>{
+  }).catch(err=>{
     formStatus.className='form-status ng';
-    formStatus.innerHTML='<b>送信できませんでした</b>お手数ですが、時間をおいて再度お試しください。改善しない場合は、恐れ入りますがメールにて直接ご連絡ください。';
+    formStatus.innerHTML='<b>送信できませんでした</b>お手数ですが、時間をおいて再度お試しください。<br><span style="font-family:monospace;font-size:11px;color:#a06258;">[DEBUG] '+(err&&err.message?err.message:'ネットワークエラー（Formspreeに到達できません）')+'</span>';
   }).finally(()=>{
     submitBtn.disabled=false;
     submitBtn.textContent='相談内容を送信する';
