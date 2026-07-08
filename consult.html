@@ -91,6 +91,11 @@ section{padding:52px 0;}
 .submit-btn{background:var(--green);color:#fff;border:none;padding:14px 34px;font-size:15px;font-weight:700;border-radius:3px;cursor:pointer;font-family:inherit;letter-spacing:.03em;}
 .submit-btn:hover{background:var(--moss);}
 .form-foot{margin-top:16px;font-size:11.5px;color:#8a8674;}
+.submit-btn:disabled{background:#9aa79e;cursor:wait;}
+.form-status{display:none;margin-top:18px;padding:16px 20px;border-radius:4px;font-size:13.5px;line-height:1.8;}
+.form-status.ok{display:block;background:#F0F5F1;border:1px solid var(--green);color:var(--green);}
+.form-status.ng{display:block;background:#FBF3F1;border:1px solid #E4C8C2;color:#7A413A;}
+.form-status b{display:block;font-family:'Noto Serif JP',serif;font-size:15px;margin-bottom:4px;}
 
 /* neutrality + fee */
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
@@ -282,27 +287,29 @@ footer a:hover{color:#fff;}
         <b>事業への参画・提携のご相談について：</b>本件は運営代表が直接拝見します。差し支えなければ、ご提案の趣旨・想定されるご協力の形を「ご相談内容」欄にご記入ください。
       </div>
 
-      <form id="contactForm" onsubmit="return handleSubmit(event)">
+      <form id="contactForm" action="https://formspree.io/f/xzdlgvjb" method="POST" onsubmit="return handleSubmit(event)">
+        <input type="hidden" name="_subject" value="【DC PLATFORM JAPAN】相談フォームより新着">
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
         <div class="frow">
           <div class="field">
             <label>お名前 <span class="req">必須</span></label>
-            <input type="text" id="name" required placeholder="山田 太郎">
+            <input type="text" id="name" name="お名前" required placeholder="山田 太郎">
           </div>
           <div class="field">
             <label>会社名・団体名 <span class="opt">（任意）</span></label>
-            <input type="text" id="company" placeholder="株式会社〇〇／〇〇市役所">
+            <input type="text" id="company" name="会社名・団体名" placeholder="株式会社〇〇／〇〇市役所">
           </div>
           <div class="field">
             <label>メールアドレス <span class="req">必須</span></label>
-            <input type="email" id="email" required placeholder="you@example.com">
+            <input type="email" id="email" name="email" required placeholder="you@example.com">
           </div>
           <div class="field">
             <label>電話番号 <span class="opt">（任意）</span></label>
-            <input type="tel" id="tel" placeholder="090-0000-0000">
+            <input type="tel" id="tel" name="電話番号" placeholder="090-0000-0000">
           </div>
           <div class="field">
             <label>ご相談の立場 <span class="req">必須</span></label>
-            <select id="typeSelect" required>
+            <select id="typeSelect" name="ご相談の立場" required>
               <option value="">選択してください</option>
               <option>土地・不動産の活用</option>
               <option>DCの開発・運営</option>
@@ -316,15 +323,15 @@ footer a:hover{color:#fff;}
           </div>
           <div class="field" id="regionField">
             <label>土地・案件の所在地 <span class="opt">（任意）</span></label>
-            <input type="text" id="region" placeholder="例：鹿児島県薩摩川内市">
+            <input type="text" id="region" name="土地・案件の所在地" placeholder="例：鹿児島県薩摩川内市">
           </div>
           <div class="field full" id="scaleField">
             <label>想定規模・電力 <span class="opt">（任意・分かる範囲で）</span></label>
-            <input type="text" id="scale" placeholder="例：2MW級／土地1ha／未定">
+            <input type="text" id="scale" name="想定規模・電力" placeholder="例：2MW級／土地1ha／未定">
           </div>
           <div class="field full">
             <label>ご相談内容 <span class="req">必須</span></label>
-            <textarea id="message" required placeholder="現在の状況、お困りごと、ご検討中の内容などを、分かる範囲でご記入ください。"></textarea>
+            <textarea id="message" name="ご相談内容" required placeholder="現在の状況、お困りごと、ご検討中の内容などを、分かる範囲でご記入ください。"></textarea>
           </div>
         </div>
 
@@ -333,9 +340,9 @@ footer a:hover{color:#fff;}
           <span>入力内容を、ご相談への対応の目的で利用することに同意します。内容は厳重に管理し、ご相談対応以外の目的には利用しません。</span>
         </label>
 
-        <button type="submit" class="submit-btn">相談内容を送信する</button>
-        <p class="form-foot">送信後、担当より折り返しご連絡します。初回相談は無料です。<br>
-        ※このフォームは設置準備中です。公開時に送信先（お問い合わせ窓口）を接続します。</p>
+        <button type="submit" class="submit-btn" id="submitBtn">相談内容を送信する</button>
+        <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+        <p class="form-foot">送信後、担当より折り返しご連絡します。初回相談は無料です。</p>
       </form>
     </div>
   </div>
@@ -447,9 +454,38 @@ document.querySelectorAll('.tcard').forEach(c=>{
   });
 });
 
+const contactForm=document.getElementById('contactForm');
+const submitBtn=document.getElementById('submitBtn');
+const formStatus=document.getElementById('formStatus');
+
 function handleSubmit(e){
   e.preventDefault();
-  alert('送信ありがとうございます。\n\n※このフォームは現在、設置準備中です。\n公開時にお問い合わせ窓口へ接続されます。');
+  formStatus.className='form-status';
+  formStatus.innerHTML='';
+  submitBtn.disabled=true;
+  submitBtn.textContent='送信しています…';
+
+  fetch(contactForm.action,{
+    method:'POST',
+    body:new FormData(contactForm),
+    headers:{'Accept':'application/json'}
+  }).then(res=>{
+    if(res.ok){
+      contactForm.reset();
+      allyNote.classList.remove('show');
+      formStatus.className='form-status ok';
+      formStatus.innerHTML='<b>送信が完了しました</b>ご相談ありがとうございます。内容を確認のうえ、担当より折り返しご連絡いたします。しばらくお待ちください。';
+      formStatus.scrollIntoView({behavior:'smooth',block:'center'});
+    }else{
+      throw new Error('送信エラー');
+    }
+  }).catch(()=>{
+    formStatus.className='form-status ng';
+    formStatus.innerHTML='<b>送信できませんでした</b>お手数ですが、時間をおいて再度お試しください。改善しない場合は、恐れ入りますがメールにて直接ご連絡ください。';
+  }).finally(()=>{
+    submitBtn.disabled=false;
+    submitBtn.textContent='相談内容を送信する';
+  });
   return false;
 }
 </script>
