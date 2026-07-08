@@ -287,7 +287,7 @@ footer a:hover{color:#fff;}
         <b>事業への参画・提携のご相談について：</b>本件は運営代表が直接拝見します。差し支えなければ、ご提案の趣旨・想定されるご協力の形を「ご相談内容」欄にご記入ください。
       </div>
 
-      <form id="contactForm" action="https://formspree.io/f/xzdlgvjb" method="POST" onsubmit="return handleSubmit(event)">
+      <form id="contactForm" action="https://formspree.io/f/xzdlqvjb" method="POST" onsubmit="return handleSubmit(event)">
         <input type="hidden" name="_subject" value="【DC PLATFORM JAPAN】相談フォームより新着">
         <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
         <div class="frow">
@@ -487,7 +487,7 @@ function handleSubmit(e){
     }
   }).catch(err=>{
     formStatus.className='form-status ng';
-    formStatus.innerHTML='<b>送信できませんでした</b>お手数ですが、時間をおいて再度お試しください。<br><span style="font-family:monospace;font-size:11px;color:#a06258;">[DEBUG] '+(err&&err.message?err.message:'ネットワークエラー（Formspreeに到達できません）')+'</span>';
+    formStatus.innerHTML='<b>送信できませんでした</b>お手数ですが、時間をおいて再度お試しください。改善しない場合は、恐れ入りますがメールにて直接ご連絡ください。';
   }).finally(()=>{
     submitBtn.disabled=false;
     submitBtn.textContent='相談内容を送信する';
