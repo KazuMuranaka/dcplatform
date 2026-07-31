@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>開発マニュアル 全文（社内用）</title>
+<meta name="description" content="社内用">
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="referrer" content="no-referrer">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --ink:#182420;
+  --paper:#F6F4ED;
+  --green:#1F4D36;
+  --moss:#43604F;
+  --gold:#A8894A;
+  --line:#DAD5C6;
+  --white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);line-height:1.75;font-size:15px;}
+.serif{font-family:'Noto Serif JP',serif;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 clamp(28px,5vw,64px);}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+
+@media (prefers-reduced-motion: reduce){ .reveal{opacity:1 !important;transform:none !important;}}
+
+/* ---- header ---- */
+header{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;}
+.brand .op{font-size:10.5px;color:#7a766a;letter-spacing:.06em;}
+nav.menu a:hover{border-color:var(--gold);}
+.cta-btn{background:var(--green);color:#fff;padding:9px 18px;font-size:13px;font-weight:700;letter-spacing:.05em;border-radius:2px;}
+.cta-btn:hover{background:var(--moss);}
+
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;}
+.hc{display:inline-block;padding:13px 26px;border-radius:2px;font-weight:700;font-size:14px;}
+.hc-gold{background:var(--gold);color:#fff;}
+.hc-gold:hover{opacity:.9;}
+.hc-line{border:1.5px solid var(--green);color:var(--green);}
+.hc-line:hover{background:var(--green);color:#fff;}
+/* ---- hero ---- */
+.hero{padding:52px 0 64px;background:
+  linear-gradient(rgba(246,244,237,.94),rgba(246,244,237,.97)),
+  repeating-linear-gradient(90deg,transparent 0 79px,rgba(31,77,54,.07) 79px 80px),
+  repeating-linear-gradient(0deg,transparent 0 79px,rgba(31,77,54,.07) 79px 80px);
+}
+.hero-photo{position:relative;width:100%;height:clamp(200px,29vw,373px);overflow:hidden;background:var(--ink);}
+.hero-photo img{width:100%;height:100%;object-fit:cover;object-position:center 42%;display:block;}
+.hero-photo::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(24,36,32,.30) 0%,rgba(24,36,32,0) 26%,rgba(24,36,32,0) 60%,rgba(246,244,237,.5) 90%,var(--paper) 100%),
+  linear-gradient(90deg,rgba(24,36,32,.38) 0%,rgba(24,36,32,0) 44%);}
+.hero-photo .cap{position:absolute;left:0;right:0;bottom:0;z-index:2;}
+.hero-photo .cap .wrap{padding-bottom:28px;}
+.hero-photo .cap .eyebrow{color:#D8C08A;text-shadow:0 1px 12px rgba(0,0,0,.6);margin-bottom:9px;}
+.hero-photo .cap .tag{font-family:'Noto Serif JP',serif;font-size:clamp(19px,2.7vw,31px);font-weight:600;color:#fff;line-height:1.5;text-shadow:0 2px 18px rgba(0,0,0,.7);letter-spacing:.02em;}
+.hero-photo .rule{position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold) 0%,var(--gold) 20%,transparent 20%);z-index:3;}
+@media(max-width:640px){.hero-photo{height:clamp(155px,40vw,227px);}}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:start;}
+.eyebrow{font-size:12px;letter-spacing:.22em;color:var(--gold);font-weight:700;margin-bottom:18px;}
+h1{font-family:'Noto Serif JP',serif;font-size:clamp(30px,3.6vw,44px);line-height:1.45;font-weight:600;color:var(--green);margin-bottom:22px;}
+h1 .u{border-bottom:3px solid var(--gold);padding-bottom:2px;}
+.lede{font-size:15.5px;color:#3d453f;max-width:34em;margin-bottom:30px;}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-primary{background:var(--green);color:#fff;padding:13px 26px;font-weight:700;font-size:14px;letter-spacing:.04em;border-radius:2px;}
+.btn-primary:hover{background:var(--moss);}
+.btn-ghost{border:1px solid var(--green);color:var(--green);padding:12px 24px;font-weight:700;font-size:14px;border-radius:2px;background:transparent;}
+.btn-ghost:hover{background:rgba(31,77,54,.06);}
+
+/* ---- index board (signature) ---- */
+.board{background:var(--ink);color:#E8E4D6;border-radius:4px;box-shadow:0 18px 40px -18px rgba(24,36,32,.45);overflow:hidden;}
+.board-head{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #2c3a33;}
+.board-head .t{font-size:12.5px;letter-spacing:.14em;color:var(--gold);font-weight:700;}
+.board-head .live{font-size:10.5px;color:#9aa79e;}
+.board-head .live::before{content:"●";color:#8FBF9F;margin-right:5px;font-size:8px;vertical-align:1px;}
+.board table{width:100%;border-collapse:collapse;font-size:13px;}
+.board th{font-weight:400;font-size:10.5px;color:#8b968d;text-align:left;padding:8px 18px 4px;letter-spacing:.08em;}
+.board th:last-child,.board td:last-child{text-align:right;}
+.board td{padding:9px 18px;border-top:1px solid #232f29;}
+.board td.gpu{font-weight:500;color:#fff;}
+.board td .cls{font-size:10px;color:#8b968d;display:block;}
+.board .up{color:#8FBF9F;} .board .dn{color:#D4A26A;}
+.board-foot{padding:11px 18px;font-size:10.5px;color:#8b968d;border-top:1px solid #2c3a33;line-height:1.6;}
+.board-foot b{color:#CFC9B8;font-weight:500;}
+
+/* ---- sections ---- */
+section{padding:70px 0;}
+.sec-head{margin-bottom:38px;max-width:640px;}
+.sec-head .eyebrow{margin-bottom:10px;}
+h2{font-family:'Noto Serif JP',serif;font-size:27px;font-weight:600;color:var(--green);line-height:1.5;}
+.sec-head p{margin-top:12px;color:#4a5148;font-size:14.5px;}
+
+/* 8 tsumari grid */
+.tsumari{background:var(--white);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.grid8{display:grid;grid-template-columns:repeat(4,1fr);border-left:1px solid var(--line);border-top:1px solid var(--line);}
+.grid8-cta{text-align:center;margin-top:28px;}
+.grid8-cta a{display:inline-block;background:var(--green);color:#fff;padding:14px 36px;border-radius:2px;font-weight:700;font-size:14px;}
+.grid8-cta a:hover{background:var(--moss);}
+/* 基礎知識セクション */
+.kb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.kb{background:var(--white);border:1px solid var(--line);border-top:3px solid var(--green);border-radius:3px;padding:24px 22px;display:flex;flex-direction:column;transition:box-shadow .15s,border-color .15s;}
+.kb:hover{border-color:var(--gold);box-shadow:0 3px 12px rgba(31,77,54,.08);}
+.kb .no{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:.14em;margin-bottom:6px;}
+.kb h3{font-family:'Noto Serif JP',serif;font-size:17px;color:var(--green);font-weight:600;margin-bottom:6px;}
+.kb p{font-size:12.5px;color:#4a5148;line-height:1.7;flex:1;}
+.kb .go2{margin-top:14px;font-size:12.5px;font-weight:700;color:var(--green);}
+.kb .go2::after{content:"→";margin-left:6px;color:var(--gold);}
+.kb.tool{background:var(--green);border-color:var(--green);}
+.kb.tool .no{color:#E8D9B5;}
+.kb.tool h3{color:#fff;}
+.kb.tool p{color:#CDD6CE;}
+.kb.tool .go2{color:#E8D9B5;}
+@media(max-width:900px){.kb-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.kb-grid{grid-template-columns:1fr;}}
+.cell{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 22px 22px;position:relative;background:var(--white);transition:background .25s;}
+.cell:hover{background:#FBFAF4;}
+.cell .no{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.1em;margin-bottom:10px;display:block;}
+.cell h3{font-family:'Noto Serif JP',serif;font-size:17.5px;color:var(--green);margin-bottom:8px;font-weight:600;}
+.cell p{font-size:12.8px;color:#5a6058;line-height:1.7;margin-bottom:14px;min-height:3.4em;}
+.cell .go{font-size:12px;font-weight:700;color:var(--green);}
+.cell .go::after{content:" →";color:var(--gold);}
+
+/* news */
+.news-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:44px;align-items:start;}
+.news-item{border-bottom:1px solid var(--line);padding:18px 0;display:grid;grid-template-columns:92px 1fr;gap:18px;}
+.news-item .d{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8a8674;padding-top:4px;}
+.news-item .tag{display:inline-block;font-size:10.5px;color:var(--gold);border:1px solid var(--gold);padding:1px 7px;border-radius:2px;margin-bottom:6px;letter-spacing:.06em;}
+.news-item h4{font-size:15px;font-weight:700;line-height:1.6;margin-bottom:5px;}
+.news-item h4 a:hover{color:var(--green);text-decoration:underline;text-decoration-color:var(--gold);}
+.news-item .note{font-size:12.8px;color:#5a6058;}
+.news-item .note b{color:var(--green);font-weight:700;}
+.side-card{background:var(--white);border:1px solid var(--line);border-radius:4px;padding:26px;}
+.side-card + .side-card{margin-top:20px;}
+.side-card h3{font-family:'Noto Serif JP',serif;font-size:17px;color:var(--green);margin-bottom:10px;}
+.side-card p{font-size:13px;color:#5a6058;margin-bottom:16px;}
+.map-mini{background:linear-gradient(rgba(31,77,54,.05),rgba(31,77,54,.05)),repeating-linear-gradient(90deg,transparent 0 19px,rgba(31,77,54,.08) 19px 20px),repeating-linear-gradient(0deg,transparent 0 19px,rgba(31,77,54,.08) 19px 20px);border:1px solid var(--line);border-radius:3px;height:150px;position:relative;margin-bottom:16px;}
+.pin{position:absolute;width:9px;height:9px;background:var(--green);border-radius:50%;box-shadow:0 0 0 4px rgba(31,77,54,.15);}
+.pin.g{background:var(--gold);box-shadow:0 0 0 4px rgba(168,137,74,.2);}
+.stat-row{display:flex;justify-content:space-between;font-size:12.5px;padding:7px 0;border-top:1px dashed var(--line);}
+.stat-row .v{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--green);}
+
+/* menus 3 tiers */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.tier{background:var(--white);border:1px solid var(--line);border-radius:4px;padding:30px 28px;display:flex;flex-direction:column;}
+.tier.hl{border-color:var(--green);border-width:1.5px;position:relative;}
+.tier .k{font-size:11px;letter-spacing:.2em;color:var(--gold);font-weight:700;margin-bottom:12px;}
+.tier h3{font-family:'Noto Serif JP',serif;font-size:19px;color:var(--green);margin-bottom:14px;font-weight:600;}
+.tier ul{list-style:none;flex:1;}
+.tier li{font-size:13.5px;padding:8px 0 8px 20px;border-bottom:1px dashed var(--line);position:relative;}
+.tier li::before{content:"";position:absolute;left:2px;top:16px;width:7px;height:7px;background:var(--gold);border-radius:1px;transform:rotate(45deg);}
+.tier .fee{margin-top:16px;font-size:12px;color:#7a766a;}
+.tier .fee b{color:var(--green);}
+
+/* membership band */
+.band{background:var(--green);color:#EDE9DC;}
+.band .wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center;}
+.band h2{color:#fff;}
+.band .eyebrow{color:#C9B074;}
+.band p{font-size:14px;color:#CDD6CE;margin-top:14px;max-width:32em;}
+.band .slots{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.18);border-radius:4px;padding:24px;}
+.band .slot{display:flex;justify-content:space-between;font-size:13px;padding:9px 2px;border-bottom:1px solid rgba(255,255,255,.12);}
+.band .slot .n{font-family:'IBM Plex Mono',monospace;color:#C9B074;}
+.band .btn-gold{display:inline-block;margin-top:24px;background:var(--gold);color:#1c1c14;font-weight:700;padding:13px 28px;font-size:14px;border-radius:2px;}
+.band .btn-gold:hover{filter:brightness(1.08);}
+
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.in{opacity:1;transform:none;}
+
+@media(max-width:900px){
+  .hero-grid,.news-grid,.band .wrap{grid-template-columns:1fr;}
+  .grid8{grid-template-columns:repeat(2,1fr);}
+  .tiers{grid-template-columns:1fr;}
+  
+  }
+@media(max-width:520px){.grid8{grid-template-columns:1fr;}}
+
+/* ===== site footer (unified) ===== */
+footer{background:var(--ink);color:#9aa79e;font-size:12.5px;padding:52px 0 32px;border-top:none;}
+footer .wrap{display:block;}
+.f-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:36px;margin-bottom:32px;}
+.f-brand .flogo{font-family:'Noto Serif JP',serif;font-weight:700;font-size:17px;color:#E8E4D6;}
+.f-brand .flogo em{font-style:normal;color:var(--gold);}
+.f-brand p{line-height:1.9;margin:10px 0 16px;}
+.f-cta{display:inline-block;background:var(--gold);color:#fff;padding:9px 18px;border-radius:2px;font-weight:700;font-size:12.5px;}
+.f-cta:hover{opacity:.9;color:#fff;}
+footer h5{color:#E8E4D6;font-size:13px;margin-bottom:12px;font-weight:700;}
+footer ul{list-style:none;margin:0;padding:0;}
+footer li{list-style:none;padding:4px 0;}
+footer a:hover{color:#fff;}
+.f-note{border-top:1px solid #2c3a33;padding-top:20px;line-height:1.9;}
+.f-note b{color:#CFC9B8;font-weight:500;}
+.f-extra{margin-top:10px;line-height:1.9;color:#8a978d;}
+.f-bottom{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;border-top:1px solid #2c3a33;margin-top:22px;padding-top:18px;color:#8a978d;}
+@media(max-width:900px){.f-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.f-grid{grid-template-columns:1fr;}}
+
+/* ===== two-row header ===== */
+.nav-top{display:flex;align-items:center;justify-content:space-between;height:54px;}
+.logo{font-family:'Noto Serif JP',serif;font-weight:700;font-size:21px;color:var(--green);}
+.logo em{font-style:normal;color:var(--gold);}
+.nav-menu{display:flex;gap:26px;font-size:13.5px;font-weight:500;align-items:center;height:44px;border-top:1px solid var(--line);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.nav-menu::-webkit-scrollbar{display:none;}
+.nav-menu a{padding:5px 0;border-bottom:2px solid transparent;white-space:nowrap;flex:0 0 auto;}
+.nav-menu a:hover,.nav-menu a.on{border-color:var(--gold);}
+@media(max-width:640px){.nav-menu{gap:20px;font-size:12.5px;}.nav-top{height:50px;}.logo{font-size:18px;}.cta-btn{padding:8px 14px;font-size:12px;}}
+
+/* =========================================================
+   開発マニュアル本文（#dcman 配下にスコープ）
+   サイト共通CSSとは干渉しません。
+   --dcm-top は固定ヘッダーの実高をJSで注入（フォールバック98px）
+   ========================================================= */
+#dcman{
+  --dcm-top:98px;
+  --dcm-ctl-h:46px;
+  --dcm-txt:#182420;
+  --dcm-txt2:#4F5D55;
+  --dcm-txt3:#7C877F;
+  --dcm-green:#1F4D36;
+  --dcm-moss:#43604F;
+  --dcm-gold:#A8894A;
+  --dcm-line:#DAD5C6;
+  --dcm-line2:#EBE7DC;
+  --dcm-sheet:#FFFFFF;
+  --dcm-signal:#A0472A;
+  --dcm-signal-bg:#FAF0EA;
+  --dcm-ref:#43604F;
+  --dcm-ref-bg:#EBF0EC;
+  color:var(--dcm-txt);
+  font-family:'Noto Sans JP',sans-serif;
+  font-size:15px;line-height:1.85;text-align:left;
+}
+#dcman *,#dcman *::before,#dcman *::after{box-sizing:border-box}
+#dcman h1,#dcman h2,#dcman h3,#dcman h4{font-family:'Noto Serif JP',serif;line-height:1.45;margin:0}
+#dcman .mono,#dcman .num,#dcman code{font-family:'IBM Plex Mono',monospace;font-feature-settings:"tnum"}
+#dcman a{color:var(--dcm-green)}
+#dcman .dcm-sheet p a,#dcman .dcm-sheet li a,#dcman .dcm-sheet td a{text-decoration:underline;text-underline-offset:2px;text-decoration-color:var(--dcm-line)}
+#dcman .dcm-sheet p a:hover,#dcman .dcm-sheet li a:hover,#dcman .dcm-sheet td a:hover{color:var(--dcm-gold);text-decoration-color:var(--dcm-gold)}
+
+/* 操作バー（サイトヘッダーの直下に追従） */
+#dcman .dcm-ctl{position:sticky;top:var(--dcm-top);z-index:30;height:var(--dcm-ctl-h);background:var(--dcm-green);color:#fff;display:flex;align-items:center}
+#dcman .dcm-ctl-in{max-width:1160px;margin:0 auto;padding:0 clamp(28px,5vw,64px);width:100%;display:flex;align-items:center;gap:12px}
+#dcman .dcm-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;color:#B8C9BE}
+#dcman .dcm-btn{background:none;border:1px solid #3C6650;color:#DCE6DE;padding:5px 13px;border-radius:2px;font-size:11.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.06em;cursor:pointer;line-height:1.4}
+#dcman .dcm-btn:hover{background:#2A6044;color:#fff}
+#dcman .dcm-ver{margin-left:auto}
+#dcman.internal .dcm-ver{border-color:var(--dcm-gold);color:#F0DDB4;background:#2E3A2C}
+#dcman .dcm-prog{position:absolute;left:0;bottom:0;height:2px;background:var(--dcm-gold);width:0}
+#dcman .dcm-toc-btn{display:none}
+
+/* レイアウト */
+#dcman .dcm-wrap{max-width:1160px;margin:0 auto;padding:0 clamp(28px,5vw,64px) 90px;display:grid;grid-template-columns:262px minmax(0,1fr);gap:38px;align-items:start}
+
+/* 目次 */
+#dcman .dcm-toc{position:sticky;top:calc(var(--dcm-top) + var(--dcm-ctl-h) + 22px);max-height:calc(100vh - var(--dcm-top) - var(--dcm-ctl-h) - 44px);overflow-y:auto;padding:22px 0 30px;font-size:13px}
+#dcman .toc-head{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;color:var(--dcm-gold);font-weight:600;border-bottom:1px solid var(--dcm-line);padding-bottom:8px;margin-bottom:12px}
+#dcman .dcm-toc ol{list-style:none;margin:0;padding:0}
+#dcman .dcm-toc li{margin:0;list-style:none}
+#dcman .dcm-toc .grp{font-family:'Noto Serif JP',serif;font-weight:700;font-size:12.5px;color:var(--dcm-green);margin:16px 0 6px;padding-top:12px;border-top:1px solid var(--dcm-line2)}
+#dcman .dcm-toc .grp:first-of-type{border-top:0;padding-top:0;margin-top:8px}
+#dcman .dcm-toc a{display:flex;gap:9px;text-decoration:none;color:var(--dcm-txt2);padding:4px 8px 4px 6px;border-left:2px solid transparent;line-height:1.5}
+#dcman .dcm-toc a:hover{color:var(--dcm-green);background:#EFEDE3}
+#dcman .dcm-toc a .n{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dcm-txt3);flex:none;padding-top:1px}
+#dcman .dcm-toc a.on{border-left-color:var(--dcm-gold);color:var(--dcm-green);font-weight:700;background:#EFEDE3}
+#dcman .dcm-toc a.on .n{color:var(--dcm-gold)}
+
+/* 本文シート */
+#dcman .dcm-sheet{background:var(--dcm-sheet);border:1px solid var(--dcm-line);padding:0 clamp(22px,3.6vw,50px) 64px;margin-top:22px}
+#dcman .titleblock{margin:0 clamp(-22px,-3.6vw,-50px) 40px;border-bottom:1px solid var(--dcm-line)}
+#dcman .tb-main{padding:44px clamp(22px,3.6vw,50px) 26px}
+#dcman .tb-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;color:var(--dcm-gold);font-weight:600;margin-bottom:14px}
+#dcman h1{font-size:clamp(24px,3.6vw,35px);font-weight:700;color:var(--dcm-green);letter-spacing:.01em}
+#dcman .tb-sub{color:var(--dcm-txt2);margin:14px 0 0;font-size:14.5px;max-width:62ch}
+#dcman .tb-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--dcm-line)}
+#dcman .tb-cell{padding:12px clamp(22px,3.6vw,50px) 14px;border-right:1px solid var(--dcm-line2)}
+#dcman .tb-cell:last-child{border-right:0}
+#dcman .tb-cell:not(:first-child){padding-left:16px}
+#dcman .tb-k{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;color:var(--dcm-txt3);display:block;margin-bottom:3px}
+#dcman .tb-v{font-size:12.5px;font-weight:500}
+
+/* 見出し */
+#dcman h2{font-size:11.5px;font-family:'IBM Plex Mono',monospace;font-weight:600;letter-spacing:.22em;color:#fff;background:var(--dcm-green);display:inline-block;padding:7px 15px;margin:64px 0 4px}
+#dcman h2:first-of-type{margin-top:12px}
+#dcman .part-rule{border-top:2px solid var(--dcm-green);margin:0 0 34px}
+#dcman h3{font-size:clamp(19px,2.3vw,23px);font-weight:700;color:var(--dcm-green);margin:54px 0 6px;display:flex;gap:13px;align-items:baseline;scroll-margin-top:calc(var(--dcm-top) + var(--dcm-ctl-h) + 18px)}
+#dcman h3 .n{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:var(--dcm-gold);flex:none}
+#dcman h4{font-size:15.5px;font-weight:700;margin:32px 0 8px;color:var(--dcm-txt)}
+
+/* 本文 */
+#dcman .lede{color:var(--dcm-txt2);border-left:2px solid var(--dcm-gold);padding-left:14px;margin:14px 0 26px}
+#dcman p{margin:14px 0}
+#dcman ul{margin:14px 0;padding-left:20px;list-style:disc}
+#dcman ol{margin:14px 0;padding-left:22px;list-style:decimal}
+#dcman li{margin:6px 0;list-style:inherit}
+#dcman strong{font-weight:700}
+#dcman .sec{scroll-margin-top:calc(var(--dcm-top) + var(--dcm-ctl-h) + 18px)}
+
+/* 表 */
+#dcman .tw{overflow-x:auto;margin:20px 0 26px;border:1px solid var(--dcm-line)}
+#dcman table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:520px;margin:0}
+#dcman th{background:#F2F0E7;text-align:left;font-weight:700;font-size:11.5px;letter-spacing:.05em;padding:10px 13px;border:0;border-bottom:1px solid var(--dcm-line);white-space:nowrap;color:var(--dcm-green)}
+#dcman td{padding:11px 13px;border:0;border-bottom:1px solid var(--dcm-line2);vertical-align:top;line-height:1.7}
+#dcman tr:last-child td{border-bottom:0}
+#dcman td.c{text-align:center}
+#dcman .num{font-variant-numeric:tabular-nums}
+
+/* 記号・囲み */
+#dcman .flag,#dcman .ref{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.04em;padding:1px 6px;border-radius:2px;white-space:nowrap;display:inline-block;vertical-align:1px}
+#dcman .flag{color:var(--dcm-signal);background:var(--dcm-signal-bg);border:1px solid #E4CBBD}
+#dcman .ref{color:var(--dcm-ref);background:var(--dcm-ref-bg);border:1px solid #C9D7CC}
+#dcman .note{border-left:3px solid var(--dcm-signal);background:var(--dcm-signal-bg);padding:16px 20px;margin:24px 0}
+#dcman .note .h{font-family:'Noto Serif JP',serif;font-weight:700;font-size:14px;color:var(--dcm-signal);margin-bottom:6px}
+#dcman .note p:first-of-type,#dcman .note ul{margin-top:0}
+#dcman .note p:last-child,#dcman .note ul:last-child{margin-bottom:0}
+#dcman .quote{border:1px solid var(--dcm-line);padding:20px 24px;margin:22px 0;background:#FAF9F4}
+#dcman .quote .src{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dcm-txt3);margin-top:12px;display:block}
+#dcman .quote ol{margin:10px 0 0}
+#dcman pre{background:var(--dcm-txt);color:#DCE6DE;padding:20px 22px;overflow-x:auto;font-size:12.5px;line-height:1.75;margin:22px 0;font-family:'IBM Plex Mono',monospace;border-radius:0}
+#dcman .formula{background:#FAF9F4;border:1px solid var(--dcm-line);padding:18px 22px;margin:20px 0;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:2}
+#dcman .badge{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;padding:2px 7px;border-radius:2px;background:var(--dcm-green);color:#fff;vertical-align:3px;margin-left:2px}
+#dcman .conf-note{border:1px dashed var(--dcm-signal);background:#FCF7F3;padding:12px 16px;margin:14px 0 22px;font-size:12.5px;color:var(--dcm-signal)}
+#dcman:not(.internal) .conf{display:none!important}
+
+/* 問い合わせ導線 */
+#dcman .dcm-cta{border:1px solid var(--dcm-green);padding:26px 28px;margin:56px 0 0;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;background:#FAF9F4}
+#dcman .dcm-cta p{margin:0;max-width:52ch;font-size:14px}
+#dcman .dcm-cta a{display:inline-block;background:var(--dcm-gold);color:#fff;text-decoration:none;padding:12px 26px;font-weight:700;font-size:13.5px;letter-spacing:.04em;border-radius:2px}
+#dcman .dcm-cta a:hover{opacity:.9;color:#fff}
+
+@media (max-width:900px){
+  #dcman .dcm-wrap{grid-template-columns:1fr;gap:0}
+  #dcman .dcm-toc-btn{display:block}
+  #dcman .dcm-label{display:none}
+  #dcman .dcm-toc{position:fixed;left:0;right:0;top:calc(var(--dcm-top) + var(--dcm-ctl-h));background:var(--dcm-sheet);border-bottom:1px solid var(--dcm-line);max-height:calc(100vh - var(--dcm-top) - var(--dcm-ctl-h));padding:18px clamp(28px,5vw,64px) 26px;display:none;z-index:29;box-shadow:0 14px 30px rgba(24,36,32,.16)}
+  #dcman .dcm-toc.open{display:block}
+  #dcman .tb-grid{grid-template-columns:repeat(2,1fr)}
+  #dcman .tb-cell{border-bottom:1px solid var(--dcm-line2)}
+}
+@media print{
+  #dcman .dcm-ctl,#dcman .dcm-toc,#dcman .dcm-cta{display:none}
+  #dcman .dcm-sheet{border:0}
+  #dcman .dcm-wrap{display:block;padding:0}
+}
+
+
+.int-bar{background:#A0472A;color:#fff;font-size:12.5px;line-height:1.8}
+.int-in{max-width:1160px;margin:0 auto;padding:11px clamp(28px,5vw,64px)}
+.int-in strong{font-weight:700;letter-spacing:.08em;margin-right:4px}
+.int-in a{color:#FFE2CF;text-decoration:underline}
+@media print{.int-bar{display:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav-top">
+    <span class="logo serif">DC PLATFORM <em>JAPAN</em></span>
+    <a class="cta-btn" href="consult.html">開発の相談をする</a>
+  </div>
+  <nav class="wrap nav-menu" aria-label="主要メニュー">
+    <a href="news.html">ニュースの視点</a>
+      <a href="marketplace.html">案件ボード</a>
+      <a href="computeindex.html">計算力指数</a>
+      <a href="index.html#basics">基礎知識</a>
+      <a href="glossary.html">用語解説</a>
+      <a href="faq.html">開発FAQ</a>
+      <a href="manual.html">開発マニュアル</a>
+  </nav>
+</header>
+
+
+<div class="int-bar">
+  <div class="int-in">
+    <strong>社内用</strong>　このページはURLを知っている人だけが到達できます。リンクの共有・外部への転送はしないでください。申請者に公開しているのは <a href="manual.html">manual.html</a> の33章版です。
+  </div>
+</div>
+
+<div id="dcman" class="internal">
+  <div class="dcm-ctl">
+    <div class="dcm-ctl-in">
+      <button class="dcm-btn dcm-toc-btn" id="dcmTocBtn" aria-expanded="false" aria-controls="dcmToc">目次</button>
+      <span class="dcm-label">INTERNAL — URLを共有しないでください</span>
+      <button class="dcm-btn dcm-ver" id="dcmVerBtn" aria-pressed="true">全45章</button>
+    </div>
+    <div class="dcm-prog" id="dcmProg"></div>
+  </div>
+
+  <div class="dcm-wrap">
+  <nav class="dcm-toc" id="dcmToc" aria-label="目次">
+    <div class="toc-head">CONTENTS</div>
+    <ol>
+      <li><a href="#intro"><span class="n">00</span><span>本資料について</span></a></li>
+      <li><a href="#gates"><span class="n">0-1</span><span>フェーズゲート</span></a></li>
+      <li><a href="#roles"><span class="n">0-2</span><span>関係者と役割</span></a></li>
+
+      <li class="grp">第1部　事業企画</li>
+      <li><a href="#s1-1"><span class="n">1-1</span><span>需要起点の設計</span></a></li>
+      <li><a href="#s1-2"><span class="n">1-2</span><span>規模決定ロジック</span></a></li>
+      <li class="conf"><a href="#s1-3"><span class="n">1-3</span><span>事業費積算</span></a></li>
+      <li class="conf"><a href="#s1-4"><span class="n">1-4</span><span>収益モデル</span></a></li>
+      <li class="conf"><a href="#s1-5"><span class="n">1-5</span><span>案件スクリーニング</span></a></li>
+
+      <li class="grp">第2部　用地・電力・通信</li>
+      <li><a href="#s2-1"><span class="n">2-1</span><span>候補地スクリーニング</span></a></li>
+      <li><a href="#s2-2"><span class="n">2-2</span><span>系統連系プロセス</span></a></li>
+      <li><a href="#s2-3"><span class="n">2-3</span><span>小売電気事業者の手当て</span></a></li>
+      <li><a href="#s2-4"><span class="n">2-4</span><span>電力調達スキーム</span></a></li>
+      <li><a href="#s2-5"><span class="n">2-5</span><span>用地の押さえ方</span></a></li>
+      <li><a href="#s2-6"><span class="n">2-6</span><span>通信の引込</span></a></li>
+
+      <li class="grp">第3部　許認可・行政</li>
+      <li><a href="#s3-1"><span class="n">3-1</span><span>自治体調整と立地協定</span></a></li>
+      <li><a href="#s3-2"><span class="n">3-2</span><span>法規制一覧</span></a></li>
+      <li><a href="#s3-3"><span class="n">3-3</span><span>許認可ロードマップ</span></a></li>
+      <li><a href="#s3-4"><span class="n">3-4</span><span>近隣・住民対応</span></a></li>
+
+      <li class="grp">第4部　設計</li>
+      <li><a href="#s4-0"><span class="n">4-0</span><span>最初に決める三つ</span></a></li>
+      <li><a href="#s4-1"><span class="n">4-1</span><span>設計基本方針</span></a></li>
+      <li><a href="#s4-2"><span class="n">4-2</span><span>コンテナ／モジュール仕様</span></a></li>
+      <li><a href="#s4-3"><span class="n">4-3</span><span>電気設備</span></a></li>
+      <li><a href="#s4-4"><span class="n">4-4</span><span>冷却設計</span></a></li>
+      <li><a href="#s4-5"><span class="n">4-5</span><span>高密度ラック設計</span></a></li>
+      <li><a href="#s4-6"><span class="n">4-6</span><span>ネットワーク設計</span></a></li>
+      <li><a href="#s4-7"><span class="n">4-7</span><span>物理セキュリティ・防災</span></a></li>
+
+      <li class="grp">第5部　調達・建設</li>
+      <li><a href="#s5-1"><span class="n">5-1</span><span>調達戦略</span></a></li>
+      <li><a href="#s5-2"><span class="n">5-2</span><span>IT機器調達</span></a></li>
+      <li><a href="#s5-3"><span class="n">5-3</span><span>工事発注管理</span></a></li>
+      <li><a href="#s5-4"><span class="n">5-4</span><span>工程管理</span></a></li>
+      <li><a href="#s5-5"><span class="n">5-5</span><span>安全・品質管理</span></a></li>
+
+      <li class="grp">第6部　統合・試験</li>
+      <li><a href="#s6-1"><span class="n">6-1</span><span>インテグレーション</span></a></li>
+      <li><a href="#s6-2"><span class="n">6-2</span><span>コミッショニング</span></a></li>
+      <li><a href="#s6-3"><span class="n">6-3</span><span>引渡し</span></a></li>
+
+      <li class="grp">第7部　運用</li>
+      <li><a href="#s7-1"><span class="n">7-1</span><span>運用体制</span></a></li>
+      <li><a href="#s7-2"><span class="n">7-2</span><span>SLA</span></a></li>
+      <li><a href="#s7-3"><span class="n">7-3</span><span>保守</span></a></li>
+      <li class="conf"><a href="#s7-4"><span class="n">7-4</span><span>計算力販売・課金</span></a></li>
+      <li><a href="#s7-5"><span class="n">7-5</span><span>KPIと法定報告</span></a></li>
+
+      <li class="grp conf">第8部　事業スキーム・契約</li>
+      <li class="conf"><a href="#s8-1"><span class="n">8-1</span><span>事業ストラクチャ</span></a></li>
+      <li class="conf"><a href="#s8-2"><span class="n">8-2</span><span>アセットライト戦略</span></a></li>
+      <li class="conf"><a href="#s8-3"><span class="n">8-3</span><span>資金調達</span></a></li>
+      <li class="conf"><a href="#s8-4"><span class="n">8-4</span><span>業務委託とSoW</span></a></li>
+      <li class="conf"><a href="#s8-5"><span class="n">8-5</span><span>報酬・請求</span></a></li>
+      <li class="conf"><a href="#s8-6"><span class="n">8-6</span><span>契約書類一覧</span></a></li>
+
+      <li class="grp">第9部　リスク管理</li>
+      <li><a href="#s9-1"><span class="n">9-1</span><span>リスク登録簿</span></a></li>
+      <li class="conf"><a href="#s9-2"><span class="n">9-2</span><span>パートナー審査</span></a></li>
+      <li class="conf"><a href="#s9-3"><span class="n">9-3</span><span>中止・撤退基準</span></a></li>
+
+      <li class="grp">附属</li>
+      <li><a href="#check"><span class="n">A</span><span>案件ごとの確認事項</span></a></li>
+      <li><a href="#refs"><span class="n">B</span><span>準拠公的文書</span></a></li>
+    </ol>
+  </nav>
+
+  <main class="dcm-sheet">
+
+    <header class="titleblock">
+      <div class="tb-main">
+        <div class="tb-eyebrow">TECHNICAL REFERENCE / FULL EDITION</div>
+        <h1>データセンター開発マニュアル</h1>
+        <p class="tb-sub">コンテナ型・モジュール型データセンターを、案件発掘から運用移行まで再現可能な手順に落とした開発標準です。全9部。</p>
+      </div>
+      <div class="tb-grid">
+        <div class="tb-cell"><span class="tb-k">DOC</span><span class="tb-v mono">GXA-DC-MAN-00/09</span></div>
+        <div class="tb-cell"><span class="tb-k">REV</span><span class="tb-v mono">0.1（公開版）</span></div>
+        <div class="tb-cell"><span class="tb-k">SCOPE</span><span class="tb-v">GPU高密度・2MW級ユニット</span></div>
+        <div class="tb-cell"><span class="tb-k">ISSUED BY</span><span class="tb-v">グリーンXアライアンス</span></div>
+      </div>
+    </header>
+
+    <section id="intro" class="sec">
+      <h3><span class="n">00</span>本資料について</h3>
+      <p class="lede">箱を建てる手順書ではなく、判断を誤らないための手順書です。データセンター開発で工程と費用を壊すのは、施工の巧拙ではなく、設計を固定する前に確認しなかった事項です。</p>
+      <p>案件発掘から運用移行までを9部で構成しています。各章には準拠する公的文書を明記し、公的文書が存在しない領域は自社の判断として区別しています。</p>
+      <p>読み方の記号は二つだけです。</p>
+      <ul>
+        <li><span class="flag">要検証</span> 案件ごとに所轄官庁・メーカー・電力会社への確認が必須の事項。ここを確認せずに設計を固定してはいけません。</li>
+        <li><span class="ref">A1</span> 準拠する公的文書。記号は<a href="#refs">附属B</a>に対応します。</li>
+        <li><span class="badge">社内</span> 社内限定。単価、交渉ポジション、契約条件など。公開版では表示されません。</li>
+      </ul>
+      <p>数値は目安であり、案件ごとに実測値・実納期で置き換える前提で記載しています。</p>
+    </section>
+
+    <h2>PART 0 ／ 総則</h2>
+    <div class="part-rule"></div>
+
+    <section id="gates" class="sec">
+      <h3><span class="n">0-1</span>フェーズゲート</h3>
+      <p class="lede">開発全体を8つのゲートで管理します。ゲート未通過での次フェーズ着手を認めない、というのが本書の背骨です。</p>
+      <div class="tw"><table>
+        <thead><tr><th>ゲート</th><th>名称</th><th>成立条件</th><th>代表成果物</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">G0</td><td>案件登録</td><td>用地・電力・需要のいずれかに実体がある</td><td>案件登録票</td></tr>
+          <tr><td class="mono">G1</td><td>事業性仮判定</td><td>概算P/Lで回収年数が基準内。需要確度が一定以上</td><td>初期事業性検討書</td></tr>
+          <tr><td class="mono">G2</td><td>電力・用地の確度確保</td><td><strong>系統の契約申込みが受理された</strong>／用地の押さえ完了</td><td>接続検討回答書、用地関係書類</td></tr>
+          <tr><td class="mono">G3</td><td>基本設計・許認可見通し</td><td>基本設計確定、建築物該当性の決着、行政協議に重大障害なし</td><td>基本設計書、許認可ロードマップ</td></tr>
+          <tr><td class="mono">G4</td><td>投資決定（FID）</td><td>資金調達目処、需要の確保</td><td>最終事業計画、契約一式</td></tr>
+          <tr><td class="mono">G5</td><td>着工</td><td>発注完了、工程・安全体制確立</td><td>実行工程表</td></tr>
+          <tr><td class="mono">G6</td><td>統合・受入</td><td>電力・冷却・ネットワークの受入試験合格</td><td>コミッショニング報告書</td></tr>
+          <tr><td class="mono">G7</td><td>運用移行</td><td>運用体制・SLA・監視の稼働確認</td><td>運用引継書</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note">
+        <div class="h">なぜG2を「契約申込み」に置くか</div>
+        <p>系統の事前相談の段階では、容量は一切確保されません。順番が発生するのは契約申込みの受理時点です。事前相談の回答をもって「電力の目処が立った」と判断し、次フェーズの費用を投じるのが、この事業で最も多い失敗です。</p>
+      </div>
+    </section>
+
+    <section id="roles" class="sec">
+      <h3><span class="n">0-2</span>関係者と役割</h3>
+      <p>案件ごとに下表を埋め、契約書に添付します。「誰の担当でもない作業」を残さないことが目的です。</p>
+      <div class="tw"><table>
+        <thead><tr><th>領域</th><th>主担当</th><th>支援</th></tr></thead>
+        <tbody>
+          <tr><td>事前調査（通信線・電力線・行政・顧客）</td><td>開発支援者</td><td>事業主</td></tr>
+          <tr><td>各種契約（用地・電力・通信・工事）</td><td>事業主／SPC</td><td>開発支援者</td></tr>
+          <tr><td>機器調達交渉</td><td>開発支援者</td><td>事業主</td></tr>
+          <tr><td>土木・設置・電気工事</td><td>事業主／EPC</td><td>開発支援者</td></tr>
+          <tr><td>コンテナ内接続・インテグレーション</td><td>開発支援者</td><td>EPC</td></tr>
+          <tr><td>受入試験・引渡し</td><td>開発支援者＋運営者</td><td>EPC</td></tr>
+          <tr><td>運用・保守</td><td>運営者</td><td>開発支援者</td></tr>
+        </tbody>
+      </table></div>
+      <p>役割の配分は案件により変わります。重要なのは配分そのものではなく、<strong>基本設計に入る前に配分が文書で確定していること</strong>です。</p>
+    </section>
+
+    <h2>PART 1 ／ 事業企画</h2>
+    <div class="part-rule"></div>
+
+    <section id="s1-1" class="sec">
+      <h3><span class="n">1-1</span>需要起点の設計</h3>
+      <div class="note">
+        <div class="h">箱を建ててから客を探さない</div>
+        <p>データセンターは、建ててから需要を探すには初期投資が大きすぎます。需要（オフテイク）の確度を先に上げ、その確度に応じて投資判断を段階化します。</p>
+      </div>
+      <h4>需要確度の格付け</h4>
+      <div class="tw"><table>
+        <thead><tr><th>格付</th><th>状態</th><th>許容されるフェーズ</th></tr></thead>
+        <tbody>
+          <tr><td class="c mono">A</td><td>契約締結済み（容量・期間・単価が確定）</td><td>G4（投資決定）に進める</td></tr>
+          <tr><td class="c mono">B</td><td>LOI／MOU締結。条件は概ね合意</td><td>G2〜G3まで。FIDは不可</td></tr>
+          <tr><td class="c mono">C</td><td>具体的な引合いあり。条件は未交渉</td><td>G1まで</td></tr>
+          <tr><td class="c mono">D</td><td>市場見込みのみ</td><td>案件登録のみ</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>FIDにはA、G2進行にはB以上</strong>を要件とします。この線引きを緩めると、系統の工事費負担金や長納期品の発注が、需要の裏付けなしに走り出します。</p>
+      <h4>需要側のデューデリジェンス</h4>
+      <ul>
+        <li>支払能力と与信。長期契約ほど相手方の存続リスクが効きます</li>
+        <li>契約期間と、途中解約時の違約条項</li>
+        <li>電力単価変動の転嫁可否。ここを固定単価で受けると事業者側が電力リスクを丸抱えします</li>
+        <li>機器の所有者（顧客持込みか、当方調達か）と、その場合の保険・保守責任</li>
+      </ul>
+    </section>
+
+    <section id="s1-2" class="sec">
+      <h3><span class="n">1-2</span>規模決定ロジック</h3>
+      <p>実務では、受電容量から降りる計算より、<strong>顧客のGPU要求台数から必要受電容量を求める逆算</strong>の方が多くなります。</p>
+      <div class="formula">GPU台数 ÷ 1サーバあたりGPU数 = サーバ台数<br>サーバ台数 × 1台あたり消費電力 ＋ ネットワーク・管理機器 = IT負荷<br>IT負荷 × ピークPUE = 必要受電電力</div>
+      <h4>計算例</h4>
+      <div class="tw"><table>
+        <thead><tr><th>項目</th><th>値</th></tr></thead>
+        <tbody>
+          <tr><td>顧客要求 GPU台数</td><td class="mono">1,000基</td></tr>
+          <tr><td>1サーバあたり8基として</td><td class="mono">125台</td></tr>
+          <tr><td>1台あたり10kWとして</td><td class="mono">1,250 kW</td></tr>
+          <tr><td>ネットワーク・管理機器を加算</td><td class="mono">約1,300 kW</td></tr>
+          <tr><td>ピークPUE 1.45</td><td class="mono">約1,885 kW</td></tr>
+          <tr><td><strong>契約受電電力</strong></td><td class="mono"><strong>2,000 kW（2MWユニット1基）</strong></td></tr>
+        </tbody>
+      </table></div>
+      <p>1台あたり消費電力はGPU世代で大きく変わるため、必ず顧客の機器仕様から積み上げます <span class="flag">要検証</span>。</p>
+      <h4>段階投資の設計</h4>
+      <p>需要は段階的に立ち上がるのが通常です。2MW級のモジュールを単位とし、需要の確度に応じてユニットを追加する構成にします。ただし<strong>受変電・基礎・配管・通信引込は、後から容量を増やすのが困難またはきわめて高価</strong>なため、最終規模を見込んで先行整備するか否かを、G3で決めます。</p>
+    </section>
+
+    <section id="s1-3" class="sec conf">
+      <h3><span class="n">1-3</span>事業費積算 <span class="badge">社内</span></h3>
+      <div class="conf-note">社内限定。公開版では表示されません。</div>
+      <h4>費目分類</h4>
+      <div class="tw"><table>
+        <thead><tr><th>大分類</th><th>費目</th><th>確定の遅さ</th></tr></thead>
+        <tbody>
+          <tr><td>用地</td><td>取得／賃借、造成、地盤改良</td><td>早い</td></tr>
+          <tr><td>電力</td><td>系統連系工事費負担金、受変電設備、UPS、発電機</td><td><strong>負担金は接続検討回答まで確定しない</strong></td></tr>
+          <tr><td>建物・躯体</td><td>コンテナ、基礎、共通棟</td><td>中</td></tr>
+          <tr><td>冷却</td><td>チラー／ドライクーラー、CDU、配管</td><td>中</td></tr>
+          <tr><td>通信</td><td>引込工事、構内配線、キャリア初期費用</td><td>中</td></tr>
+          <tr><td>IT機器</td><td>サーバ、GPU、ネットワーク、ラック</td><td>割当枠次第</td></tr>
+          <tr><td>工事</td><td>土木、電気、機械、通信、設置</td><td>中</td></tr>
+          <tr><td>ソフト</td><td>設計監理、各種申請、コンサルティング</td><td>早い</td></tr>
+          <tr><td>予備費</td><td>—</td><td>設計段階に応じて設定</td></tr>
+        </tbody>
+      </table></div>
+      <p>最大の不確実性は<strong>系統連系の工事費負担金</strong>です。概算段階では幅を持って計上し、接続検討回答の受領をもって置き換えます。ここを楽観的に置いた概算は、G2で必ず崩れます。</p>
+      <h4>単価出典の管理</h4>
+      <p>すべての単価に「誰の見積か／取得日／有効期限／前提条件」を紐づけた台帳を持ちます。出典不明の単価が1つ混じると、積算全体の説明責任が持てなくなります。</p>
+    </section>
+
+    <section id="s1-4" class="sec conf">
+      <h3><span class="n">1-4</span>収益モデル <span class="badge">社内</span></h3>
+      <div class="conf-note">社内限定。公開版では表示されません。</div>
+      <h4>主要変数</h4>
+      <div class="tw"><table>
+        <thead><tr><th>変数</th><th>効き方</th></tr></thead>
+        <tbody>
+          <tr><td>稼働率</td><td>売上に直接。立上げ期の稼働率カーブを保守的に置く</td></tr>
+          <tr><td>販売単価</td><td>市況変動が大きい。長期固定と変動のミックスを検討</td></tr>
+          <tr><td>電力単価</td><td><strong>費用側の最大変数</strong>。転嫁条項の有無で事業リスクが一変する</td></tr>
+          <tr><td>PUE</td><td>PUE1.3と1.5では電力費が約15%変わる。設計判断が直接P/Lに出る</td></tr>
+        </tbody>
+      </table></div>
+      <h4>感応度分析</h4>
+      <p>単一のベースケースだけで投資判断をしません。最低限、電力単価±20%、稼働率±15ポイント、販売単価±20%の3変数について感応度を出し、<strong>どの変数が先に事業を赤字にするか</strong>を特定します。多くの案件で電力単価が先に効きます。</p>
+    </section>
+
+    <section id="s1-5" class="sec conf">
+      <h3><span class="n">1-5</span>案件スクリーニング <span class="badge">社内</span></h3>
+      <div class="conf-note">社内限定。公開版では表示されません。</div>
+      <p>G1で以下のいずれかに該当する案件は、原則として先に進めません。</p>
+      <ul>
+        <li>需要確度がD（市場見込みのみ）</li>
+        <li>系統に空き容量の見通しがなく、増強の時期も示されない</li>
+        <li>通信のバックボーンまでの距離が過大で、引込費用が事業費を圧迫する</li>
+        <li>ハザードマップ上、想定浸水深が対策可能な範囲を超える</li>
+        <li>自治体が誘致に消極的、または近隣に組織的な反対の兆候がある</li>
+        <li>用地の権利関係が整理されておらず、整理の見通しが立たない</li>
+      </ul>
+      <p>足切りは早いほど安価です。案件を落とす判断を、担当者個人ではなく基準表で行える状態にしておきます。</p>
+    </section>
+
+    <h2>PART 2 ／ 用地・電力・通信</h2>
+    <div class="part-rule"></div>
+
+    <section id="s2-1" class="sec">
+      <h3><span class="n">2-1</span>候補地スクリーニング</h3>
+      <p class="lede">現地に行く前に、机上で落とせる候補地を落とします。7軸で評価します。</p>
+      <div class="tw"><table>
+        <thead><tr><th>軸</th><th>確認事項</th><th>足切り条件の例</th></tr></thead>
+        <tbody>
+          <tr><td>電力</td><td>最寄変電所までの距離、系統の空き容量見通し、受電電圧</td><td>増強時期の見通しが示されない</td></tr>
+          <tr><td>通信</td><td>バックボーンまでの距離、キャリアの引込可否、2ルート確保の可否</td><td>単一ルートしか取れない</td></tr>
+          <tr><td>水</td><td>上水／井水の可否、水量、排水先</td><td>水冷方式が必須なのに水源がない</td></tr>
+          <tr><td>地盤・地形</td><td>地耐力、造成量、搬入路の勾配と幅員</td><td>大型車両が進入できない</td></tr>
+          <tr><td>災害</td><td>ハザードマップ（浸水・土砂・津波）、活断層、積雪</td><td>対策可能範囲を超える浸水深</td></tr>
+          <tr><td>行政</td><td>用途地域、開発許可の要否、誘致姿勢、支援制度</td><td>用途地域上、立地が困難</td></tr>
+          <tr><td>近隣</td><td>住宅までの距離、既存の反対運動、騒音の受け手</td><td>組織的な反対の兆候</td></tr>
+        </tbody>
+      </table></div>
+      <p>建築物該当性の運用は特定行政庁ごとに差がありうるため、<strong>この段階で所轄に照会しておきます</strong>（<a href="#s4-2">4-2</a>）。後で判明すると、レイアウトごとやり直しになります。</p>
+    </section>
+
+    <section id="s2-2" class="sec">
+      <h3><span class="n">2-2</span>系統連系プロセス <span class="ref">B1</span></h3>
+      <p class="lede">本書の中核です。データセンターは需要設備であり、発電設備とは手続きの流れが異なります。</p>
+      <h4>手続きの段階</h4>
+      <div class="tw"><table>
+        <thead><tr><th>段階</th><th>何が得られるか</th><th>容量の確保</th></tr></thead>
+        <tbody>
+          <tr><td>事前相談</td><td>系統の状況、大まかな可否感</td><td class="c"><strong>なし</strong></td></tr>
+          <tr><td>接続検討</td><td>連系可否、工事概要、概算工事費、所要工期の回答</td><td class="c"><strong>なし</strong></td></tr>
+          <tr><td>契約申込み</td><td>手続き上の順番</td><td class="c"><strong>ここで発生</strong></td></tr>
+          <tr><td>接続契約</td><td>連系の確定</td><td class="c">確定</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="note">
+        <div class="h">接続検討回答の性質を誤解しない</div>
+        <p>広域機関の説明では、接続検討回答は<strong>連系・工事費・工期を確約するものではない</strong>とされています。回答後・契約申込み前に他の系統連系希望者が契約申込みを行うと系統条件が変わり、再検討が必要になる場合があります。再検討には検討料と追加の検討期間を要します。また契約申込み後の現地調査や地権者との協議により、工事費や工期が変動する可能性があるとされています。</p>
+        <p>加えて、<strong>接続検討回答書には有効期限が設けられています。</strong>期限を超えて契約申込みを行う場合は、再度の接続検討が必要になります。事前相談から契約申込みまでを間延びさせると、検討をやり直すことになります。</p>
+      </div>
+
+      <h4>申込み前に確定させておくこと</h4>
+      <ul>
+        <li>契約受電電力（後で増やすには手続きをやり直す）</li>
+        <li>受電希望日（工程全体の起点になる）</li>
+        <li>需給契約の相手方＝小売電気事業者（<a href="#s2-3">2-3</a>）</li>
+        <li>申込主体（SPC設立前か後か。名義変更の手間を考慮する）</li>
+      </ul>
+      <p>様式は広域機関および各一般送配電事業者が公開しています <span class="ref">B1</span>。記載例も併せて公開されているため、初回申込みでも様式そのものは障害になりません。障害になるのは、上記の前提条件が固まっていないことです。</p>
+    </section>
+
+    <section id="s2-3" class="sec">
+      <h3><span class="n">2-3</span>小売電気事業者の手当て</h3>
+      <p>需給契約の相手方が決まらないと、系統側の手続きが進みません。<strong>用地と系統だけを追いかけて、小売の手当てを後回しにするのが典型的な詰まり方です。</strong></p>
+      <div class="tw"><table>
+        <thead><tr><th>交渉論点</th><th>要点</th></tr></thead>
+        <tbody>
+          <tr><td>単価と料金体系</td><td>基本料金・従量料金の構成。DCは負荷率が高く、一般的な想定と挙動が異なる</td></tr>
+          <tr><td>契約電力とデマンド</td><td>立上げ期は実負荷が低い。契約電力の階段的な設定が可能か</td></tr>
+          <tr><td>インバランス</td><td>計画値同時同量の責任分担</td></tr>
+          <tr><td>契約期間</td><td>長期固定と市場連動のバランス。顧客への転嫁条項と整合させる</td></tr>
+          <tr><td>非化石価値</td><td>顧客が再エネ要件を持つ場合、証書の調達方法を含めて設計する</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="s2-4" class="sec">
+      <h3><span class="n">2-4</span>電力調達スキーム</h3>
+      <div class="tw"><table>
+        <thead><tr><th>方式</th><th>長所</th><th>留意点</th></tr></thead>
+        <tbody>
+          <tr><td>系統からの調達</td><td>設備投資が小さい</td><td>市場価格変動の影響を直接受ける</td></tr>
+          <tr><td>オンサイト自家発・自家消費</td><td>系統制約を一部回避できる</td><td>用地面積、設備投資、保安体制</td></tr>
+          <tr><td>オフサイトPPA</td><td>長期の価格固定と再エネ性を両立</td><td>契約が複雑。相手方の与信と期間</td></tr>
+          <tr><td>非化石証書等の調達</td><td>柔軟</td><td>顧客が求める要件（追加性等）を満たすか確認</td></tr>
+        </tbody>
+      </table></div>
+      <p>脱炭素電源の近くにデータセンターを立地させる政策的な後押しがあり、地域によっては支援制度と組み合わせられます <span class="ref">E2</span>。</p>
+    </section>
+
+    <section id="s2-5" class="sec">
+      <h3><span class="n">2-5</span>用地の押さえ方</h3>
+      <ul>
+        <li>権利関係の確認：所有者、共有、抵当、借地、相続未了の有無</li>
+        <li>地目と転用：農地・山林の場合、転用手続きの可否と期間を先に確認する</li>
+        <li>押さえ方の段階：秘密保持 → 覚書（優先交渉権・期限付き）→ 売買予約または賃貸借</li>
+        <li><strong>期限管理</strong>：覚書の有効期限と、系統手続きの所要期間を突き合わせる。系統が長引いて用地の押さえが切れる、が最も避けたい事態</li>
+        <li>隣接地の将来利用（拡張余地と、逆に迷惑施設が来るリスク）</li>
+      </ul>
+    </section>
+
+    <section id="s2-6" class="sec">
+      <h3><span class="n">2-6</span>通信の引込</h3>
+      <p>電力に比べて軽視されがちですが、リードタイムは長く、後から短縮できません。</p>
+      <ul>
+        <li>バックボーンまでの距離と、引込工事の概算費用・期間をキャリアに照会する</li>
+        <li><strong>物理的に別ルートの2経路</strong>を確保する。同一管路内の2回線は冗長ではない</li>
+        <li>IXまでの距離と、レイテンシ要件（用途による）</li>
+        <li>暗ファイバの調達可否、将来の増速余地</li>
+        <li>引込口の位置を、コンテナ配置計画と同時に決める（<a href="#s5-3">5-3</a>の責任分界点）</li>
+      </ul>
+    </section>
+
+    <h2>PART 3 ／ 許認可・行政</h2>
+    <div class="part-rule"></div>
+
+    <section id="s3-1" class="sec">
+      <h3><span class="n">3-1</span>自治体調整と立地協定</h3>
+      <h4>接触の順序</h4>
+      <p>企業誘致の担当部署から入り、そこを経由して建築・消防・土木・環境の各部署に接続してもらうのが円滑です。個別部署に直接照会を重ねると、自治体内部で情報が分断され、後で方針が食い違います。</p>
+      <h4>初回説明資料の構成</h4>
+      <ul>
+        <li>事業の概要と規模（受電容量、敷地面積、ユニット数）</li>
+        <li>地域への効果：雇用、税収、地元発注、災害時の役割</li>
+        <li>懸念への先回り：騒音、水利用、景観、交通量、電力の逼迫</li>
+        <li>スケジュールと、自治体に依頼したい事項</li>
+      </ul>
+      <h4>立地協定の論点</h4>
+      <p>雇用計画、地元調達、固定資産税の減免、用地の取得条件、環境配慮、操業開始時期、未達時の取扱い。<strong>達成できない数値を協定に書かない</strong>ことが、長期的な信頼につながります。</p>
+      <p>国の支援制度は、データセンターの地方立地を後押しする方向で継続しています <span class="ref">E1</span><span class="ref">E2</span>。補助対象費目は積算の分類設計にも参考になります。</p>
+    </section>
+
+    <section id="s3-2" class="sec">
+      <h3><span class="n">3-2</span>法規制一覧</h3>
+      <div class="tw"><table>
+        <thead><tr><th>法令</th><th>論点</th><th>備考</th></tr></thead>
+        <tbody>
+          <tr><td>建築基準法</td><td><strong>建築物該当性</strong>、用途地域、建築確認</td><td><span class="ref">A1</span> 詳細は<a href="#s4-2">4-2</a></td></tr>
+          <tr><td>都市計画法</td><td>開発許可の要否、市街化調整区域の扱い</td><td>面積要件</td></tr>
+          <tr><td>農地法・森林法</td><td>転用許可、林地開発許可</td><td>期間が長い</td></tr>
+          <tr><td>消防法</td><td>消防用設備、危険物（発電機燃料）、蓄電池</td><td><span class="ref">F2</span><span class="flag">要検証</span></td></tr>
+          <tr><td>電気事業法</td><td>自家用電気工作物、保安規程、主任技術者</td><td><span class="ref">F1</span></td></tr>
+          <tr><td>省エネ・非化石転換法</td><td>データセンター業としての定期報告、PUE</td><td><span class="ref">C1</span><span class="ref">C2</span> 運用フェーズ</td></tr>
+          <tr><td>騒音規制法・振動規制法</td><td>特定施設の届出、規制基準</td><td>発電機・冷却設備</td></tr>
+          <tr><td>水質汚濁防止法・下水道法</td><td>排水の扱い</td><td>水冷方式の場合</td></tr>
+          <tr><td>景観条例等</td><td>色彩、高さ、緑化</td><td>自治体ごとに差が大きい</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="s3-3" class="sec">
+      <h3><span class="n">3-3</span>許認可ロードマップ</h3>
+      <p>案件ごとに、必要な手続きを洗い出し、所要期間と前後関係を1枚の表にします。ポイントは3つです。</p>
+      <ul>
+        <li><strong>並行処理できるものとできないものを分ける</strong>。転用許可が下りないと開発許可が進まない、といった依存関係を明示する</li>
+        <li>各手続きの<strong>事前相談期間</strong>を工程に含める。申請書を出してからの標準処理期間だけを見ると、実際の2倍近くずれる</li>
+        <li>建築物該当性の判断（<a href="#s4-2">4-2</a>）を最上流に置く。ここの結論で、必要な手続きの数そのものが変わる</li>
+      </ul>
+    </section>
+
+    <section id="s3-4" class="sec">
+      <h3><span class="n">3-4</span>近隣・住民対応</h3>
+      <div class="tw"><table>
+        <thead><tr><th>論点</th><th>実態</th><th>説明の方針</th></tr></thead>
+        <tbody>
+          <tr><td>騒音</td><td>冷却設備と発電機試運転が主。定常運転時は冷却設備</td><td>敷地境界での測定値を、着工前の暗騒音と対で示す（<a href="#s6-2">6-2</a>）</td></tr>
+          <tr><td>水</td><td>冷却方式によっては相当量を使用</td><td>使用量を数値で示す。水を使わない方式を選んだ場合はその旨を明示</td></tr>
+          <tr><td>電力の逼迫</td><td>地域の電力を奪うという懸念が出やすい</td><td>系統手続きを経て容量を確保していること、増強負担の考え方を説明する</td></tr>
+          <tr><td>景観</td><td>コンテナと冷却設備の外観</td><td>色彩計画、植栽、配置による遮蔽</td></tr>
+          <tr><td>交通</td><td>工事期間中の車両</td><td>経路と時間帯を事前に提示する</td></tr>
+          <tr><td>雇用</td><td>無人運用のため直接雇用は限定的</td><td><strong>過大な雇用数を約束しない。</strong>保守・警備・地元発注を含めた実像で説明する</td></tr>
+        </tbody>
+      </table></div>
+      <p>無人運用を前提とする以上、雇用効果を過大に語ると、後で必ず信頼を失います。地域への効果は、税収・地元発注・災害時の役割で正直に組み立てます。</p>
+    </section>
+
+    <h2>PART 4 ／ 設計</h2>
+    <div class="part-rule"></div>
+
+    <section id="s4-0" class="sec">
+      <h3><span class="n">4-0</span>最初に決める三つ</h3>
+      <p>以下の三つは相互に依存し、後から変えると設計全体がやり直しになります。基本設計の着手前に決着させます。</p>
+      <div class="tw"><table>
+        <thead><tr><th>#</th><th>決定事項</th><th>決めないと何が止まるか</th></tr></thead>
+        <tbody>
+          <tr><td class="c num">1</td><td><strong>建築物に該当させるか否か</strong></td><td>許認可ロードマップ、工程全体、コンテナ内部レイアウト</td></tr>
+          <tr><td class="c num">2</td><td><strong>空冷か液冷か</strong></td><td>冷却設備、電力、基礎荷重、コンテナ仕様、工事区分</td></tr>
+          <tr><td class="c num">3</td><td><strong>可用性等級（冗長度）</strong></td><td>受変電・UPS・発電機・冷却の台数、事業費の2〜3割</td></tr>
+        </tbody>
+      </table></div>
+      <p>この三つが未決のまま調達を進めると、長納期品を発注し直すことになり、遅延がそのまま事業費に跳ね返ります。</p>
+    </section>
+
+    <section id="s4-1" class="sec">
+      <h3><span class="n">4-1</span>設計基本方針</h3>
+
+      <h4>設計インプット確定表</h4>
+      <p>基本設計の着手条件は、下表がすべて埋まっていることです。空欄がある状態での着手を認めません。</p>
+      <div class="tw"><table>
+        <thead><tr><th>項目</th><th>単位</th><th>決定者</th><th>備考</th></tr></thead>
+        <tbody>
+          <tr><td>契約受電電力</td><td class="mono">kW</td><td>電力会社との協議</td><td>契約申込みの内容と一致させる</td></tr>
+          <tr><td>目標PUE（年平均）</td><td>—</td><td>設計責任者</td><td>省エネ法の報告指標と同じ定義で置く <span class="ref">C1</span><span class="ref">C2</span></td></tr>
+          <tr><td>想定PUE（夏季ピーク）</td><td>—</td><td>設計責任者</td><td><strong>容量計算はこちらを使う</strong></td></tr>
+          <tr><td>ラック電力密度</td><td class="mono">kW/ラック</td><td>顧客機器仕様</td><td>冷却方式の分岐点</td></tr>
+          <tr><td>設計外気条件</td><td class="mono">°C / °C WB</td><td>設計責任者</td><td>何年確率を採るか明記</td></tr>
+          <tr><td>可用性等級</td><td>Tier相当</td><td>経営</td><td><span class="ref">G1</span>に対応づける</td></tr>
+          <tr><td>水利用の可否と水源</td><td>—</td><td>用地条件</td><td>上水／井水／循環。行政協議事項</td></tr>
+          <tr><td>拡張計画</td><td>ユニット数</td><td>経営</td><td>受変電・基礎・配管の先行余裕</td></tr>
+        </tbody>
+      </table></div>
+
+      <h4>電力からの逆算</h4>
+      <div class="formula">IT負荷 [kW]　=　契約受電電力 [kW] ÷ PUE<br>ラック数 [台]　=　IT負荷 [kW] ÷ ラック電力密度 [kW/台]</div>
+      <div class="note">
+        <div class="h">年平均PUEでラック数を決めない</div>
+        <p>年平均PUEは省エネ法の報告値としては正しいものの、外気温が高い時期は冷却動力が増えてPUEは悪化します。年平均で容量を決めると、夏季に受電容量を超えます。容量計算にはピーク時PUEを使います。</p>
+      </div>
+
+      <h4>計算例（2MW受電ユニット）</h4>
+      <div class="tw"><table>
+        <thead><tr><th>前提</th><th>値</th></tr></thead>
+        <tbody>
+          <tr><td>契約受電電力</td><td class="mono">2,000 kW</td></tr>
+          <tr><td>年平均PUE（報告用の目標）</td><td class="mono">1.30</td></tr>
+          <tr><td>夏季ピークPUE（容量計算用）</td><td class="mono">1.45</td></tr>
+          <tr><td>容量計算上のIT負荷</td><td class="mono"><strong>2,000 ÷ 1.45 ≒ 1,379 kW</strong></td></tr>
+        </tbody>
+      </table></div>
+      <p>同じIT負荷でも、ラック密度でラック数は一桁変わります。</p>
+      <div class="tw"><table>
+        <thead><tr><th>ラック電力密度</th><th>ラック数</th><th>想定冷却方式</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">14 kW</td><td class="mono">約98台</td><td>空冷＋アイル封じ込め</td></tr>
+          <tr><td class="mono">30 kW</td><td class="mono">約46台</td><td>空冷限界域／リアドア熱交換</td></tr>
+          <tr><td class="mono">60 kW</td><td class="mono">約23台</td><td>直接液冷（DLC）</td></tr>
+          <tr><td class="mono">120 kW</td><td class="mono">約11台</td><td>DLC必須</td></tr>
+        </tbody>
+      </table></div>
+      <p>受変電はカタログ最大、冷却は実運用ピークで見るのが安全側です <span class="flag">要検証</span>（機器仕様による）。</p>
+
+      <h4>可用性等級の選定</h4>
+      <div class="tw"><table>
+        <thead><tr><th>用途</th><th>停止の影響</th><th>考え方</th></tr></thead>
+        <tbody>
+          <tr><td>AI学習（バッチ）</td><td>チェックポイントから再開可能。損失は再計算時間</td><td>過剰な冗長は費用対効果が悪い。N＋1中心</td></tr>
+          <tr><td>AI推論（商用サービス）</td><td>即座に売上・SLA違反</td><td>電源・冷却とも高い冗長度が必要</td></tr>
+          <tr><td>コロケーション</td><td>顧客との契約次第</td><td>顧客のSLA要求が仕様を決める</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note">
+        <div class="h">「学習用途だから冗長は要らない」は成り立たない</div>
+        <p>学習ジョブは再開できても、高密度ラックの急激な温度上昇による機器故障、液冷系の漏水による物理損傷、異常瞬断による電源ユニット破損は再開できません。<strong>可用性のための冗長と、機器保護のための冗長は別物</strong>であり、後者は用途によらず削れません。この整理が、過剰仕様と手抜き仕様の両方を防ぎます。</p>
+      </div>
+    </section>
+
+    <section id="s4-2" class="sec">
+      <h3><span class="n">4-2</span>コンテナ／モジュール仕様</h3>
+
+      <h4>建築物該当性の判断 <span class="ref">A1</span></h4>
+      <p>コンテナ型データセンターは、条件を満たせば建築基準法上の建築物に該当しません。根拠は国土交通省住宅局建築指導課長通知（国住指第4933号、平成23年3月25日、技術的助言）です。</p>
+      <div class="quote">
+        <strong>同通知が示す非該当の要件（要旨）</strong>
+        <ol>
+          <li>土地に自立して設置するものであること</li>
+          <li>内部に有するのは、サーバ機器本体などデータサーバとしての機能に必要な設備と、空調の風道などその機能に必要な最小限の空間のみであること</li>
+          <li>稼働時は無人であること</li>
+          <li>機器の重大な障害発生時等を除き、内部に人が立ち入らないものであること</li>
+        </ol>
+        <p style="margin-bottom:0">これらを満たすものは建築基準法第2条第1号にいう貯蔵槽その他これらに類する施設として扱われ、建築物に該当しないものとされています。<strong>ただし複数積み重ねる場合は、建築物に該当するものとして取り扱う</strong>と明記されています。</p>
+        <span class="src">出典：国土交通省 国住指第4933号（平成23年3月25日）</span>
+      </div>
+
+      <h4>この通知が設計を規定する</h4>
+      <div class="tw"><table>
+        <thead><tr><th>設計方針</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td><strong>コンテナは積み重ねず、平面展開を原則とする</strong></td><td>積み重ねた時点で建築物扱いが明示されている</td></tr>
+          <tr><td>監視室・作業スペース・休憩スペースをITコンテナ内に設けない</td><td>「最小限の空間のみ」「稼働時は無人」の要件に抵触しうる</td></tr>
+          <tr><td>常時有人の機能は別棟に分離する</td><td>分離した棟は当然に建築物として設計する</td></tr>
+          <tr><td>保守は「重大な障害発生時等」の立入りとして運用設計する</td><td>日常的に人が滞在する運用にすると前提が崩れる</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="note">
+        <div class="h"><span class="flag">要検証</span>　特定行政庁との事前協議を必須手順とする</div>
+        <p>通知の文言だけでは判断がつかない論点があります。該当性の判断は特定行政庁ごとに運用差がありうるため、<strong>候補地選定の段階で照会します。</strong></p>
+        <ul>
+          <li>電気室・UPS・CDUを同一コンテナに同居させた場合、「機能を果たすため必要となる設備」の範囲に収まるか</li>
+          <li>液冷配管・CDUを収めた冷却モジュールコンテナ単体の扱い</li>
+          <li>複数コンテナを渡り廊下や共通の屋根で連結した場合の扱い</li>
+        </ul>
+      </div>
+
+      <h4>消防法の扱いは別判断 <span class="ref">F2</span></h4>
+      <p>建築基準法上非該当であっても、消防法の適用は別に判断されます。単体設置か、積み重ねか、合計床面積がどうか等で結論が変わりえます <span class="flag">要検証</span>。<strong>建築で非該当だったから消防も不要、という推論をしてはいけません。</strong>所轄消防本部への事前相談を、行政協議の独立項目として立てます。</p>
+      <p>加えて、非常用発電機の燃料タンクは危険物としての規制対象になります。指定数量との関係で手続きが変わるため、燃料備蓄時間を決める前に確認します <span class="flag">要検証</span>。</p>
+
+      <h4>標準ユニット構成</h4>
+      <div class="tw"><table>
+        <thead><tr><th>モジュール</th><th>内容</th><th>備考</th></tr></thead>
+        <tbody>
+          <tr><td>ITコンテナ</td><td>ラック、ラックPDU、（DLCの場合）マニホールド</td><td>無人前提のレイアウト</td></tr>
+          <tr><td>電気モジュール</td><td>受変電、UPS、配電盤</td><td>ITコンテナと分離するか同居させるかは上記の確認事項に依存</td></tr>
+          <tr><td>冷却モジュール</td><td>チラー／ドライクーラー、CDU、ポンプ、膨張タンク</td><td>屋外設置時の防音・防雪・塩害対策</td></tr>
+          <tr><td>発電機</td><td>非常用発電機、燃料タンク</td><td>消防法、騒音、排気方向</td></tr>
+          <tr><td>共通棟（建築物）</td><td>監視、入退室管理、倉庫、作業スペース</td><td>建築確認の対象。通常の建築物として設計</td></tr>
+        </tbody>
+      </table></div>
+
+      <h4>輸送・据付の制約</h4>
+      <p>設計段階で潰しておかないと、現地に入りません。</p>
+      <ul>
+        <li>道路運送車両法の一般的制限値を超える場合、特殊車両通行許可が必要。40ftコンテナは超過するのが通常であり、許可取得期間を工程に織り込みます <span class="flag">要検証</span></li>
+        <li>搬入経路の事前踏査：橋梁の重量制限、交差点の回転半径、架空線の高さ、電柱、勾配</li>
+        <li>基礎：地耐力調査、べた基礎／杭の選定、転倒・浮上り対策、据付レベル精度（配管接続に影響）</li>
+        <li>配置：排気の再循環を避ける離隔、保守動線、将来ユニットの増設余地</li>
+      </ul>
+    </section>
+
+    <section id="s4-3" class="sec">
+      <h3><span class="n">4-3</span>電気設備</h3>
+
+      <h4>標準単線結線</h4>
+<pre>受電点 → 主遮断装置 → 主変圧器 → 高圧／低圧配電盤
+                                    ├→ UPS → PDU → ラックPDU（A系）
+                                    ├→ UPS → PDU → ラックPDU（B系）
+                                    ├→ 冷却設備動力盤  ★保安電源系に接続
+                                    └→ 一般動力・照明
+非常用発電機 → 切替装置（ATS）→ 保安電源母線</pre>
+
+      <div class="note">
+        <div class="h">冷却設備を保安電源系に載せる</div>
+        <p>高密度ラックでは、サーバが生きていても冷却が止まれば短時間で危険温度に達します。UPSでIT機器だけを守る従来型の設計は、GPU高密度では成立しません。少なくともCDU、一次ポンプ、制御系を発電機系統に載せ、発電機起動までの空白をUPSまたは蓄熱で埋めます。</p>
+      </div>
+
+      <h4>UPS</h4>
+      <div class="tw"><table>
+        <thead><tr><th>項目</th><th>検討事項</th></tr></thead>
+        <tbody>
+          <tr><td>方式</td><td>常時インバータ給電が基本</td></tr>
+          <tr><td>バックアップ時間</td><td>発電機の起動・並列完了までの時間＋安全余裕。長時間化は費用対効果が悪く、発電機の信頼性で担保する設計を優先</td></tr>
+          <tr><td>電池</td><td>リチウムイオン（設置面積・寿命で有利。消防・保管要件を確認 <span class="flag">要検証</span>）／鉛蓄電池</td></tr>
+          <tr><td>構成</td><td>集中型／分散型（ラック内BBU）。高密度では分散型の検討価値あり</td></tr>
+        </tbody>
+      </table></div>
+
+      <h4>非常用発電機</h4>
+      <ul>
+        <li>起動・受電までの所要時間が、UPSバックアップ時間の設計根拠になります</li>
+        <li>燃料備蓄時間：72時間が一つの目安とされますが、タンク容量は消防法上の規制に直結します <span class="ref">F2</span><span class="flag">要検証</span></li>
+        <li>排気・騒音・振動は近隣対応と直結します</li>
+        <li>冷却設備を含めた負荷での容量選定（上記方針を反映すると発電機容量は増えます）</li>
+      </ul>
+
+      <h4>保安管理体制 <span class="ref">F1</span></h4>
+      <p>自家用電気工作物に該当するため、電気事業法に基づく保安規程の届出および電気主任技術者の選任が必要となります。要件は受電電圧・規模により異なるため <span class="flag">要検証</span>、外部委託承認制度を使うか自社選任とするかを含め、基本設計の段階で体制を決めます。</p>
+      <p>その他の設計項目：保護協調、接地方式、高調波対策（GPUサーバの電源ユニットは高調波発生源）、力率改善、ラックへのA/B系統二重給電、配電盤の増設余地。</p>
+    </section>
+
+    <section id="s4-4" class="sec">
+      <h3><span class="n">4-4</span>冷却設計</h3>
+
+      <h4>冷却方式の分岐</h4>
+      <p>ラック電力密度が方式を決めます。下表は目安であり、機器仕様・外気条件で前後します <span class="flag">要検証</span>。</p>
+      <div class="tw"><table>
+        <thead><tr><th>ラック密度</th><th>現実的な方式</th><th>主な制約</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">〜10 kW</td><td>空冷＋アイル封じ込め</td><td>従来型で成立</td></tr>
+          <tr><td class="mono">10〜30 kW</td><td>空冷（高風量）／リアドア熱交換器</td><td>風量・静圧の確保、床下／天井の経路</td></tr>
+          <tr><td class="mono">30〜80 kW</td><td>直接液冷（DLC）＋残熱の空冷</td><td>配管、CDU、水質管理が新たに必要</td></tr>
+          <tr><td class="mono">80 kW〜</td><td>DLC必須。液浸も検討対象</td><td>保守方法が根本的に変わる</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note">
+        <div class="h">DLCを採用しても空調は不要にならない</div>
+        <p>コールドプレートで捕捉できるのはサーバ全熱の一部で、残りは空気側に出ます。捕捉率は機器構成により幅があります <span class="flag">要検証</span>。残熱を処理する空調容量を必ず確保します。ここを削ると、DLC導入後にコンテナ内が異常高温になります。</p>
+      </div>
+
+      <h4>DLCの系統構成</h4>
+<pre>外部放熱（チラー／ドライクーラー／冷却塔）
+   ↓ 一次側（施設水）
+  CDU（熱交換・ポンプ・制御）
+   ↓ 二次側（技術水／専用冷却液）
+  マニホールド → クイックコネクタ → コールドプレート（GPU/CPU）</pre>
+      <div class="tw"><table>
+        <thead><tr><th>管理項目</th><th>なぜ管理するか</th></tr></thead>
+        <tbody>
+          <tr><td>二次側供給水温</td><td>高すぎればGPUがサーマルスロットリング、低すぎれば結露</td></tr>
+          <tr><td>流量・差圧</td><td>ラック増設時に末端流量が不足する。設計時に余裕を持つ</td></tr>
+          <tr><td>水質（導電率・pH・腐食性・微生物）</td><td>詰まり・腐食・漏水の原因。定期水質検査を運用手順に入れる</td></tr>
+          <tr><td>漏水検知</td><td>ラック単位・マニホールド単位で検知し、系統遮断まで自動化する</td></tr>
+          <tr><td>二次側の冗長</td><td>CDU・ポンプはN＋1が基本</td></tr>
+        </tbody>
+      </table></div>
+      <p>結露は液冷特有の失敗要因です。二次側水温を室内露点より下げない制御を必ず入れます <span class="flag">要検証</span>。</p>
+
+      <h4>外気条件・水・省エネ <span class="ref">C1</span><span class="ref">C2</span><span class="ref">G2</span></h4>
+      <ul>
+        <li>フリークーリング可能時間を候補地の気象データから試算します。地方立地の優位性を定量化できます</li>
+        <li>水源と水量：水利用は行政協議・近隣対応の論点になりやすく、使わない設計（空冷式ドライクーラー）と使う設計（冷却塔）で、PUEと地元合意の難易度がトレードオフになります</li>
+        <li>省エネ法のベンチマーク指標はPUEで、目標値は1.4とされています。<strong>法定目標に張り付く設計ではなく、余裕を見て1.3以下を設計目標に置きます</strong></li>
+        <li>実測の計測点は設計段階で決めて計器を仕込みます。後付けは困難です</li>
+      </ul>
+
+      <h4>冷却喪失時の熱時定数</h4>
+      <p>低密度のサーバ室では、冷却が止まっても温度上昇は緩やかで、発電機起動までの数十秒は問題になりませんでした。<strong>高密度ラックではこの前提が崩れます。</strong>発熱密度が高いほど、空気・水の熱容量に対する発熱量の比が大きくなり、上限温度に達するまでの時間が短くなります。</p>
+      <p>したがって設計手順は次のようになります。</p>
+      <ul>
+        <li>想定ラック密度における冷却喪失時の温度上昇率を試算する <span class="flag">要検証</span></li>
+        <li>上限温度に達するまでの許容時間を求める</li>
+        <li>その時間内に冷却が復帰する設計にする（発電機起動時間＋切替時間 &lt; 許容時間）</li>
+        <li>足りなければ、冷却系をUPSバックアップに載せる、蓄熱を持つ、のいずれかで埋める</li>
+      </ul>
+      <p>この試算結果は<a href="#s6-2">統合負荷試験</a>で実測して検証し、次案件の設計にフィードバックします。</p>
+    </section>
+
+    <section id="s4-5" class="sec">
+      <h3><span class="n">4-5</span>高密度ラック設計</h3>
+      <div class="tw"><table>
+        <thead><tr><th>項目</th><th>検討事項</th></tr></thead>
+        <tbody>
+          <tr><td>荷重</td><td>液冷ラックは水を含めて重い。基礎・床の許容荷重を機器確定前に押さえる <span class="flag">要検証</span>。フリーアクセスフロアか直置きかで結論が変わる</td></tr>
+          <tr><td>給電</td><td>ラックPDUの容量、A/B二系統、分岐回路数、コネクタ形式</td></tr>
+          <tr><td>配線経路</td><td>上部トレイ方式が主流。液冷配管と電源・通信の経路を分離し、漏水時に電源側へ波及しない配置にする</td></tr>
+          <tr><td>ネットワーク距離</td><td><strong>GPUクラスタのファブリックは配線長に制約がある。ラック配置はネットワーク設計から逆算する。</strong>電気と冷却でレイアウトを決めてからネットワークを引く順序は破綻しやすい</td></tr>
+          <tr><td>保守性</td><td>無人運用前提と、故障時の交換作業の両立</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="s4-6" class="sec">
+      <h3><span class="n">4-6</span>ネットワーク設計</h3>
+      <p>三面構成で設計します。</p>
+      <div class="tw"><table>
+        <thead><tr><th>面</th><th>用途</th><th>設計上の要点</th></tr></thead>
+        <tbody>
+          <tr><td>計算ファブリック</td><td>GPU間通信（InfiniBand／RoCE）</td><td>トポロジ、配線長制約、光／銅の使い分け。<strong>ラックレイアウトを規定する</strong></td></tr>
+          <tr><td>ストレージ網</td><td>学習データの供給</td><td>帯域がボトルネックになりやすい</td></tr>
+          <tr><td>管理網（OOB）</td><td>遠隔監視・電源制御</td><td>無人運用の前提。ここが落ちると現地対応になる</td></tr>
+        </tbody>
+      </table></div>
+      <p>外部接続は、キャリア引込を物理的に別ルート2経路とすることを原則とします（同一管路の2回線は冗長ではありません）。引込工事のリードタイムは長く、用地選定と同時期に着手します。</p>
+    </section>
+
+    <section id="s4-7" class="sec">
+      <h3><span class="n">4-7</span>物理セキュリティ・防災</h3>
+      <div class="tw"><table>
+        <thead><tr><th>領域</th><th>設計項目</th></tr></thead>
+        <tbody>
+          <tr><td>境界</td><td>フェンス、ゲート、監視カメラ、照明</td></tr>
+          <tr><td>コンテナ</td><td>施錠、入退室記録、二要素認証。無人運用でも記録は必須</td></tr>
+          <tr><td>消火</td><td>消防法上の要否を確認 <span class="ref">F2</span><span class="flag">要検証</span>。義務がなくとも、顧客要件・保険条件でガス消火を求められる場合がある</td></tr>
+          <tr><td>耐震</td><td>コンテナのアンカー、ラックの固定、配管の可撓継手。液冷配管は地震時の破断リスクを見る</td></tr>
+          <tr><td>浸水</td><td>ハザードマップの想定浸水深を上回る基礎高さ。重要設備を低所に置かない</td></tr>
+          <tr><td>雷</td><td>避雷、SPD。山間・沿岸立地で重要</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <h2>PART 5 ／ 調達・建設</h2>
+    <div class="part-rule"></div>
+
+    <section id="s5-1" class="sec">
+      <h3><span class="n">5-1</span>調達戦略</h3>
+      <div class="note">
+        <div class="h">工程の起点は受電日ではなく長納期品の納期</div>
+        <p>事業計画では稼働開始日から逆算しがちですが、実際の制約は長納期品にあります。受変電設備・変圧器の納期がクリティカルパスに乗るのが通例であり、ここを起点に工程を組みます。</p>
+      </div>
+      <p>納期は世界的な需給で大きく変動するため、引合い時点の実納期で毎回更新します。下表は<strong>発注順序の判断</strong>に用いるものです。</p>
+      <div class="tw"><table>
+        <thead><tr><th>品目</th><th>納期の相対長さ</th><th>備考</th></tr></thead>
+        <tbody>
+          <tr><td>特別高圧受変電設備・変圧器</td><td class="c">最長</td><td>世界的に逼迫。最優先で押さえる</td></tr>
+          <tr><td>非常用発電機</td><td class="c">長い</td><td>容量が大きいほど長い</td></tr>
+          <tr><td>チラー／CDU</td><td class="c">中〜長</td><td>液冷は機種選定にも時間がかかる</td></tr>
+          <tr><td>UPS・蓄電池</td><td class="c">中〜長</td><td>—</td></tr>
+          <tr><td>コンテナ躯体</td><td class="c">中</td><td>仕様確定後</td></tr>
+          <tr><td>GPU・サーバ</td><td class="c">割当枠次第</td><td>—</td></tr>
+          <tr><td>ネットワーク機器</td><td class="c">短〜中</td><td>光ケーブル・トランシーバの数量に注意</td></tr>
+        </tbody>
+      </table></div>
+      <p>投資決定前に長納期品を先行発注しないと工程が成立しない場合があります。その際は、中止時の違約条件、先行発注分の資金手当てと引継ぎ方法、他案件への転用可能性を必ずセットで設計します。</p>
+    </section>
+
+    <section id="s5-2" class="sec">
+      <h3><span class="n">5-2</span>IT機器調達</h3>
+      <ul>
+        <li>調達ルートを複線化する（単一ルート依存は納期リスク）</li>
+        <li>割当枠は、確約の形式と、枠が流れる条件を文書で確認する</li>
+        <li><strong>保証開始日を設計する</strong>：据付・稼働前に保証期間が始まると実質的な保証期間が目減りします。据付完了日または受入試験合格日を起点とするよう契約で押さえます</li>
+        <li>予備品を同時調達する。特に電源ユニット、ファン、光トランシーバ</li>
+        <li>搬入前の保管場所と保管条件（温湿度、防塵、盗難）</li>
+      </ul>
+    </section>
+
+    <section id="s5-3" class="sec">
+      <h3><span class="n">5-3</span>工事発注管理</h3>
+      <div class="tw"><table>
+        <thead><tr><th>形態</th><th>長所</th><th>短所</th></tr></thead>
+        <tbody>
+          <tr><td>EPC一括</td><td>責任が一元化、工程管理が容易</td><td>費用が高い、内訳が見えない</td></tr>
+          <tr><td>分離発注</td><td>費用最適化、内訳が透明</td><td><strong>取合い部分の責任が発注者に残る。</strong>発注者側に技術力が必要</td></tr>
+        </tbody>
+      </table></div>
+
+      <h4>三つの責任分界点</h4>
+      <p>図で示し、契約書に添付します。ここが曖昧なまま着工すると、必ず後で揉めます。</p>
+      <div class="tw"><table>
+        <thead><tr><th>#</th><th>分界</th><th>決めること</th></tr></thead>
+        <tbody>
+          <tr><td class="c num">1</td><td>電力</td><td>一般送配電事業者と構内の財産分界点・保安分界点。工事範囲と費用負担</td></tr>
+          <tr><td class="c num">2</td><td>通信</td><td>キャリア設備と構内配線の分界。引込口の位置と管路</td></tr>
+          <tr><td class="c num">3</td><td>工事区分</td><td>土木／建築／電気／機械／通信／IT設置の各社間の取合い。特に<strong>液冷配管の一次側と二次側の分界</strong></td></tr>
+        </tbody>
+      </table></div>
+      <p>検収は、工事種別ごとに何をもって完了とするかを事前に定義します。書類要件を先に決め、<a href="#s6-3">引渡書類</a>と一致させます。</p>
+    </section>
+
+    <section id="s5-4" class="sec">
+      <h3><span class="n">5-4</span>工程管理</h3>
+      <h4>クリティカルパス候補は三つ</h4>
+      <p>工程会議では毎回この三つの状態を確認します。他の遅延は吸収できることが多いものの、この三つは吸収できません。</p>
+      <div class="tw"><table>
+        <thead><tr><th>#</th><th>項目</th><th>性質</th></tr></thead>
+        <tbody>
+          <tr><td class="c num">1</td><td>系統連系工事</td><td>電力会社側の工事。自社でコントロールできない <span class="ref">B1</span></td></tr>
+          <tr><td class="c num">2</td><td>受変電設備・変圧器の納期</td><td>発注時期がすべてを決める</td></tr>
+          <tr><td class="c num">3</td><td>許認可</td><td>特に建築物該当性の判断が長引いた場合</td></tr>
+        </tbody>
+      </table></div>
+      <h4>遅延の早期兆候</h4>
+      <ul>
+        <li>電力会社からの回答が予定より2週間以上遅れている</li>
+        <li>メーカーが納期回答を「確認中」のまま保留している</li>
+        <li>行政協議の議事録に「持ち帰り」が2回以上続いている</li>
+        <li>設計変更の承認待ちが5件以上滞留している</li>
+      </ul>
+      <p>いずれかに該当したら、工程影響を試算して経営に報告します。</p>
+    </section>
+
+    <section id="s5-5" class="sec">
+      <h3><span class="n">5-5</span>安全・品質管理</h3>
+      <ul>
+        <li>施工計画書・安全計画書の提出を着工条件とする</li>
+        <li>立会検査ポイント一覧（誰が、いつ、何を確認するか）を着工前に確定する</li>
+        <li>隠蔽部（埋設配管、基礎配筋、床下配線）は<strong>埋める前に写真記録</strong>。後から確認できない</li>
+        <li>設計変更は書面申請 → 影響評価（費用・工程・性能）→ 承認の三段階を必ず通す。口頭指示による変更を禁止する</li>
+      </ul>
+    </section>
+
+    <h2>PART 6 ／ 統合・試験</h2>
+    <div class="part-rule"></div>
+
+    <section id="s6-1" class="sec">
+      <h3><span class="n">6-1</span>インテグレーション</h3>
+      <div class="note">
+        <div class="h">順序を誤ると、高価な機器を壊すかやり直しになる</div>
+        <p>特に液冷系は、サーバ搬入前に配管作業を完了させます。配管内の切粉・異物はコールドプレートを詰まらせます。</p>
+      </div>
+      <div class="tw"><table>
+        <thead><tr><th>#</th><th>作業</th><th>注意</th></tr></thead>
+        <tbody>
+          <tr><td class="c num">1</td><td>コンテナ据付・アンカー固定・接地</td><td>据付精度が配管接続に影響</td></tr>
+          <tr><td class="c num">2</td><td>一次側電源の受電、仮設電源の確保</td><td>保安体制の確立 <span class="ref">F1</span></td></tr>
+          <tr><td class="c num">3</td><td><strong>冷却配管の充水・フラッシング・耐圧試験・漏水確認</strong></td><td><strong>サーバ搬入前に必ず完了</strong></td></tr>
+          <tr><td class="c num">4</td><td>電気設備の絶縁測定・保護協調試験</td><td>通電前</td></tr>
+          <tr><td class="c num">5</td><td>冷却設備の単体起動・水温安定確認</td><td>3・4完了後</td></tr>
+          <tr><td class="c num">6</td><td>ラック搬入・固定</td><td>荷重・搬入経路</td></tr>
+          <tr><td class="c num">7</td><td>配電接続（A/B系）、ラックPDU設置</td><td>系統の取り違えに注意</td></tr>
+          <tr><td class="c num">8</td><td>ネットワーク配線・疎通確認</td><td>ラベリングを同時に完了させる</td></tr>
+          <tr><td class="c num">9</td><td>サーバ搬入・設置・液冷接続</td><td>クイックコネクタの締結確認</td></tr>
+          <tr><td class="c num">10</td><td>電源投入・起動</td><td>段階的に投入（一斉投入は突入電流の問題）</td></tr>
+          <tr><td class="c num">11</td><td>ファブリック検証・ベンチマーク</td><td>統合負荷試験と並行</td></tr>
+        </tbody>
+      </table></div>
+      <p>各ステップで実施日・実施者・立会者・判定・写真を残します。この記録がそのまま引渡書類になります。</p>
+    </section>
+
+    <section id="s6-2" class="sec">
+      <h3><span class="n">6-2</span>コミッショニング</h3>
+      <div class="tw"><table>
+        <thead><tr><th>レベル</th><th>名称</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Lv1</td><td>工場出荷検査（FAT）</td><td>仕様適合、外観、単体動作。<strong>立会う。</strong>ここで見逃すと現地でしか直せない</td></tr>
+          <tr><td class="mono">Lv2</td><td>据付検査</td><td>据付位置・レベル・アンカー・接地・配管接続</td></tr>
+          <tr><td class="mono">Lv3</td><td>単体機能試験</td><td>各機器を単独で起動し、仕様値を確認</td></tr>
+          <tr><td class="mono">Lv4</td><td>系統統合試験</td><td>機器間の連動、制御・監視、警報</td></tr>
+          <tr><td class="mono">Lv5</td><td><strong>統合負荷試験（IST）</strong></td><td>実負荷相当をかけた総合試験。受入判定の中心</td></tr>
+        </tbody>
+      </table></div>
+
+      <h4>統合負荷試験の試験項目</h4>
+      <p>ロードバンクを用いて実施します。<strong>合格基準は契約前に合意します</strong>（後出しの基準は紛争になります）。</p>
+      <div class="tw"><table>
+        <thead><tr><th>#</th><th>試験</th><th>方法</th><th>合格基準の考え方</th></tr></thead>
+        <tbody>
+          <tr><td class="c num">1</td><td>段階負荷試験</td><td>25／50／75／100%で各段階を保持</td><td>各段階で温度・電圧・水温が設計値内に収束</td></tr>
+          <tr><td class="c num">2</td><td>商用→発電機切替</td><td>商用電源を遮断</td><td>UPSが無瞬断で受け、発電機が所定時間内に受電。IT負荷側で電圧異常なし</td></tr>
+          <tr><td class="c num">3</td><td>発電機連続運転</td><td>全負荷で所定時間運転</td><td>温度・振動・燃料消費率が仕様内。<strong>実測燃料消費率から備蓄時間を再計算</strong></td></tr>
+          <tr><td class="c num">4</td><td>UPSバックアップ時間実測</td><td>発電機を起動させずに放電</td><td>カタログ値ではなく実測値を記録し運用手順に反映</td></tr>
+          <tr><td class="c num">5</td><td><strong>冷却喪失試験</strong></td><td>全負荷状態で冷却を停止し温度上昇率を実測</td><td>設計試算と照合。乖離があれば運用条件を見直す</td></tr>
+          <tr><td class="c num">6</td><td>冗長機器の単一障害試験</td><td>N＋1のうち1台を停止</td><td>残り機器で全負荷を維持できること</td></tr>
+          <tr><td class="c num">7</td><td>漏水検知試験</td><td>検知器に模擬入力</td><td>検知→警報→系統遮断まで動作</td></tr>
+          <tr><td class="c num">8</td><td>消火設備の作動・連動</td><td>設置している場合</td><td>空調停止・ダンパ閉などの連動を含む</td></tr>
+          <tr><td class="c num">9</td><td>PUE実測</td><td>部分負荷・全負荷の各条件</td><td><span class="ref">G2</span>の計測方法に準拠。計測点は設計時に仕込み済みであること</td></tr>
+          <tr><td class="c num">10</td><td>騒音測定</td><td>敷地境界、発電機・冷却設備の稼働時</td><td>近隣対応の根拠資料。<strong>運転前の暗騒音と対で記録</strong></td></tr>
+          <tr><td class="c num">11</td><td>監視・警報の網羅試験</td><td>全警報点を模擬発報</td><td>遠隔監視で確実に受信できること</td></tr>
+        </tbody>
+      </table></div>
+      <p>Lv5合格をもって受入判定とします。<strong>不合格項目がある状態での運用移行を認めません。</strong>軽微な残項目は残工事リストに記載し、期限と責任者を明記します。</p>
+    </section>
+
+    <section id="s6-3" class="sec">
+      <h3><span class="n">6-3</span>引渡し</h3>
+      <div class="tw"><table>
+        <thead><tr><th>分類</th><th>書類</th></tr></thead>
+        <tbody>
+          <tr><td>図面</td><td>竣工図、単線結線図、配管系統図、ネットワーク構成図、配置図、責任分界点図</td></tr>
+          <tr><td>試験</td><td>Lv1〜Lv5の全試験成績書、IST報告書、PUE実測記録、騒音測定記録</td></tr>
+          <tr><td>法定</td><td>保安規程、電気主任技術者選任関係書類 <span class="ref">F1</span>、消防関係届出 <span class="ref">F2</span>、（該当する場合）建築関係書類</td></tr>
+          <tr><td>機器</td><td>取扱説明書、メーカー保証書、保守契約書、予備品リスト</td></tr>
+          <tr><td>運用</td><td>運用手順書、警報一覧と対処手順、連絡体制表、アクセス権限一覧</td></tr>
+          <tr><td>管理</td><td>残工事リスト（期限・責任者付き）、変更履歴、施工写真記録</td></tr>
+        </tbody>
+      </table></div>
+      <p>引渡し後は、契約不適合責任の期間と範囲を明確化し、初期故障期間の重点監視体制を敷きます。実績値（PUE、温度、故障）は設計へフィードバックします。</p>
+    </section>
+
+    <h2>PART 7 ／ 運用</h2>
+    <div class="part-rule"></div>
+
+    <section id="s7-1" class="sec">
+      <h3><span class="n">7-1</span>運用体制</h3>
+      <p>設計時に「稼働時は無人」を前提としている場合（<a href="#s4-2">4-2</a>）、運用体制はその前提と矛盾しない形に設計します。</p>
+      <div class="tw"><table>
+        <thead><tr><th>機能</th><th>体制</th><th>要点</th></tr></thead>
+        <tbody>
+          <tr><td>常時監視</td><td>遠隔（24時間）</td><td>管理網（OOB）経由。警報の受信確認は受入試験で検証済みであること</td></tr>
+          <tr><td>一次対応</td><td>近隣拠点からの駆けつけ</td><td>到着時間の目標値を定め、SLAと整合させる</td></tr>
+          <tr><td>電気保安</td><td>電気主任技術者（選任または外部委託）</td><td><span class="ref">F1</span> 巡視・点検の頻度は保安規程による</td></tr>
+          <tr><td>定期保守</td><td>ベンダー＋自社</td><td>年間計画として事前に顧客と共有する</td></tr>
+        </tbody>
+      </table></div>
+      <p>ITコンテナ内への立入りは記録を残し、日常的な滞在としない運用を維持します。</p>
+    </section>
+
+    <section id="s7-2" class="sec">
+      <h3><span class="n">7-2</span>SLA</h3>
+      <p>SLAは営業条件であると同時に、設計仕様の裏返しです。<strong>設計上の冗長度で担保できない水準を約束しない</strong>ことが原則です。</p>
+      <div class="tw"><table>
+        <thead><tr><th>項目</th><th>定義で揉めやすい点</th></tr></thead>
+        <tbody>
+          <tr><td>稼働率</td><td>何をもって「停止」とするか。給電停止か、温度逸脱を含むか、計測点はどこか</td></tr>
+          <tr><td>計画停止</td><td>年次点検等の計画停止を稼働率算定から除外するか。除外する場合の事前通知期間</td></tr>
+          <tr><td>障害区分</td><td>重要度の定義と、区分ごとの初動・復旧目標時間</td></tr>
+          <tr><td>免責</td><td>天災、系統側の広域停電、顧客機器起因、上位回線の障害</td></tr>
+          <tr><td>ペナルティ</td><td>返金上限。事業のダウンサイドを規定するため、契約前に必ず経営判断を通す</td></tr>
+        </tbody>
+      </table></div>
+      <p>可用性の等級と用途の関係は<a href="#s4-1">4-1</a>を参照します。学習用途と推論用途でSLAを分けるのが実務的です。</p>
+    </section>
+
+    <section id="s7-3" class="sec">
+      <h3><span class="n">7-3</span>保守</h3>
+      <ul>
+        <li>年間保守計画：受変電の年次点検、発電機の定期試運転と燃料の入替、UPS電池の劣化診断、冷却系の水質検査とフィルタ交換</li>
+        <li><strong>年次点検に伴う停電作業</strong>の扱いを、SLAと顧客契約で事前に定める。無停電で実施するには設計段階での冗長が必要</li>
+        <li>予備品：電源ユニット、ファン、光トランシーバ、ポンプ、フィルタ。調達リードタイムの長い品目は現地在庫を持つ</li>
+        <li>液冷系は水質管理が保守の中心になります。<a href="#s4-4">4-4</a>の管理項目を定期記録として運用します</li>
+      </ul>
+    </section>
+
+    <section id="s7-4" class="sec conf">
+      <h3><span class="n">7-4</span>計算力販売・課金 <span class="badge">社内</span></h3>
+      <div class="conf-note">社内限定。公開版では表示されません。</div>
+      <div class="tw"><table>
+        <thead><tr><th>販売形態</th><th>課金単位</th><th>事業側のリスク</th></tr></thead>
+        <tbody>
+          <tr><td>専有（長期）</td><td>ラック単位／kW単位／月額</td><td>低。稼働率が読める</td></tr>
+          <tr><td>計算力販売</td><td>GPU時間</td><td>高。稼働率と市況の両方を負う</td></tr>
+          <tr><td>ハウジング</td><td>ラック＋電力従量</td><td>中。電力転嫁の設計次第</td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li>電力単価の転嫁条項を必ず設ける。ここが固定だと、電力市況で事業が反転する</li>
+        <li>立上げ期の稼働率カーブを契約に織り込む（段階的な最低保証など）</li>
+        <li>請求の根拠となる計測（電力量、稼働時間）を、設計段階で仕込む</li>
+      </ul>
+    </section>
+
+    <section id="s7-5" class="sec">
+      <h3><span class="n">7-5</span>KPIと法定報告</h3>
+      <h4>法定報告 <span class="ref">C1</span><span class="ref">C2</span></h4>
+      <p>データセンター業は省エネ法のベンチマーク制度の対象業種であり、一定規模以上の事業者は定期報告においてベンチマーク指標（PUE）を報告する必要があります。指標の目標値は1.4とされています。資源エネルギー庁からはデータセンター業向けのガイドラインおよび原単位計算ツールが公開されています。</p>
+      <ul>
+        <li>報告に必要な計測が可能な構成になっているかを、<strong>設計段階で確認する</strong>（<a href="#s4-4">4-4</a>）</li>
+        <li>報告の対象範囲と、テナントのIT機器分の扱いを事前に整理する</li>
+        <li>中長期計画書の作成・提出</li>
+      </ul>
+      <h4>自社KPIとフィードバック</h4>
+      <div class="tw"><table>
+        <thead><tr><th>KPI</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td>PUE（月次・年平均・ピーク）</td><td>法定報告と、次案件の設計値の検証</td></tr>
+          <tr><td>稼働率</td><td>収益モデルの検証</td></tr>
+          <tr><td>障害件数・区分別</td><td>SLAの妥当性検証、設計へのフィードバック</td></tr>
+          <tr><td>冷却系の水質推移</td><td>予防保全</td></tr>
+          <tr><td>実測燃料消費率</td><td>備蓄時間の再計算</td></tr>
+        </tbody>
+      </table></div>
+      <p>これらの実測値を第4部の設計値と突き合わせ、乖離を記録することが、本書を実務で使える文書に育てる唯一の方法です。</p>
+    </section>
+
+    <h2 class="conf">PART 8 ／ 事業スキーム・契約</h2>
+    <div class="part-rule conf"></div>
+
+    <section id="s8-1" class="sec conf">
+      <h3><span class="n">8-1</span>事業ストラクチャ <span class="badge">社内</span></h3>
+      <div class="conf-note">社内限定。公開版では表示されません。</div>
+      <div class="tw"><table>
+        <thead><tr><th>形態</th><th>適する場面</th><th>留意点</th></tr></thead>
+        <tbody>
+          <tr><td>自社開発・保有</td><td>小規模、単独で資金調達可能</td><td>バランスシートへの影響が大きい</td></tr>
+          <tr><td>SPC組成</td><td>大規模、複数出資者、出口を想定</td><td>組成・維持コスト、意思決定の設計</td></tr>
+          <tr><td>JV</td><td>役割が明確に分かれる相手がいる</td><td>デッドロック条項、持分譲渡の制限</td></tr>
+          <tr><td>業務委託（開発支援のみ）</td><td>資本を入れず知見で参画</td><td>報酬設計が事業の全て（<a href="#s8-5">8-5</a>）</td></tr>
+        </tbody>
+      </table></div>
+      <p>案件ごとに、資本参加するのか、業務委託に徹するのかを<strong>G1の時点で決めます</strong>。ここが曖昧なまま進むと、支援のつもりが実質的にリスクを負う立場になります。</p>
+    </section>
+
+    <section id="s8-2" class="sec conf">
+      <h3><span class="n">8-2</span>アセットライト戦略 <span class="badge">社内</span></h3>
+      <div class="conf-note">社内限定。公開版では表示されません。</div>
+      <p>建設・整備は事業者側が担い、完成後のアセットをファンド等が取得し、運営・保守・計算力販売は継続して担う構成です。</p>
+      <div class="tw"><table>
+        <thead><tr><th>局面</th><th>担い手</th><th>設計上の要点</th></tr></thead>
+        <tbody>
+          <tr><td>開発・建設</td><td>SPC（＋支援者）</td><td>売却を前提とした書類整備。引渡書類の水準が買手評価を左右する</td></tr>
+          <tr><td>アセット取得</td><td>ファンド等</td><td>取得価格の算定根拠、デューデリジェンス対応</td></tr>
+          <tr><td>運営・保守</td><td>運営者（継続）</td><td>運営契約の期間と条件を、売却条件とセットで交渉する</td></tr>
+        </tbody>
+      </table></div>
+      <p>この構成では、<strong>コミッショニング記録と引渡書類の完成度がそのまま売却価格に効きます</strong>（<a href="#s6-3">6-3</a>）。試験記録の不備は、買手にとって減価要因です。</p>
+    </section>
+
+    <section id="s8-3" class="sec conf">
+      <h3><span class="n">8-3</span>資金調達 <span class="badge">社内</span></h3>
+      <div class="conf-note">社内限定。公開版では表示されません。</div>
+      <ul>
+        <li>エクイティ／デット／リースの組合せ。IT機器はリース適性が高い一方、電力設備は長期資産</li>
+        <li>金融機関が見るのは、<strong>オフテイクの確度</strong>（<a href="#s1-1">1-1</a>）と<strong>電力の確保状況</strong>（<a href="#s2-2">2-2</a>）の2点。この2つが揃わない段階で融資交渉に入らない</li>
+        <li>補助金の活用可能性と、その場合の費目整理・処分制限 <span class="ref">E1</span></li>
+        <li>FID前の先行発注分の資金手当てと、SPCへの引継ぎ方法（<a href="#s5-1">5-1</a>）</li>
+      </ul>
+    </section>
+
+    <section id="s8-4" class="sec conf">
+      <h3><span class="n">8-4</span>業務委託とSoW <span class="badge">社内</span></h3>
+      <div class="conf-note">社内限定。公開版では表示されません。</div>
+      <p>業務範囲表（SoW）は、<a href="#roles">0-2</a>の役割分担を案件固有に落としたものです。各作業について「主担当／支援／対象外」の3区分で埋めます。</p>
+      <div class="tw"><table>
+        <thead><tr><th>作業</th><th>自社</th><th>事業主</th></tr></thead>
+        <tbody>
+          <tr><td>事前調査（通信線・電力線・行政・顧客）</td><td class="c">主担当</td><td class="c">支援</td></tr>
+          <tr><td>各種契約の締結</td><td class="c">支援</td><td class="c">主担当</td></tr>
+          <tr><td>機器調達交渉</td><td class="c">主担当</td><td class="c">支援</td></tr>
+          <tr><td>土木・設置・電気工事</td><td class="c">支援</td><td class="c">主担当</td></tr>
+          <tr><td>コンテナ内接続・インテグレーション</td><td class="c">主担当</td><td class="c">支援</td></tr>
+          <tr><td>運用</td><td class="c">支援</td><td class="c">主担当</td></tr>
+        </tbody>
+      </table></div>
+      <p>成果物と検収条件を作業ごとに定義します。「支援」と書いた作業について成果物を定義しないと、際限なく巻き込まれます。</p>
+    </section>
+
+    <section id="s8-5" class="sec conf">
+      <h3><span class="n">8-5</span>報酬・請求 <span class="badge">社内</span></h3>
+      <div class="conf-note">社内限定。公開版では表示されません。</div>
+      <div class="tw"><table>
+        <thead><tr><th>方式</th><th>採否</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td>マネジメント単価（日額）×工数</td><td class="c">採用</td><td>作業量と報酬が対応し、説明可能</td></tr>
+          <tr><td>マイルストーン払い</td><td class="c">併用</td><td>ゲート通過に紐づける</td></tr>
+          <tr><td>成功報酬</td><td class="c"><strong>不採用</strong></td><td>事業成否は事業主側の要因に大きく左右されるため</td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li>請求明細は、<strong>特定の相手方に依存しない汎用ひな型</strong>として整備する</li>
+        <li>費目区分：マネジメント、技術支援、調査・実費、旅費交通、外部専門家費用</li>
+        <li>初期費用の相談を受ける場合の取扱いを、あらかじめ社内で決めておく</li>
+        <li>見積は工数の根拠（誰が、何日、何を）まで示す。日額単価だけを提示すると値引き交渉になる</li>
+      </ul>
+    </section>
+
+    <section id="s8-6" class="sec conf">
+      <h3><span class="n">8-6</span>契約書類一覧 <span class="badge">社内</span></h3>
+      <div class="conf-note">社内限定。公開版では表示されません。</div>
+      <div class="tw"><table>
+        <thead><tr><th>順序</th><th>契約</th><th>締結時期</th></tr></thead>
+        <tbody>
+          <tr><td class="c num">1</td><td>秘密保持契約</td><td>案件登録時</td></tr>
+          <tr><td class="c num">2</td><td>業務委託基本契約・SoW</td><td>G0〜G1</td></tr>
+          <tr><td class="c num">3</td><td>用地の覚書・賃貸借／売買</td><td>G1〜G2</td></tr>
+          <tr><td class="c num">4</td><td>需給契約（小売電気事業者）</td><td>G2（契約申込みの前提）</td></tr>
+          <tr><td class="c num">5</td><td>接続契約（一般送配電事業者）</td><td>G2〜G3</td></tr>
+          <tr><td class="c num">6</td><td>オフテイク契約</td><td>G4の前提</td></tr>
+          <tr><td class="c num">7</td><td>SPC関係（株主間、出資）</td><td>G4</td></tr>
+          <tr><td class="c num">8</td><td>工事請負・機器売買</td><td>G4〜G5</td></tr>
+          <tr><td class="c num">9</td><td>保守・運営契約</td><td>G6〜G7</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <h2>PART 9 ／ リスク管理</h2>
+    <div class="part-rule"></div>
+
+    <section id="s9-1" class="sec">
+      <h3><span class="n">9-1</span>リスク登録簿</h3>
+      <p class="lede">案件ごとに1つの登録簿を持ち、ゲート判定のたびに更新します。「誰の担当でもないリスク」を残さないことが目的です。</p>
+      <div class="tw"><table>
+        <thead><tr><th>分類</th><th>代表的なリスク</th><th>主な対策</th></tr></thead>
+        <tbody>
+          <tr><td>電力</td><td>系統容量が確保できない／工事費負担金が想定を超える／工事が長期化</td><td>早期の契約申込み、複数候補地の並行検討</td></tr>
+          <tr><td>許認可</td><td>建築物該当性の判断が想定と異なる／転用許可が下りない</td><td>候補地選定段階での事前照会</td></tr>
+          <tr><td>調達</td><td>長納期品の納期延伸／価格上昇／割当枠の消滅</td><td>早期発注、複線化、価格スライド条項</td></tr>
+          <tr><td>需要</td><td>オフテイク先の離脱／市況下落</td><td>需要格付けに基づくゲート運用（<a href="#s1-1">1-1</a>）</td></tr>
+          <tr><td>技術</td><td>冷却設計の想定外／高密度化への追随不能</td><td>受入試験での実測、拡張余地の確保</td></tr>
+          <tr><td>災害</td><td>浸水・地震・停電</td><td>立地選定基準、設計での対策、BCP</td></tr>
+          <tr><td>相手方</td><td>パートナーの信用不安／方針転換</td><td>事前審査（<a href="#s9-2">9-2</a>）</td></tr>
+          <tr><td>市場・為替</td><td>電力単価上昇／輸入機器の為替変動</td><td>転嫁条項、ヘッジ方針</td></tr>
+        </tbody>
+      </table></div>
+      <p>各リスクに、影響度・発生確率・対策・担当者・次回確認日を付します。<strong>担当者名の入っていないリスクは、管理されていないリスクです。</strong></p>
+    </section>
+
+    <section id="s9-2" class="sec conf">
+      <h3><span class="n">9-2</span>パートナー審査 <span class="badge">社内</span></h3>
+      <div class="conf-note">社内限定。公開版では表示されません。</div>
+      <p>大型案件では、相手方リスクが技術リスクを上回ることがあります。基本合意の前に以下を確認します。</p>
+      <ul>
+        <li>登記情報、資本構成、実質的支配者、関連会社との資本・人的関係</li>
+        <li>財務状況と、当該案件を遂行できる資力の有無</li>
+        <li>係争の有無（進行中の訴訟、行政処分歴）</li>
+        <li>過去の実績の裏取り。<strong>提示された実績を、第三者の情報源で確認する</strong></li>
+        <li>反社会的勢力との関係の確認</li>
+        <li>提携先・出資者の実在性と、資金の出所</li>
+      </ul>
+      <p>確認結果は記録として残します。判断そのものより、<strong>確認した事実と、その時点で判断した理由</strong>を残すことが重要です。</p>
+    </section>
+
+    <section id="s9-3" class="sec conf">
+      <h3><span class="n">9-3</span>中止・撤退基準 <span class="badge">社内</span></h3>
+      <div class="conf-note">社内限定。公開版では表示されません。</div>
+      <p>撤退の判断が遅れる理由は、ほぼ常に埋没費用です。基準を事前に決めておくことで、その場の情に流されない判断ができます。</p>
+      <div class="tw"><table>
+        <thead><tr><th>ゲート</th><th>撤退を検討する条件</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">G1</td><td>需要確度がDのまま3か月経過／系統に見通しが立たない</td></tr>
+          <tr><td class="mono">G2</td><td>工事費負担金が概算の想定幅を大きく超える／用地の権利関係が整理できない</td></tr>
+          <tr><td class="mono">G3</td><td>建築物該当性・許認可の見通しが立たず、工程が事業性を損なう水準まで延びる</td></tr>
+          <tr><td class="mono">G4</td><td>オフテイクが格付Aに到達しない／資金調達の目処が立たない</td></tr>
+          <tr><td class="mono">G5以降</td><td>相手方の信用不安が顕在化した場合</td></tr>
+        </tbody>
+      </table></div>
+      <p><strong>埋没費用は判断材料に含めません。</strong>これまで投じた費用の多寡ではなく、これから投じる費用に対する見返りだけで判断します。</p>
+    </section>
+
+    <section id="check" class="sec">
+      <h3><span class="n">A</span>案件ごとの確認事項</h3>
+      <p class="lede">本書で <span class="flag">要検証</span> としたものの一覧です。案件ごとにこの表を埋めてから設計を確定します。</p>
+      <div class="tw"><table>
+        <thead><tr><th>#</th><th>事項</th><th>確認先</th><th>影響範囲</th></tr></thead>
+        <tbody>
+          <tr><td class="c num">1</td><td>建築物該当性（電気室・CDU同居、モジュール連結）</td><td>所轄特定行政庁</td><td>工程全体・レイアウト</td></tr>
+          <tr><td class="c num">2</td><td>消防法の適用（消防用設備、コンテナの扱い）</td><td>所轄消防本部</td><td>設備費・工程</td></tr>
+          <tr><td class="c num">3</td><td>燃料タンクの危険物規制</td><td>所轄消防本部</td><td>発電機備蓄時間</td></tr>
+          <tr><td class="c num">4</td><td>電気主任技術者の選任要件・外部委託の可否</td><td>産業保安監督部</td><td>運用体制・費用</td></tr>
+          <tr><td class="c num">5</td><td>特殊車両通行許可の要否と所要期間</td><td>道路管理者</td><td>据付時期</td></tr>
+          <tr><td class="c num">6</td><td>ラック実重量と床・基礎の許容荷重</td><td>機器メーカー／構造設計</td><td>基礎設計</td></tr>
+          <tr><td class="c num">7</td><td>DLCの熱捕捉率と残熱の空調容量</td><td>機器メーカー</td><td>空調容量</td></tr>
+          <tr><td class="c num">8</td><td>冷却喪失時の温度上昇率</td><td>設計計算＋実測</td><td>保安電源の範囲</td></tr>
+          <tr><td class="c num">9</td><td>リチウムイオン蓄電池の設置・消防要件</td><td>所轄消防本部</td><td>UPS方式</td></tr>
+          <tr><td class="c num">10</td><td>長納期品の実納期</td><td>各メーカー</td><td>工程全体</td></tr>
+          <tr><td class="c num">11</td><td>ファブリックの配線長制約</td><td>機器メーカー</td><td>ラックレイアウト</td></tr>
+          <tr><td class="c num">12</td><td>水利用の可否・水量・排水条件</td><td>自治体・水道事業者</td><td>冷却方式</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="refs" class="sec">
+      <h3><span class="n">B</span>準拠公的文書</h3>
+      <div class="tw"><table>
+        <thead><tr><th>記号</th><th>文書</th><th>発行</th></tr></thead>
+        <tbody>
+          <tr><td><span class="ref">A1</span></td><td>コンテナ型データセンタに係る建築基準法の取扱いについて（技術的助言）／国住指第4933号</td><td>国土交通省</td></tr>
+          <tr><td><span class="ref">B1</span></td><td>系統アクセスに関する手続き（需要設備系統アクセスの流れ、様式集）</td><td>電力広域的運営推進機関</td></tr>
+          <tr><td><span class="ref">C1</span></td><td>省エネ・非化石転換法に基づくデータセンター業に係る措置のガイドライン</td><td>資源エネルギー庁</td></tr>
+          <tr><td><span class="ref">C2</span></td><td>データセンター業のベンチマーク制度</td><td>資源エネルギー庁</td></tr>
+          <tr><td><span class="ref">F1</span></td><td>電気事業法（自家用電気工作物、保安規程、電気主任技術者）</td><td>—</td></tr>
+          <tr><td><span class="ref">F2</span></td><td>消防法（危険物、消防用設備）</td><td>—</td></tr>
+          <tr><td><span class="ref">G1</span></td><td>データセンター ファシリティ スタンダード（ティア1〜4）</td><td>日本データセンター協会</td></tr>
+          <tr><td><span class="ref">G2</span></td><td>PUE計測・計算方法に関するガイドライン</td><td>日本データセンター協会</td></tr>
+        </tbody>
+      </table></div>
+      <p style="font-size:13px;color:var(--ink-3)">日本データセンター協会の資料は有償頒布です。本書では条文・表の転載を行わず、要旨の参照にとどめています。</p>
+
+      <div class="dcm-cta">
+        <p>用地・電力の確度評価から、設計・調達・受入試験の管理まで。本書の手順に沿った開発支援をご相談いただけます。</p>
+        <a href="consult.html">開発について相談する</a>
+      </div>
+    </section>
+
+  </main>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div class="f-brand">
+        <span class="flogo">DC PLATFORM <em>JAPAN</em></span>
+        <p>データセンターをつくる、すべての人のためのプラットフォーム。</p>
+        <a class="f-cta" href="consult.html">開発の相談をする</a>
+      </div>
+      <div>
+        <h5>情報</h5>
+        <ul>
+          <li><a href="news.html">ニュースの視点</a></li>
+          <li><a href="marketplace.html">案件ボード</a></li>
+          <li><a href="computeindex.html">計算力指数</a></li>
+          <li><a href="glossary.html">用語解説（DC開発辞典）</a></li>
+          <li><a href="faq.html">開発FAQ</a></li>
+          <li><a href="manual.html">開発マニュアル（申請制）</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5><a href="index.html#basics">基礎知識・診断</a></h5>
+        <ul>
+          <li><a href="sitecheck.html">用地簡易診断ツール</a></li>
+          <li><a href="gpu.html">GPU基礎データ・比較表</a></li>
+          <li><a href="cooling.html">冷却技術の基礎・比較</a></li>
+          <li><a href="power.html">電力・系統接続の基礎</a></li>
+          <li><a href="network.html">通信・回線の基礎</a></li>
+          <li><a href="reliability.html">信頼性・Tier等級の基礎</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>サービス・運営</h5>
+        <ul>
+          <li><a href="consult.html">開発コンサルティング</a></li>
+          <li><a href="marketplace.html">計算力取引板</a></li>
+          <li><a href="consult.html">パートナー会員制度</a></li>
+          <li><a href="consult.html#neutrality">運営体制と中立性ポリシー</a></li>
+          <li><a href="consult.html">お問い合わせ</a></li>
+          <li>運営：一般社団法人グリーンXアライアンス</li>
+          <li>事業実務：グリーンX合同会社</li>
+        </ul>
+      </div>
+    </div>
+    <div class="f-note">
+      <b>中立性について：</b>本サイトは一般社団法人グリーンXアライアンスが運営し、仲介・コンサルティング等の収益実務はグリーンX合同会社が受託しています。運営者およびその関係先が関与する案件を掲載する場合は、その旨を必ず表示します。本サイトの解説・数値は一般的な情報提供であり、法務・税務・投資・技術の個別助言ではありません。
+    </div>
+    <div class="f-bottom">
+      <span>© 2026 DC PLATFORM JAPAN（仮称）／一般社団法人グリーンXアライアンス</span>
+      <a href="index.html">ホームへ戻る</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// scroll reveal (respects reduced motion via CSS)
+const io = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+<script>
+(function(){
+  var root=document.getElementById('dcman'); if(!root) return;
+  var head=document.querySelector('header');
+  function setTop(){ if(head) root.style.setProperty('--dcm-top', head.offsetHeight+'px'); }
+  setTop();
+  var links=Array.prototype.slice.call(root.querySelectorAll('.dcm-toc a'));
+  var map={},targets=[];
+  links.forEach(function(a){var el=document.getElementById(a.getAttribute('href').slice(1));if(el){map[el.id]=a;targets.push(el);}});
+  var ctl=root.querySelector('.dcm-ctl'),prog=document.getElementById('dcmProg'),nav=document.getElementById('dcmToc'),current=null;
+  function spy(){
+    var line=window.scrollY+(head?head.offsetHeight:0)+ctl.getBoundingClientRect().height+70;
+    var found=targets[0];
+    for(var i=0;i<targets.length;i++){
+      var top=targets[i].getBoundingClientRect().top+window.scrollY;
+      if(top<=line) found=targets[i]; else break;
+    }
+    if(found&&found!==current){
+      current=found;
+      links.forEach(function(a){a.classList.remove('on');});
+      var t=map[found.id];
+      if(t){
+        t.classList.add('on');
+        if(window.innerWidth>900){
+          var o=t.offsetTop;
+          if(o<nav.scrollTop||o>nav.scrollTop+nav.clientHeight-40){nav.scrollTop=o-nav.clientHeight/2;}
+        }
+      }
+    }
+    var box=root.getBoundingClientRect(),total=root.offsetHeight-window.innerHeight,done=-box.top;
+    prog.style.width=(total>0?Math.min(100,Math.max(0,done/total*100)):0)+'%';
+  }
+  var t=false;
+  window.addEventListener('scroll',function(){if(!t){window.requestAnimationFrame(function(){spy();t=false;});t=true;}},{passive:true});
+  window.addEventListener('resize',function(){setTop();spy();});
+  spy();
+  var tb=document.getElementById('dcmTocBtn');
+  tb.addEventListener('click',function(){
+    var open=nav.classList.toggle('open');
+    tb.setAttribute('aria-expanded',open?'true':'false');
+  });
+  links.forEach(function(a){a.addEventListener('click',function(){
+    if(window.innerWidth<=900){nav.classList.remove('open');tb.setAttribute('aria-expanded','false');}
+  });});
+  var vb=document.getElementById('dcmVerBtn');
+  if(vb){vb.addEventListener('click',function(){
+    var on=root.classList.toggle('internal');
+    vb.textContent=on?'全45章':'申請者ビュー(33章)';
+    vb.setAttribute('aria-pressed',on?'true':'false');
+    current=null;spy();
+  });}
+})();
+</script>
+
+</body>
+</html>
