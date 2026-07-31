@@ -333,6 +333,12 @@ footer a:hover{color:#fff;}
 #dcman .dcm-cta a{display:inline-block;background:var(--dcm-gold);color:#fff;text-decoration:none;padding:12px 26px;font-weight:700;font-size:13.5px;letter-spacing:.04em;border-radius:2px}
 #dcman .dcm-cta a:hover{opacity:.9;color:#fff}
 
+
+/* サイト共通CSSの要素セレクタが本文に侵入するのを打ち消す */
+#dcman .titleblock{position:static;top:auto;z-index:auto;background:none}
+#dcman section{padding:0}
+#dcman header{position:static;top:auto;z-index:auto;border-bottom:0;background:none}
+
 @media (max-width:900px){
   #dcman .dcm-wrap{grid-template-columns:1fr;gap:0}
   #dcman .dcm-toc-btn{display:block}
@@ -470,7 +476,7 @@ footer a:hover{color:#fff;}
 
   <main class="dcm-sheet">
 
-    <header class="titleblock">
+    <div class="titleblock">
       <div class="tb-main">
         <div class="tb-eyebrow">TECHNICAL REFERENCE / FULL EDITION</div>
         <h1>データセンター開発マニュアル</h1>
@@ -482,7 +488,7 @@ footer a:hover{color:#fff;}
         <div class="tb-cell"><span class="tb-k">SCOPE</span><span class="tb-v">GPU高密度・2MW級ユニット</span></div>
         <div class="tb-cell"><span class="tb-k">ISSUED BY</span><span class="tb-v">グリーンXアライアンス</span></div>
       </div>
-    </header>
+    </div>
 
     <section id="intro" class="sec">
       <h3><span class="n">00</span>本資料について</h3>
