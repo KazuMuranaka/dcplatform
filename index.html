@@ -163,6 +163,13 @@ h2{font-family:'Noto Serif JP',serif;font-size:27px;font-weight:600;color:var(--
 
 
 /* reveal */
+.eco{background:var(--paper);padding:56px 0 60px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.eco-fig{margin:0;}
+.eco-fig picture{display:block;}
+.eco-fig img{display:block;width:100%;height:auto;border:1px solid var(--line);background:#fff;}
+.eco-fig figcaption{margin-top:14px;font-size:13px;color:#5D6A62;text-align:center;}
+@media(max-width:720px){.eco{padding:38px 0 42px;}.eco-fig figcaption{text-align:left;}}
+
 .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease;}
 .reveal.in{opacity:1;transform:none;}
 
@@ -278,6 +285,20 @@ footer a:hover{color:#fff;}
     </aside>
   </div>
 </div>
+
+<!-- ECOSYSTEM -->
+<section class="eco" id="ecosystem">
+  <div class="wrap">
+    <figure class="eco-fig reveal">
+      <picture>
+        <source media="(max-width:720px)" srcset="dc-ecosystem-sm.jpg">
+        <img src="dc-ecosystem.jpg" width="1400" height="933" loading="lazy" decoding="async"
+             alt="DATA CENTER ECOSYSTEM ― DC PLATFORM JAPAN を中心に、土地・用地、電力、GPU・ITインフラ、AI・ソリューション、クラウド、通信・ネットワーク、建設・EPC、投資家・ファンド、金融機関、自治体・地域の10領域をつなぐ相関図。用地探索・診断から事業計画・FS、パートナー連携、設計・建設、運用・最適化、AI活用・拡張までをワンストップで支援する。">
+      </picture>
+      <figcaption>データセンター開発に関わる10の領域を、ひとつの窓口でつなぎます。</figcaption>
+    </figure>
+  </div>
+</section>
 
 <!-- 8つの詰まり -->
 <section class="tsumari" id="solve">
