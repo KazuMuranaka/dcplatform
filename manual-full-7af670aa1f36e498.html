@@ -337,6 +337,11 @@ footer a:hover{color:#fff;}
 #dcman .dcm-cta a:hover{opacity:.9;color:#fff}
 
 
+#dcman .fine{display:block;font-size:11.5px;color:var(--dcm-txt3);margin-top:3px;line-height:1.6}
+#dcman .fine-p{font-size:12.5px;color:var(--dcm-txt3);margin-top:-10px}
+#dcman td.c{text-align:center;white-space:nowrap}
+#dcman .dcm-sheet td a[target="_blank"]::after{content:"↗";font-size:10px;margin-left:3px;color:var(--dcm-txt3);text-decoration:none}
+
 /* サイト共通CSSの要素セレクタが本文に侵入するのを打ち消す */
 #dcman .titleblock{position:static;top:auto;z-index:auto;background:none}
 #dcman section{padding:0}
@@ -1536,20 +1541,84 @@ footer a:hover{color:#fff;}
 
     <section id="refs" class="sec">
       <h3><span class="n">B</span>準拠公的文書</h3>
+      <p class="lede">本書の各章が根拠とする文書の一覧です。いずれも一次資料に直接リンクしています。改訂されることがあるため、実務では必ず発行元の最新版をご確認ください。</p>
+
+      <h4>公的機関の文書</h4>
       <div class="tw"><table>
-        <thead><tr><th>記号</th><th>文書</th><th>発行</th></tr></thead>
+        <thead><tr><th>記号</th><th>文書</th><th>発行</th><th>最終確認</th></tr></thead>
         <tbody>
-          <tr><td><span class="ref">A1</span></td><td>コンテナ型データセンタに係る建築基準法の取扱いについて（技術的助言）／国住指第4933号</td><td>国土交通省</td></tr>
-          <tr><td><span class="ref">B1</span></td><td>系統アクセスに関する手続き（需要設備系統アクセスの流れ、様式集）</td><td>電力広域的運営推進機関</td></tr>
-          <tr><td><span class="ref">C1</span></td><td>省エネ・非化石転換法に基づくデータセンター業に係る措置のガイドライン</td><td>資源エネルギー庁</td></tr>
-          <tr><td><span class="ref">C2</span></td><td>データセンター業のベンチマーク制度</td><td>資源エネルギー庁</td></tr>
-          <tr><td><span class="ref">F1</span></td><td>電気事業法（自家用電気工作物、保安規程、電気主任技術者）</td><td>—</td></tr>
-          <tr><td><span class="ref">F2</span></td><td>消防法（危険物、消防用設備）</td><td>—</td></tr>
-          <tr><td><span class="ref">G1</span></td><td>データセンター ファシリティ スタンダード（ティア1〜4）</td><td>日本データセンター協会</td></tr>
-          <tr><td><span class="ref">G2</span></td><td>PUE計測・計算方法に関するガイドライン</td><td>日本データセンター協会</td></tr>
+          <tr>
+            <td><span class="ref">A1</span></td>
+            <td><a href="https://www.mlit.go.jp/common/000138783.pdf" target="_blank" rel="noopener">コンテナ型データセンタに係る建築基準法の取扱いについて</a>（技術的助言）<br><span class="fine">国住指第4933号／平成23年3月25日</span></td>
+            <td>国土交通省</td><td class="mono c">2026-08</td>
+          </tr>
+          <tr>
+            <td><span class="ref">B1</span></td>
+            <td><a href="https://www.occto.or.jp/access/kentou/" target="_blank" rel="noopener">系統アクセスに関する手続きについて</a><br><span class="fine">データセンターは需要設備側のフロー</span></td>
+            <td>電力広域的運営推進機関</td><td class="mono c">2026-08</td>
+          </tr>
+          <tr>
+            <td><span class="ref">B2</span></td>
+            <td><a href="https://www.occto.or.jp/access/kentou/youshiki.html" target="_blank" rel="noopener">系統アクセス手続きで用いる様式集</a><br><span class="fine">事前相談申込書、接続検討要否確認依頼書ほか</span></td>
+            <td>電力広域的運営推進機関</td><td class="mono c">2026-08</td>
+          </tr>
+          <tr>
+            <td><span class="ref">C1</span></td>
+            <td><a href="https://www.enecho.meti.go.jp/category/saving_and_new/saving/enterprise/factory/support-tools/index.html" target="_blank" rel="noopener">省エネ・非化石転換法 関連ガイドライン・支援ツール</a><br><span class="fine">データセンター業に係る措置のガイドライン（2026年4月策定）を含む</span></td>
+            <td>資源エネルギー庁</td><td class="mono c">2026-08</td>
+          </tr>
+          <tr>
+            <td><span class="ref">C2</span></td>
+            <td><a href="https://www.enecho.meti.go.jp/category/saving_and_new/saving/enterprise/factory/" target="_blank" rel="noopener">工場・事業場向け 省エネ法の措置</a><br><span class="fine">データセンター業のベンチマーク制度（指標はPUE）</span></td>
+            <td>資源エネルギー庁</td><td class="mono c">2026-08</td>
+          </tr>
+          <tr>
+            <td><span class="ref">E1</span></td>
+            <td><a href="https://www.meti.go.jp/policy/mono_info_service/joho/index.html" target="_blank" rel="noopener">デジタルインフラ整備に関する施策</a><br><span class="fine">立地補助の公募要領は補助対象費目の分類設計に有用</span></td>
+            <td>経済産業省</td><td class="mono c">2026-08</td>
+          </tr>
         </tbody>
       </table></div>
-      <p style="font-size:13px;color:var(--ink-3)">日本データセンター協会の資料は有償頒布です。本書では条文・表の転載を行わず、要旨の参照にとどめています。</p>
+
+      <h4>法令（e-Gov法令検索）</h4>
+      <div class="tw"><table>
+        <thead><tr><th>記号</th><th>法令</th><th>本書で扱う論点</th><th>最終確認</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="ref">F1</span></td>
+            <td><a href="https://laws.e-gov.go.jp/law/339AC0000000170" target="_blank" rel="noopener">電気事業法</a></td>
+            <td>自家用電気工作物、保安規程、電気主任技術者の選任</td><td class="mono c">2026-08</td>
+          </tr>
+          <tr>
+            <td><span class="ref">F2</span></td>
+            <td><a href="https://laws.e-gov.go.jp/law/323AC1000000186" target="_blank" rel="noopener">消防法</a></td>
+            <td>消防用設備、危険物（非常用発電機の燃料）、蓄電池</td><td class="mono c">2026-08</td>
+          </tr>
+          <tr>
+            <td><span class="ref">F3</span></td>
+            <td><a href="https://laws.e-gov.go.jp/law/325AC0000000201" target="_blank" rel="noopener">建築基準法</a></td>
+            <td>第2条第1号の建築物の定義（<a href="#s3-2">3-2</a>）</td><td class="mono c">2026-08</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+      <h4>民間標準</h4>
+      <div class="tw"><table>
+        <thead><tr><th>記号</th><th>文書</th><th>発行</th><th>最終確認</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="ref">G1</span></td>
+            <td><a href="https://www.jdcc.or.jp/" target="_blank" rel="noopener">データセンター ファシリティ スタンダード</a><br><span class="fine">ティア1〜4の基準項目・推奨項目</span></td>
+            <td>日本データセンター協会</td><td class="mono c">2026-08</td>
+          </tr>
+          <tr>
+            <td><span class="ref">G2</span></td>
+            <td><a href="https://www.jdcc.or.jp/" target="_blank" rel="noopener">PUE計測・計算方法に関するガイドライン</a></td>
+            <td>日本データセンター協会</td><td class="mono c">2026-08</td>
+          </tr>
+        </tbody>
+      </table></div>
+      <p class="fine-p">日本データセンター協会の資料は有償頒布です。本書では条文・表の転載を行わず、要旨の参照にとどめています。ダイジェスト版は同協会サイトで無償公開されています。</p>
 
       <div class="dcm-cta">
         <p>用地・電力の確度評価から、設計・調達・受入試験の管理まで。本書の手順に沿った開発支援をご相談いただけます。</p>
